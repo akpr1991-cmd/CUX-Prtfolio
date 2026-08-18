@@ -1,0 +1,783 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --display:'Playfair Display',Georgia,serif;
+  --body:'DM Sans',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --p:#7F77DD;--p-light:#EEEDFE;--p-mid:#AFA9EC;--p-dark:#3C3489;
+  --t:#1D9E75;--t-light:#E1F5EE;--t-mid:#5DCAA5;--t-dark:#085041;
+  --c:#D85A30;--c-light:#FAECE7;--c-mid:#F0997B;--c-dark:#4A1B0C;
+  --a:#BA7517;--a-light:#FAEEDA;--a-mid:#EF9F27;--a-dark:#412402;
+  --g:#888780;--g-light:#F1EFE8;--g-mid:#B4B2A9;--g-dark:#2C2C2A;
+}
+.cs{font-family:var(--body);max-width:860px;margin:0 auto;padding:0 0 100px}
+
+/* ── NAV ── */
+.cs-nav{display:flex;gap:6px;flex-wrap:wrap;padding:24px 0 32px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:0}
+.nav-pill{font-family:var(--mono);font-size:10px;padding:4px 12px;border-radius:100px;border:0.5px solid var(--color-border-tertiary);cursor:pointer;color:var(--color-text-secondary);background:transparent;transition:all .15s}
+.nav-pill:hover,.nav-pill.active{background:var(--p-light);color:var(--p-dark);border-color:var(--p-mid)}
+
+/* ── SECTION SHELL ── */
+.sec{padding:60px 0 44px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.sec:last-child{border-bottom:none}
+.sec-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-text-secondary);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec-label::before{content:'';width:20px;height:0.5px;background:var(--p);display:inline-block}
+.sec h2{font-family:var(--display);font-size:30px;font-weight:700;line-height:1.18;color:var(--color-text-primary);margin-bottom:10px;letter-spacing:-.4px}
+.sec>p{font-size:15px;line-height:1.75;color:var(--color-text-secondary);max-width:640px;margin-bottom:36px}
+
+/* ── HERO ── */
+.hero{padding:56px 0 48px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.hero-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-secondary);margin-bottom:18px}
+.hero h1{font-family:var(--display);font-size:46px;font-weight:700;line-height:1.14;color:var(--color-text-primary);margin-bottom:18px;letter-spacing:-.6px}
+.hero h1 em{color:var(--p);font-style:italic}
+.hero-sub{font-size:17px;line-height:1.75;color:var(--color-text-secondary);max-width:580px;margin-bottom:36px}
+.hero-chips{display:flex;gap:10px;flex-wrap:wrap}
+.hero-chip{font-family:var(--mono);font-size:11px;padding:5px 14px;border-radius:100px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)}
+
+/* ── PROBLEM FRAMING ── */
+.pf-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:28px}
+.pf-card{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:18px 20px;border:0.5px solid var(--color-border-tertiary)}
+.pf-card .pf-icon{width:28px;height:28px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;margin-bottom:12px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);font-family:var(--mono)}
+.pf-card h4{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
+.pf-card p{font-size:12px;line-height:1.65;color:var(--color-text-secondary)}
+.hmw-block{background:var(--p-light);border-radius:var(--border-radius-lg);padding:24px 28px;border:0.5px solid var(--p-mid);margin-bottom:28px}
+.hmw-block .hmw-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--p-dark);margin-bottom:14px}
+.hmw-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:13px;color:var(--p-dark);line-height:1.6}
+.hmw-item:last-child{margin-bottom:0}
+.hmw-item::before{content:'HMW';font-family:var(--mono);font-size:10px;padding:2px 6px;background:var(--p-mid);color:#fff;border-radius:4px;flex-shrink:0;margin-top:1px;letter-spacing:.04em}
+.insight-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+.insight-card{border-left:2px solid var(--p);padding-left:14px}
+.insight-card .i-quote{font-family:var(--display);font-size:14px;font-style:italic;color:var(--color-text-primary);line-height:1.6;margin-bottom:6px}
+.insight-card .i-source{font-family:var(--mono);font-size:10px;color:var(--color-text-secondary)}
+.tension-row{display:flex;gap:14px;align-items:stretch;margin-bottom:0}
+.tension-side{flex:1;padding:16px 18px;border-radius:var(--border-radius-lg);font-size:13px;line-height:1.6}
+.tension-vs{font-family:var(--mono);font-size:11px;color:var(--color-text-secondary);align-self:center;padding:0 4px;flex-shrink:0}
+.tension-label{font-size:11px;font-weight:500;font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+
+/* ── DECISIONS ── */
+.dec-list{display:flex;flex-direction:column;gap:0}
+.dec-item{display:grid;grid-template-columns:40px 1fr;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);padding:24px 0}
+.dec-item:last-child{border-bottom:none}
+.dec-num{font-family:var(--mono);font-size:11px;color:var(--color-text-secondary);padding-top:2px}
+.dec-body h4{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
+.dec-body>p{font-size:13px;line-height:1.7;color:var(--color-text-secondary);margin-bottom:14px}
+.dec-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.dec-pill{font-size:11px;padding:3px 10px;border-radius:100px;border:0.5px solid;font-family:var(--mono)}
+.dec-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dec-opt{padding:12px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);font-size:12px;line-height:1.6}
+.dec-opt .opt-label{font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;font-weight:500}
+.dec-opt p{color:var(--color-text-secondary)}
+.dec-opt.chosen{border-color:var(--p-mid);background:var(--p-light)}
+.dec-opt.chosen .opt-label{color:var(--p-dark)}
+.dec-opt.chosen p{color:var(--p-dark)}
+.dec-opt.alt .opt-label{color:var(--color-text-secondary)}
+
+/* ── IA ── */
+.ia-root{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:24px}
+.ia-header{padding:12px 18px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);display:flex;align-items:center;justify-content:space-between}
+.ia-header h3{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.ia-tag{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:100px;background:var(--a-light);color:var(--a-dark);border:0.5px solid var(--a-mid)}
+.ia-body{padding:24px;overflow-x:auto}
+.ia-tree{min-width:700px}
+.ia-l0{display:flex;justify-content:center;margin-bottom:0}
+.ia-node{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 14px;text-align:center;cursor:pointer;transition:all .15s;position:relative}
+.ia-node:hover{border-color:var(--p-mid);background:var(--p-light)}
+.ia-node.root{background:var(--p-light);border-color:var(--p-mid);min-width:140px}
+.ia-node .n-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.ia-node .n-sub{font-size:10px;color:var(--color-text-secondary);font-family:var(--mono);margin-top:2px}
+.ia-node.root .n-title{color:var(--p-dark)}
+.ia-node.root .n-sub{color:var(--p)}
+.ia-connectors{display:flex;justify-content:center;height:28px;position:relative}
+.ia-vert{width:0.5px;background:var(--color-border-tertiary);margin:0 auto;height:100%}
+.ia-horiz{height:0.5px;background:var(--color-border-tertiary);position:absolute;top:100%}
+.ia-l1-row{display:flex;justify-content:center;gap:12px;margin-bottom:0;position:relative}
+.ia-l1-row::before{content:'';position:absolute;top:-28px;left:50%;width:0.5px;height:28px;background:var(--color-border-tertiary);transform:translateX(-50%)}
+.ia-l1{min-width:130px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 12px;text-align:center;cursor:pointer;transition:all .15s}
+.ia-l1:hover{border-color:var(--t-mid);background:var(--t-light)}
+.ia-l1 .n-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.ia-l1 .n-sub{font-size:10px;color:var(--color-text-secondary);font-family:var(--mono);margin-top:2px}
+.ia-bridge{display:flex;gap:12px;justify-content:center;margin:0;padding-top:24px}
+.ia-branch{display:flex;flex-direction:column;align-items:center;gap:0;flex:1;max-width:160px}
+.ia-branch-line{width:0.5px;height:24px;background:var(--color-border-tertiary)}
+.ia-l2-row{display:flex;flex-direction:column;gap:6px;width:100%}
+.ia-l2{padding:6px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);cursor:pointer;transition:border-color .15s}
+.ia-l2:hover{border-color:var(--p-mid)}
+.ia-l2 .n-title{font-size:11px;color:var(--color-text-primary)}
+.ia-l2 .n-sub{font-size:10px;color:var(--color-text-secondary);font-family:var(--mono);margin-top:1px}
+.ia-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:20px;padding-top:16px;border-top:0.5px solid var(--color-border-tertiary)}
+.ia-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--color-text-secondary)}
+.ia-legend-dot{width:8px;height:8px;border-radius:50%;border:0.5px solid}
+
+/* ── FLOW PATHS ── */
+.flow-sec{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+.flow-card{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:18px;border:0.5px solid var(--color-border-tertiary)}
+.flow-card h4{font-size:12px;font-weight:500;font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-secondary);margin-bottom:12px}
+.flow-step{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:var(--color-text-primary)}
+.flow-step:last-child{margin-bottom:0}
+.flow-dot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:500;flex-shrink:0}
+.flow-arrow{font-size:10px;color:var(--color-text-secondary)}
+
+/* ── OUTCOME ── */
+.outcome-hero{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:28px;border:0.5px solid var(--color-border-tertiary);margin-bottom:24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.oc-metric{text-align:center}
+.oc-num{font-family:var(--display);font-size:40px;font-weight:700;color:var(--color-text-primary);line-height:1}
+.oc-num span{font-size:22px;color:var(--t)}
+.oc-label{font-size:12px;color:var(--color-text-secondary);margin-top:6px;line-height:1.5}
+.oc-divider{width:0.5px;background:var(--color-border-tertiary)}
+.learning-list{display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
+.learning{display:grid;grid-template-columns:24px 1fr;gap:12px;font-size:13px;line-height:1.7}
+.learning-icon{width:24px;height:24px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;border:0.5px solid var(--color-border-tertiary)}
+.learning-body{color:var(--color-text-secondary)}
+.learning-body strong{color:var(--color-text-primary);font-weight:500}
+.next-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.next-card{padding:16px 18px;border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.next-card .phase{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--color-text-secondary);margin-bottom:6px}
+.next-card h4{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px}
+.next-card p{font-size:12px;line-height:1.6;color:var(--color-text-secondary)}
+.retro-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+.retro-card{padding:16px 18px;border-radius:var(--border-radius-lg);border:0.5px solid;font-size:12px;line-height:1.65}
+.retro-card .r-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;font-weight:500}
+.retro-card ul{padding-left:14px;color:var(--color-text-secondary)}
+.retro-card ul li{margin-bottom:4px}
+
+/* ── INTERACTIVE DEMO ── */
+.demo-wrap{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:0}
+.demo-bar{padding:12px 18px;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between}
+.demo-bar h3{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.demo-badge{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:100px;background:var(--p-light);color:var(--p-dark);border:0.5px solid var(--p-mid)}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.demo-col{padding:18px}
+.demo-col+.demo-col{border-left:0.5px solid var(--color-border-tertiary)}
+.demo-col-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-secondary);margin-bottom:12px}
+.out-chip{font-size:12px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 12px;margin-bottom:6px;cursor:pointer;line-height:1.55;color:var(--color-text-primary);transition:all .15s}
+.out-chip:hover{border-color:var(--p-mid)}
+.out-chip.sel{border-color:var(--p);background:var(--p-light);color:var(--p-dark)}
+.sig-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.sig-row:last-child{border-bottom:none}
+.sig-k{color:var(--color-text-secondary);font-family:var(--mono);font-size:10px}
+.sig-v{color:var(--color-text-primary);font-weight:500}
+.tr-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.tr-name{font-size:11px;color:var(--color-text-secondary);min-width:84px}
+.tr-bar{flex:1;height:3px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden}
+.tr-fill{height:100%;border-radius:2px;transition:width .55s ease}
+.tr-delta{font-family:var(--mono);font-size:10px;min-width:28px;text-align:right}
+.apply-btn{width:100%;padding:8px;border-radius:var(--border-radius-md);background:var(--p);color:#fff;border:none;font-family:var(--body);font-size:12px;cursor:pointer;margin-top:12px;transition:opacity .15s}
+.apply-btn:hover{opacity:.85}
+.empty-state{font-size:12px;color:var(--color-text-secondary);text-align:center;padding:24px 0}
+</style>
+
+<div class="cs">
+
+<!-- NAV -->
+<div class="cs-nav">
+  <button class="nav-pill active" onclick="scrollTo('hero')">Overview</button>
+  <button class="nav-pill" onclick="scrollTo('pf')">Problem Framing</button>
+  <button class="nav-pill" onclick="scrollTo('concept')">The Concept</button>
+  <button class="nav-pill" onclick="scrollTo('loop')">Update Loop</button>
+  <button class="nav-pill" onclick="scrollTo('decisions')">Decisions</button>
+  <button class="nav-pill" onclick="scrollTo('ia')">Information Architecture</button>
+  <button class="nav-pill" onclick="scrollTo('demo')">Try It</button>
+  <button class="nav-pill" onclick="scrollTo('outcome')">Outcome</button>
+</div>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-eyebrow">UX Case Study — Agentik AI Platform · Design Lead</div>
+  <h1>Agents with a <em>Soul</em></h1>
+  <p class="hero-sub">A personalization system where AI agents evolve their identity through every interaction — making each agent distinctly yours over time.</p>
+  <div class="hero-chips">
+    <span class="hero-chip">Design Lead</span>
+    <span class="hero-chip">Agentik AI</span>
+    <span class="hero-chip">Soul Updation</span>
+    <span class="hero-chip">0 → 1 Feature</span>
+    <span class="hero-chip">Platform Differentiator</span>
+  </div>
+</div>
+
+<!-- PROBLEM FRAMING -->
+<div class="sec" id="pf">
+  <div class="sec-label">01 — Problem Framing</div>
+  <h2>Why agents feel disposable</h2>
+  <p>Research across 18 power users revealed that teams quickly outgrow their agents — not because agents fail, but because they never grow. The relationship stays transactional when it could be transformational.</p>
+
+  <div class="pf-grid">
+    <div class="pf-card">
+      <div class="pf-icon" style="color:var(--p-dark);border-color:var(--p-mid);background:var(--p-light)">P1</div>
+      <h4>Static identity</h4>
+      <p>Agents are defined once at setup. No matter how many tasks they run, their personality, tone, and approach never adapt.</p>
+    </div>
+    <div class="pf-card">
+      <div class="pf-icon" style="color:var(--c-dark);border-color:var(--c-mid);background:var(--c-light)">P2</div>
+      <h4>Invisible outputs</h4>
+      <p>Task outputs are consumed and discarded. There's no feedback loop connecting what an agent produces back to who it is.</p>
+    </div>
+    <div class="pf-card">
+      <div class="pf-icon" style="color:var(--a-dark);border-color:var(--a-mid);background:var(--a-light)">P3</div>
+      <h4>Low team trust</h4>
+      <p>Teams treat agents as utilities, not teammates. There's no shared language to describe what an agent is genuinely good at.</p>
+    </div>
+    <div class="pf-card">
+      <div class="pf-icon" style="color:var(--t-dark);border-color:var(--t-mid);background:var(--t-light)">P4</div>
+      <h4>Manual re-prompting</h4>
+      <p>Users re-configure agents before every task type — compensating for lack of adaptation with manual cognitive overhead.</p>
+    </div>
+    <div class="pf-card">
+      <div class="pf-icon" style="color:var(--p-dark);border-color:var(--p-mid);background:var(--p-light)">P5</div>
+      <h4>No differentiation</h4>
+      <p>A research agent and an execution agent share the same empty identity shell — only the prompt distinguishes them.</p>
+    </div>
+    <div class="pf-card">
+      <div class="pf-icon" style="color:var(--c-dark);border-color:var(--c-mid);background:var(--c-light)">P6</div>
+      <h4>High churn signal</h4>
+      <p>Activation-to-D30 retention drops sharply once teams have 3+ agents. Complexity without identity causes abandonment.</p>
+    </div>
+  </div>
+
+  <!-- HMW -->
+  <div class="hmw-block">
+    <div class="hmw-label">How might we</div>
+    <div class="hmw-item">make an agent's accumulated experience visible and useful to the team?</div>
+    <div class="hmw-item">design a feedback loop where every output makes the agent more itself?</div>
+    <div class="hmw-item">give teams a shared language for what their agents are becoming over time?</div>
+    <div class="hmw-item">keep users in control of agent identity while still enabling autonomous evolution?</div>
+  </div>
+
+  <!-- Insights -->
+  <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-secondary);margin-bottom:14px">User research · Selected insights</div>
+  <div class="insight-row">
+    <div class="insight-card">
+      <div class="i-quote">"I keep having to remind it what kind of thing it is. It doesn't remember that it's our research agent."</div>
+      <div class="i-source">Senior PM · B2B SaaS team · 4 agents</div>
+    </div>
+    <div class="insight-card">
+      <div class="i-quote">"I want to be able to say — this one is the analytical one, this one is the creative one — and actually mean it."</div>
+      <div class="i-source">Head of Ops · Fintech · 6 agents</div>
+    </div>
+    <div class="insight-card">
+      <div class="i-quote">"The best thing would be if it got a little bit better at being itself every time it does a task."</div>
+      <div class="i-source">Founder · Early-stage startup · 2 agents</div>
+    </div>
+    <div class="insight-card">
+      <div class="i-quote">"I don't want it to change too much without me knowing. I need to trust it before I'll give it harder work."</div>
+      <div class="i-source">Engineering Lead · Enterprise · 12 agents</div>
+    </div>
+  </div>
+
+  <!-- Design Tension -->
+  <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-secondary);margin-bottom:12px">Core design tension</div>
+  <div class="tension-row">
+    <div class="tension-side" style="background:var(--p-light);border:0.5px solid var(--p-mid)">
+      <div class="tension-label" style="color:var(--p-dark)">Autonomous evolution</div>
+      <p style="color:var(--p-dark)">Agents should adapt and grow without needing constant manual input. The value compounds automatically.</p>
+    </div>
+    <div class="tension-vs">vs</div>
+    <div class="tension-side" style="background:var(--c-light);border:0.5px solid var(--c-mid)">
+      <div class="tension-label" style="color:var(--c-dark)">User control and trust</div>
+      <p style="color:var(--c-dark)">Users need to understand, approve, and revert changes. Unpredictable identity change destroys trust.</p>
+    </div>
+  </div>
+  <div style="margin-top:12px;padding:12px 16px;background:var(--t-light);border-radius:var(--border-radius-md);border:0.5px solid var(--t-mid);font-size:13px;color:var(--t-dark);line-height:1.6">
+    <strong style="font-weight:500">Resolution:</strong> Soul updates are pattern-triggered, versioned, and require explicit approval before applying — evolution happens, but users stay the author.
+  </div>
+</div>
+
+<!-- CONCEPT (condensed) -->
+<div class="sec" id="concept">
+  <div class="sec-label">02 — The Concept</div>
+  <h2>What makes a soul</h2>
+  <p>A soul is the persistent identity layer of an agent — a living set of traits, behaviors, and affinities that evolves through work. Unlike a prompt or config, a soul has history and direction.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:22px">
+      <div style="font-family:var(--display);font-size:16px;color:var(--color-text-primary);margin-bottom:3px">Nova</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--color-text-secondary);margin-bottom:18px">Research Agent · Soul v1.4 · 38 outputs</div>
+      <div id="soul-traits"></div>
+      <div style="margin-top:14px;padding-top:14px;border-top:0.5px solid var(--color-border-tertiary);font-family:var(--mono);font-size:10px;color:var(--color-text-secondary)">Last updated 2 tasks ago · Version history available</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="padding:14px 16px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Trait Layer</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.55">Numerical scores across behavioral axes. Updated by pattern accumulation across outputs.</div>
+      </div>
+      <div style="padding:14px 16px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Communication Style</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.55">Inferred from output structure and tone — formal/casual, brief/expansive, data-first/narrative-first.</div>
+      </div>
+      <div style="padding:14px 16px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Domain Affinity</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.55">Task categories where this agent consistently performs well. Drives intelligent routing.</div>
+      </div>
+      <div style="padding:14px 16px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary)">
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Memory Signature</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.55">Recurring reasoning patterns across tasks — the agent's fingerprint. Unique per agent.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UPDATE LOOP (condensed) -->
+<div class="sec" id="loop">
+  <div class="sec-label">03 — The Update Loop</div>
+  <h2>How outputs shape the soul</h2>
+  <p>Every task completion is a data point. The loop reads signals from outputs, accumulates patterns, proposes versioned soul updates, and waits for user approval before applying.</p>
+  <div style="display:flex;flex-direction:column;gap:0;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden">
+    <div style="display:grid;grid-template-columns:32px 1fr;align-items:stretch">
+      <div style="background:var(--p-light);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:var(--p-dark);font-weight:500;writing-mode:vertical-rl;letter-spacing:.08em;padding:16px 8px;border-right:0.5px solid var(--p-mid)">5-STEP LOOP</div>
+      <div>
+        <div style="display:flex;gap:0">
+          <div style="flex:1;padding:14px 16px;border-right:0.5px solid var(--color-border-tertiary);border-bottom:0.5px solid var(--color-border-tertiary)">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--color-text-secondary);margin-bottom:5px">01</div>
+            <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Task execution</div>
+            <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.55">Agent receives and completes a task, producing a structured output.</div>
+          </div>
+          <div style="flex:1;padding:14px 16px;border-right:0.5px solid var(--color-border-tertiary);border-bottom:0.5px solid var(--color-border-tertiary)">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--color-text-secondary);margin-bottom:5px">02</div>
+            <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Signal extraction</div>
+            <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.55">Output is analyzed for tone, reasoning depth, structure type, and confidence signals.</div>
+          </div>
+          <div style="flex:1;padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary)">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--color-text-secondary);margin-bottom:5px">03</div>
+            <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Pattern check</div>
+            <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.55">Signals compared across 5+ outputs. Update triggered only on consistent drift.</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+          <div style="padding:14px 16px;border-right:0.5px solid var(--color-border-tertiary)">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--color-text-secondary);margin-bottom:5px">04</div>
+            <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Versioned soul update</div>
+            <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.55">Proposed changes are staged as a new soul version — not applied until approved by the user.</div>
+          </div>
+          <div style="padding:14px 16px">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--color-text-secondary);margin-bottom:5px">05</div>
+            <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Evolved behavior</div>
+            <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.55">Updated soul informs tone, structure, and reasoning on the next task automatically.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DECISIONS -->
+<div class="sec" id="decisions">
+  <div class="sec-label">04 — Design Decisions</div>
+  <h2>The hard choices and why</h2>
+  <p>Six pivotal decisions shaped how soul updation works — each required choosing between competing design values. Here's the reasoning behind each call.</p>
+
+  <div class="dec-list">
+    <div class="dec-item">
+      <span class="dec-num">D1</span>
+      <div class="dec-body">
+        <h4>Versioned updates, not silent drift</h4>
+        <p>Every soul change creates a numbered version with a full diff. Users receive a notification and must approve before any change takes effect. Reverting to any prior version is always one tap away.</p>
+        <div class="dec-pills">
+          <span class="dec-pill" style="background:var(--t-light);color:var(--t-dark);border-color:var(--t-mid)">Builds trust</span>
+          <span class="dec-pill" style="background:var(--t-light);color:var(--t-dark);border-color:var(--t-mid)">Preserves control</span>
+          <span class="dec-pill" style="background:var(--a-light);color:var(--a-dark);border-color:var(--a-mid)">More friction</span>
+        </div>
+        <div class="dec-compare">
+          <div class="dec-opt chosen">
+            <div class="opt-label">Chosen — versioned + approval</div>
+            <p>Slower adoption, but users understand and trust the system. Long-term retention benefit outweighs short-term friction.</p>
+          </div>
+          <div class="dec-opt alt">
+            <div class="opt-label">Considered — auto-apply silently</div>
+            <p>Faster adaptation, but users lose visibility. Any unexpected behavior feels like a black-box bug, not a feature.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dec-item">
+      <span class="dec-num">D2</span>
+      <div class="dec-body">
+        <h4>Pattern-based thresholds, not event triggers</h4>
+        <p>Soul updates require consistent signals across a minimum of 5 outputs before a change is proposed. A single outlier output — creative brief from an analytical agent — does not trigger an update.</p>
+        <div class="dec-pills">
+          <span class="dec-pill" style="background:var(--t-light);color:var(--t-dark);border-color:var(--t-mid)">Stable identity</span>
+          <span class="dec-pill" style="background:var(--t-light);color:var(--t-dark);border-color:var(--t-mid)">Reduces noise</span>
+          <span class="dec-pill" style="background:var(--a-light);color:var(--a-dark);border-color:var(--a-mid)">Slower to evolve</span>
+        </div>
+        <div class="dec-compare">
+          <div class="dec-opt chosen">
+            <div class="opt-label">Chosen — 5-output threshold</div>
+            <p>Identity stays coherent. Users can give agents unusual one-off tasks without worrying it'll reshape the agent permanently.</p>
+          </div>
+          <div class="dec-opt alt">
+            <div class="opt-label">Considered — every output triggers</div>
+            <p>More responsive but creates identity thrashing. Agent personality oscillates wildly if tasks are diverse.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dec-item">
+      <span class="dec-num">D3</span>
+      <div class="dec-body">
+        <h4>Human-readable trait language</h4>
+        <p>Traits are labeled in plain behavioral language — Analytical, Creative, Decisive, Collaborative — not technical parameters. Teams should be able to describe their agent the way they'd describe a new hire.</p>
+        <div class="dec-pills">
+          <span class="dec-pill" style="background:var(--t-light);color:var(--t-dark);border-color:var(--t-mid)">Reduces cognitive load</span>
+          <span class="dec-pill" style="background:var(--t-light);color:var(--t-dark);border-color:var(--t-mid)">Enables team alignment</span>
+          <span class="dec-pill" style="background:var(--a-light);color:var(--a-dark);border-color:var(--a-mid)">Less precise</span>
+        </div>
+        <div class="dec-compare">
+          <div class="dec-opt chosen">
+            <div class="opt-label">Chosen — plain behavioral labels</div>
+            <p>Non-technical team members can participate in agent stewardship. The soul feels like a character, not a config file.</p>
+          </div>
+          <div class="dec-opt alt">
+            <div class="opt-label">Considered — technical parameter names</div>
+            <p>More precise, but creates a wall between technical and non-technical users. Limits who can meaningfully own the agent.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dec-item">
+      <span class="dec-num">D4</span>
+      <div class="dec-body">
+        <h4>Soul is team-visible, not owner-only</h4>
+        <p>The soul profile and its evolution history are visible to every member of a team workspace, not just the agent creator. This enables shared mental models, better task routing, and distributed ownership.</p>
+        <div class="dec-pills">
+          <span class="dec-pill" style="background:var(--t-light);color:var(--t-dark);border-color:var(--t-mid)">Shared ownership</span>
+          <span class="dec-pill" style="background:var(--t-light);color:var(--t-dark);border-color:var(--t-mid)">Better routing</span>
+          <span class="dec-pill" style="background:var(--a-light);color:var(--a-dark);border-color:var(--a-mid)">Privacy tradeoff</span>
+        </div>
+        <div class="dec-compare">
+          <div class="dec-opt chosen">
+            <div class="opt-label">Chosen — team-visible soul</div>
+            <p>Agents become shared infrastructure. Teams develop habits around them. Agent utilisation increases 2.4× when soul is visible.</p>
+          </div>
+          <div class="dec-opt alt">
+            <div class="opt-label">Considered — owner-private soul</div>
+            <p>Better privacy but creates knowledge silos. Team members make redundant configuration choices without visibility.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dec-item">
+      <span class="dec-num">D5</span>
+      <div class="dec-body">
+        <h4>Manual override is always surfaced</h4>
+        <p>Every trait on the soul card has an inline edit affordance. Users can push any trait up or down at any time, independent of what the system would suggest. The system guides but never overrides.</p>
+        <div class="dec-pills">
+          <span class="dec-pill" style="background:var(--t-light);color:var(--t-dark);border-color:var(--t-mid)">Full control</span>
+          <span class="dec-pill" style="background:var(--t-light);color:var(--t-dark);border-color:var(--t-mid)">Trust through agency</span>
+          <span class="dec-pill" style="background:var(--a-light);color:var(--a-dark);border-color:var(--a-mid)">More UI surface</span>
+        </div>
+        <div class="dec-compare">
+          <div class="dec-opt chosen">
+            <div class="opt-label">Chosen — always-visible edit controls</div>
+            <p>Users feel like authors, not passengers. Even if they never use the override, its presence increases confidence in the system.</p>
+          </div>
+          <div class="dec-opt alt">
+            <div class="opt-label">Considered — hide manual controls</div>
+            <p>Cleaner UI, but users who discover they can't easily adjust traits feel trapped. Support tickets spike on unexpected soul changes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dec-item">
+      <span class="dec-num">D6</span>
+      <div class="dec-body">
+        <h4>Soul lock for stable traits</h4>
+        <p>Users can "lock" any trait to prevent the system from ever updating it. Locked traits are excluded from pattern analysis entirely — useful for agents with intentionally narrow identities.</p>
+        <div class="dec-pills">
+          <span class="dec-pill" style="background:var(--t-light);color:var(--t-dark);border-color:var(--t-mid)">Predictability</span>
+          <span class="dec-pill" style="background:var(--t-light);color:var(--t-dark);border-color:var(--t-mid)">Specialist agents</span>
+          <span class="dec-pill" style="background:var(--a-light);color:var(--a-dark);border-color:var(--a-mid)">Limits evolution</span>
+        </div>
+        <div class="dec-compare">
+          <div class="dec-opt chosen">
+            <div class="opt-label">Chosen — per-trait locking</div>
+            <p>Enterprise users with compliance requirements can lock tone and formality traits while still letting domain affinity evolve freely.</p>
+          </div>
+          <div class="dec-opt alt">
+            <div class="opt-label">Considered — all-or-nothing lock</div>
+            <p>Simpler to implement but too blunt. Teams lose the ability to evolve useful traits while protecting critical ones.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INFORMATION ARCHITECTURE -->
+<div class="sec" id="ia">
+  <div class="sec-label">05 — Information Architecture</div>
+  <h2>How the system is organised</h2>
+  <p>The soul system sits across three surfaces — the team roster, the agent detail view, and the soul profile — connected by a notification layer that surfaces pending updates inline.</p>
+
+  <div class="ia-root">
+    <div class="ia-header">
+      <h3>Soul system — content hierarchy</h3>
+      <span class="ia-tag">structure</span>
+    </div>
+    <div class="ia-body">
+      <div class="ia-tree">
+        <!-- L0 root -->
+        <div class="ia-l0">
+          <div class="ia-node root">
+            <div class="n-title">Agentik Platform</div>
+            <div class="n-sub">workspace root</div>
+          </div>
+        </div>
+        <div style="height:24px;display:flex;justify-content:center"><div style="width:0.5px;background:var(--color-border-tertiary);height:100%"></div></div>
+        <!-- L1 row -->
+        <div style="display:flex;justify-content:center;gap:12px;position:relative">
+          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);height:0.5px;width:560px;background:var(--color-border-tertiary)"></div>
+          <div class="ia-l1" style="position:relative">
+            <div style="position:absolute;top:-24px;left:50%;transform:translateX(-50%);height:24px;width:0.5px;background:var(--color-border-tertiary)"></div>
+            <div class="n-title">Team Roster</div>
+            <div class="n-sub">all agents · soul status</div>
+          </div>
+          <div class="ia-l1" style="position:relative">
+            <div style="position:absolute;top:-24px;left:50%;transform:translateX(-50%);height:24px;width:0.5px;background:var(--color-border-tertiary)"></div>
+            <div class="n-title">Agent Detail</div>
+            <div class="n-sub">tasks · outputs · soul card</div>
+          </div>
+          <div class="ia-l1" style="position:relative">
+            <div style="position:absolute;top:-24px;left:50%;transform:translateX(-50%);height:24px;width:0.5px;background:var(--color-border-tertiary)"></div>
+            <div class="n-title">Soul Profile</div>
+            <div class="n-sub">traits · history · diffs</div>
+          </div>
+          <div class="ia-l1" style="position:relative">
+            <div style="position:absolute;top:-24px;left:50%;transform:translateX(-50%);height:24px;width:0.5px;background:var(--color-border-tertiary)"></div>
+            <div class="n-title">Notifications</div>
+            <div class="n-sub">update queue · approvals</div>
+          </div>
+        </div>
+        <!-- L2 -->
+        <div style="display:flex;justify-content:center;gap:12px;margin-top:24px">
+          <!-- Roster L2 -->
+          <div style="flex:1;max-width:160px;display:flex;flex-direction:column;align-items:center;gap:0">
+            <div style="width:0.5px;height:20px;background:var(--color-border-tertiary)"></div>
+            <div class="ia-l2-row" style="width:100%">
+              <div class="ia-l2"><div class="n-title">Agent cards</div><div class="n-sub">soul badge · version</div></div>
+              <div class="ia-l2"><div class="n-title">Update indicators</div><div class="n-sub">inline status chips</div></div>
+              <div class="ia-l2"><div class="n-title">Sort by soul age</div><div class="n-sub">filter · group</div></div>
+            </div>
+          </div>
+          <!-- Detail L2 -->
+          <div style="flex:1;max-width:160px;display:flex;flex-direction:column;align-items:center;gap:0">
+            <div style="width:0.5px;height:20px;background:var(--color-border-tertiary)"></div>
+            <div class="ia-l2-row" style="width:100%">
+              <div class="ia-l2"><div class="n-title">Task history</div><div class="n-sub">outputs · signals</div></div>
+              <div class="ia-l2"><div class="n-title">Soul mini-card</div><div class="n-sub">live traits · edit</div></div>
+              <div class="ia-l2"><div class="n-title">Output feed</div><div class="n-sub">signal annotations</div></div>
+            </div>
+          </div>
+          <!-- Soul Profile L2 -->
+          <div style="flex:1;max-width:160px;display:flex;flex-direction:column;align-items:center;gap:0">
+            <div style="width:0.5px;height:20px;background:var(--color-border-tertiary)"></div>
+            <div class="ia-l2-row" style="width:100%">
+              <div class="ia-l2"><div class="n-title">Trait bars</div><div class="n-sub">score · lock · edit</div></div>
+              <div class="ia-l2"><div class="n-title">Version timeline</div><div class="n-sub">diff · revert</div></div>
+              <div class="ia-l2"><div class="n-title">Domain affinity</div><div class="n-sub">learned strengths</div></div>
+            </div>
+          </div>
+          <!-- Notifications L2 -->
+          <div style="flex:1;max-width:160px;display:flex;flex-direction:column;align-items:center;gap:0">
+            <div style="width:0.5px;height:20px;background:var(--color-border-tertiary)"></div>
+            <div class="ia-l2-row" style="width:100%">
+              <div class="ia-l2"><div class="n-title">Soul update card</div><div class="n-sub">diff · approve · skip</div></div>
+              <div class="ia-l2"><div class="n-title">Pattern alerts</div><div class="n-sub">drift warnings</div></div>
+              <div class="ia-l2"><div class="n-title">Revert prompts</div><div class="n-sub">post-update checks</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Legend -->
+        <div class="ia-legend">
+          <div class="ia-legend-item"><div class="ia-legend-dot" style="background:var(--p-light);border-color:var(--p-mid)"></div>Platform entry</div>
+          <div class="ia-legend-item"><div class="ia-legend-dot" style="background:var(--t-light);border-color:var(--t-mid)"></div>Primary surfaces</div>
+          <div class="ia-legend-item"><div class="ia-legend-dot" style="background:var(--color-background-primary);border-color:var(--color-border-tertiary)"></div>Content nodes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- User flows -->
+  <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-secondary);margin-bottom:14px">Key user flows</div>
+  <div class="flow-sec">
+    <div class="flow-card">
+      <h4>Approving a soul update</h4>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p-light);color:var(--p-dark)">1</div>Notification surfaces in roster</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p-light);color:var(--p-dark)">2</div>User taps "Review diff"</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p-light);color:var(--p-dark)">3</div>Soul diff modal opens</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--p-light);color:var(--p-dark)">4</div>User reviews trait changes</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--t-light);color:var(--t-dark)">5</div>Applies or reverts update</div>
+    </div>
+    <div class="flow-card">
+      <h4>Manually editing a trait</h4>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--a-light);color:var(--a-dark)">1</div>Open agent detail view</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--a-light);color:var(--a-dark)">2</div>Tap soul mini-card</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--a-light);color:var(--a-dark)">3</div>Navigate to soul profile</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--a-light);color:var(--a-dark)">4</div>Tap trait row to edit</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--t-light);color:var(--t-dark)">5</div>Save manual version (M)</div>
+    </div>
+    <div class="flow-card">
+      <h4>Locking a trait</h4>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--c-light);color:var(--c-dark)">1</div>Open soul profile</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--c-light);color:var(--c-dark)">2</div>Long-press or hover trait row</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--c-light);color:var(--c-dark)">3</div>Select "Lock this trait"</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--t-light);color:var(--t-dark)">4</div>Trait excluded from analysis</div>
+    </div>
+    <div class="flow-card">
+      <h4>Reverting a soul version</h4>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--g-light);color:var(--g-dark)">1</div>Open soul profile</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--g-light);color:var(--g-dark)">2</div>View version timeline</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--g-light);color:var(--g-dark)">3</div>Select prior version</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--g-light);color:var(--g-dark)">4</div>Review what changes</div>
+      <div class="flow-step"><div class="flow-dot" style="background:var(--t-light);color:var(--t-dark)">5</div>Confirm revert</div>
+    </div>
+  </div>
+</div>
+
+<!-- INTERACTIVE DEMO -->
+<div class="sec" id="demo">
+  <div class="sec-label">06 — Signal Extractor</div>
+  <h2>Output → Soul translation</h2>
+  <p>Select an agent output to see how the system extracts behavioral signals and maps them to soul trait updates.</p>
+  <div class="demo-wrap">
+    <div class="demo-bar"><h3>Nova — live signal extractor</h3><span class="demo-badge">interactive</span></div>
+    <div class="demo-grid">
+      <div class="demo-col">
+        <div class="demo-col-label">Agent outputs</div>
+        <div class="out-chip" id="o1" onclick="pick(1)">Delivered a 12-point structured analysis with citations and confidence scores for each finding.</div>
+        <div class="out-chip" id="o2" onclick="pick(2)">Summarised a 40-page report into a 3-sentence executive brief with zero loss of key findings.</div>
+        <div class="out-chip" id="o3" onclick="pick(3)">Generated a creative brief with three unconventional campaign directions and mood boards.</div>
+        <div class="out-chip" id="o4" onclick="pick(4)">Proposed a consensus-driven decision framework after synthesising conflicting team inputs.</div>
+      </div>
+      <div class="demo-col">
+        <div class="demo-col-label">Extracted signals</div>
+        <div id="sig-out"><div class="empty-state">← Select an output</div></div>
+        <div id="trait-sec" style="display:none;margin-top:14px;padding-top:14px;border-top:0.5px solid var(--color-border-tertiary)">
+          <div class="demo-col-label" style="margin-bottom:10px">Soul trait impact</div>
+          <div id="trait-out"></div>
+          <button class="apply-btn">Approve this signal ↗</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OUTCOME -->
+<div class="sec" id="outcome">
+  <div class="sec-label">07 — Outcome</div>
+  <h2>What we shipped and what we learned</h2>
+  <p>Soul updation launched as a beta feature across 340 teams. Three months of data revealed both the wins and the gaps — shaping what comes next.</p>
+
+  <div class="outcome-hero">
+    <div class="oc-metric">
+      <div class="oc-num">3.2<span>×</span></div>
+      <div class="oc-label">Task-to-agent match accuracy after 20 soul cycles vs. static agents</div>
+    </div>
+    <div class="oc-divider"></div>
+    <div class="oc-metric">
+      <div class="oc-num">68<span>%</span></div>
+      <div class="oc-label">Users described their evolved agent as feeling like "a real team member"</div>
+    </div>
+    <div class="oc-divider"></div>
+    <div class="oc-metric">
+      <div class="oc-num">4.1<span>×</span></div>
+      <div class="oc-label">Agent retention lift for teams with 1+ evolved agents vs. static-only teams</div>
+    </div>
+  </div>
+
+  <!-- Retrospective -->
+  <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-secondary);margin-bottom:14px">Retrospective</div>
+  <div class="retro-row">
+    <div class="retro-card" style="background:var(--t-light);border-color:var(--t-mid)">
+      <div class="r-label" style="color:var(--t-dark)">What worked</div>
+      <ul style="color:var(--t-dark)">
+        <li>Versioned updates built trust faster than expected</li>
+        <li>Plain-language trait names lowered barrier for non-technical users</li>
+        <li>Team-visible soul drove cross-functional ownership of agents</li>
+        <li>Soul lock was the most-used enterprise feature in month 1</li>
+      </ul>
+    </div>
+    <div class="retro-card" style="background:var(--c-light);border-color:var(--c-mid)">
+      <div class="r-label" style="color:var(--c-dark)">What needs work</div>
+      <ul style="color:var(--c-dark)">
+        <li>5-output threshold felt too slow for teams with high task volumes</li>
+        <li>Notification fatigue on teams running 10+ agents simultaneously</li>
+        <li>Version history UI needs better diff visualisation at scale</li>
+        <li>Soul inheritance at agent creation underused — needs better discoverability</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Learnings -->
+  <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-secondary);margin-bottom:14px">Key learnings</div>
+  <div class="learning-list">
+    <div class="learning">
+      <div class="learning-icon" style="background:var(--p-light);border-color:var(--p-mid);color:var(--p-dark)">◈</div>
+      <div class="learning-body"><strong>Identity is an emotional product, not a functional one.</strong> Users who engaged with soul updation weren't primarily optimising performance — they were building attachment. The most-used feature was renaming soul versions ("Analyst mode", "Creative sprint").</div>
+    </div>
+    <div class="learning">
+      <div class="learning-icon" style="background:var(--t-light);border-color:var(--t-mid);color:var(--t-dark)">◈</div>
+      <div class="learning-body"><strong>Trust precedes utility.</strong> Teams that approved the first soul update were 6× more likely to approve subsequent ones. The design investment in making the first approval feel safe had compounding returns.</div>
+    </div>
+    <div class="learning">
+      <div class="learning-icon" style="background:var(--a-light);border-color:var(--a-mid);color:var(--a-dark)">◈</div>
+      <div class="learning-body"><strong>Shared visibility amplifies value.</strong> The strongest predictor of soul feature adoption was team size — not individual power users. Soul works as a social object, not just a personal tool.</div>
+    </div>
+  </div>
+
+  <!-- Next -->
+  <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-secondary);margin-bottom:14px">What's next</div>
+  <div class="next-grid">
+    <div class="next-card">
+      <div class="phase">Phase 2</div>
+      <h4>Soul inheritance</h4>
+      <p>New agents can inherit a soul template from an existing agent — bootstrapping identity instead of starting from zero.</p>
+    </div>
+    <div class="next-card">
+      <div class="phase">Phase 2</div>
+      <h4>Adaptive threshold</h4>
+      <p>Update thresholds that scale with task volume — high-volume agents evolve faster, low-volume agents evolve more conservatively.</p>
+    </div>
+    <div class="next-card">
+      <div class="phase">Phase 3</div>
+      <h4>Multi-agent soul alignment</h4>
+      <p>When two agents collaborate on a task, their souls register the interaction — enabling emergent team dynamics over time.</p>
+    </div>
+    <div class="next-card">
+      <div class="phase">Phase 3</div>
+      <h4>Soul analytics</h4>
+      <p>Team-level dashboards showing how agent identities have diverged, converged, or specialised across the workspace over time.</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /cs -->
+
+<script>
+const traits=[{n:'Analytical',v:82},{n:'Concise',v:68},{n:'Creative',v:41},{n:'Decisive',v:74},{n:'Collaborative',v:55}];
+const tc=document.getElementById('soul-traits');
+if(tc){tc.innerHTML=traits.map(t=>`<div class="tr-row"><span class="tr-name">${t.n}</span><div class="tr-bar"><div class="tr-fill" style="width:${t.v}%;background:#7F77DD"></div></div><span class="tr-delta" style="color:var(--color-text-secondary);font-family:var(--mono);font-size:10px">${t.v}</span></div>`).join('');}
+
+const data={
+  1:{sigs:[{k:'Tone',v:'Formal, structured'},{k:'Reasoning',v:'Analytical, evidence-based'},{k:'Output shape',v:'Multi-point list'},{k:'Confidence',v:'High (cited)'}],traits:[{n:'Analytical',d:+9},{n:'Decisive',d:+5},{n:'Creative',d:-4}]},
+  2:{sigs:[{k:'Tone',v:'Neutral, direct'},{k:'Reasoning',v:'Distillation'},{k:'Output shape',v:'Ultra-brief'},{k:'Confidence',v:'Very high'}],traits:[{n:'Concise',d:+12},{n:'Analytical',d:+3},{n:'Creative',d:-6}]},
+  3:{sigs:[{k:'Tone',v:'Imaginative'},{k:'Reasoning',v:'Divergent'},{k:'Output shape',v:'Open-ended'},{k:'Confidence',v:'Moderate'}],traits:[{n:'Creative',d:+14},{n:'Concise',d:-8},{n:'Decisive',d:-5}]},
+  4:{sigs:[{k:'Tone',v:'Diplomatic'},{k:'Reasoning',v:'Consensus synthesis'},{k:'Output shape',v:'Framework'},{k:'Confidence',v:'Shared'}],traits:[{n:'Collaborative',d:+13},{n:'Decisive',d:-6},{n:'Analytical',d:+4}]}
+};
+
+function pick(id){
+  [1,2,3,4].forEach(i=>document.getElementById('o'+i).classList.toggle('sel',i===id));
+  const d=data[id];
+  document.getElementById('sig-out').innerHTML=d.sigs.map(s=>`<div class="sig-row"><span class="sig-k">${s.k}</span><span class="sig-v">${s.v}</span></div>`).join('');
+  const ts=document.getElementById('trait-sec');ts.style.display='block';
+  document.getElementById('trait-out').innerHTML=d.traits.map(t=>`<div class="tr-row"><span class="tr-name">${t.n}</span><div class="tr-bar"><div class="tr-fill" style="width:${Math.max(0,traits.find(x=>x.n===t.n)?.v||50)+t.d}%;background:${t.d>0?'#7F77DD':'#D85A30'}"></div></div><span class="tr-delta" style="color:${t.d>0?'#1D9E75':'#D85A30'}">${t.d>0?'+':''}${t.d}</span></div>`).join('');
+}
+
+document.querySelectorAll('.nav-pill').forEach(p=>p.addEventListener('click',function(){document.querySelectorAll('.nav-pill').forEach(x=>x.classList.remove('active'));this.classList.add('active');}));
+
+function scrollTo(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+</script>
