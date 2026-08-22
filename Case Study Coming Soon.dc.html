@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+html,body{margin:0;background:#08080b}
+a{color:#7ad8ff;text-decoration:none}a:hover{color:#c9a8ff}
+@keyframes spinA{to{transform:rotate(360deg)}}
+@keyframes spinB{to{transform:rotate(-360deg)}}
+@keyframes ribbon{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.12)}100%{transform:rotate(360deg) scale(1)}}
+@keyframes breathe{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.95;transform:scale(1.06)}}
+@keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(172,208,61,.55)}70%{box-shadow:0 0 0 9px rgba(172,208,61,0)}}
+@keyframes drift{0%{transform:translate3d(-2%,1%,0)}50%{transform:translate3d(2%,-2%,0)}100%{transform:translate3d(-2%,1%,0)}}
+</style>
+</helmet>
+<div style="position:relative;width:1920px;height:1080px;overflow:hidden;background:radial-gradient(120% 85% at 50% 45%,#12121a 0%,#0d0d11 45%,#08080b 100%);font-family:Manrope,-apple-system,'SF Pro Display',system-ui,sans-serif;color:#fff">
+
+  <div style="position:absolute;inset:0;background-image:linear-gradient(to right,rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.045) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(70% 60% at 50% 42%,#000 0%,rgba(0,0,0,.35) 55%,transparent 85%);-webkit-mask-image:radial-gradient(70% 60% at 50% 42%,#000 0%,rgba(0,0,0,.35) 55%,transparent 85%)"></div>
+  <div style="position:absolute;inset:0;background-image:linear-gradient(to right,rgba(255,255,255,.09) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.09) 1px,transparent 1px);background-size:400px 400px;mask-image:radial-gradient(60% 55% at 50% 48%,#000,transparent 80%);-webkit-mask-image:radial-gradient(60% 55% at 50% 48%,#000,transparent 80%)"></div>
+
+  <div style="{{ auraWrap }}">
+    <div style="{{ ring1 }}"></div>
+    <div style="{{ ring2 }}"></div>
+    <div style="{{ ring3 }}"></div>
+  </div>
+
+  <div style="{{ halo }}"></div>
+
+  <div style="position:absolute;left:50%;top:40%;width:760px;height:760px;margin:-380px 0 0 -380px">
+    <x-import component-from-global-scope="AuraCore" from="./aura-core.jsx" intensity="{{ auraIntensity }}" sparks="{{ auraSparks }}" palette="{{ auraPaletteName }}" hint-size="760px,760px"></x-import>
+  </div>
+
+  <div style="{{ disc }}"></div>
+  <div style="{{ sheen }}"></div>
+
+  <div style="position:absolute;left:50%;top:40%;width:264px;height:264px;margin:-132px 0 0 -132px">
+    <img src="uploads/AkpixelsLogo2.png" alt="AK Pixels" width="264" height="264" style="display:block;width:264px;height:264px;object-fit:contain;filter:drop-shadow(0 0 26px rgba(92,234,255,.4)) drop-shadow(0 0 64px rgba(122,44,255,.3))">
+  </div>
+  <div style="{{ rim }}"></div>
+
+  <div style="position:absolute;left:0;right:0;top:104px;display:flex;justify-content:center">
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 18px 9px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 8px 30px rgba(0,0,0,.35)">
+      <span style="width:8px;height:8px;border-radius:50%;background:#ACD03D;box-shadow:0 0 10px rgba(172,208,61,.9);animation:pulseDot 2.4s ease-out infinite"></span>
+      <span style="font-size:15px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.82)">Human in the loop</span>
+    </div>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:140px;display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center">
+    <h1 style="margin:0;font-size:88px;line-height:1;font-weight:800;letter-spacing:-.035em;background:linear-gradient(180deg,#ffffff 25%,rgba(255,255,255,.62) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 90px rgba(120,170,255,.25)">Portfolio Coming Soon</h1>
+    <p style="margin:0;max-width:720px;font-size:20px;line-height:1.6;font-weight:400;color:rgba(255,255,255,.52);text-wrap:pretty">A deep dive into the process, the decisions and the interface work behind the project.</p>
+    <div style="display:flex;align-items:center;gap:14px;margin-top:10px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.34)">
+      <span style="width:56px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3))"></span>
+      <span>AKPixels · 2026</span>
+      <span style="width:56px;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.3),transparent)"></span>
+    </div>
+  </div>
+
+  <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(100% 70% at 50% 42%,transparent 55%,rgba(0,0,0,.55) 100%)"></div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1920,&quot;height&quot;:1080},&quot;auraPalette&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Siri spectrum&quot;,&quot;Electric ice&quot;,&quot;Magenta dusk&quot;,&quot;Brand lime&quot;],&quot;default&quot;:&quot;Siri spectrum&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Aura&quot;},&quot;energy&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0,&quot;max&quot;:100,&quot;step&quot;:1,&quot;default&quot;:60,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Aura&quot;},&quot;sparks&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Aura&quot;},&quot;stage&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Open field&quot;,&quot;Glass disc&quot;,&quot;Halo ring&quot;],&quot;default&quot;:&quot;Open field&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Centerpiece&quot;}}">class Component extends DCLogic {
+  renderVals() {
+    const pal = this.props.auraPalette ?? "Siri spectrum";
+    const e = (this.props.energy ?? 60) / 100;
+    const stage = this.props.stage ?? "Open field";
+
+    const P = {
+      "Siri spectrum": {
+        r1: "rgba(0,120,255,A), rgba(255,0,160,A), rgba(0,230,255,A), rgba(120,0,255,A), rgba(0,120,255,A)",
+        r2: "rgba(0,225,255,A), transparent 30%, rgba(255,0,200,A) 55%, transparent 78%, rgba(90,60,255,A)",
+        r3: "rgba(255,255,255,A), rgba(0,190,255,A), rgba(190,0,255,A), rgba(255,255,255,A)",
+        halo: ["80,140,255", "160,60,255"], rim: ["0,200,255", "255,0,180"]
+      },
+      "Electric ice": {
+        r1: "rgba(0,180,255,A), rgba(120,255,240,A), rgba(40,90,255,A), rgba(190,230,255,A), rgba(0,180,255,A)",
+        r2: "rgba(140,255,255,A), transparent 32%, rgba(0,140,255,A) 58%, transparent 80%, rgba(90,200,255,A)",
+        r3: "rgba(255,255,255,A), rgba(120,240,255,A), rgba(70,130,255,A), rgba(255,255,255,A)",
+        halo: ["70,170,255", "120,240,255"], rim: ["120,235,255", "60,140,255"]
+      },
+      "Magenta dusk": {
+        r1: "rgba(255,40,140,A), rgba(120,0,255,A), rgba(255,110,60,A), rgba(190,0,200,A), rgba(255,40,140,A)",
+        r2: "rgba(255,90,180,A), transparent 30%, rgba(140,0,255,A) 55%, transparent 78%, rgba(255,140,90,A)",
+        r3: "rgba(255,255,255,A), rgba(255,70,170,A), rgba(150,0,255,A), rgba(255,255,255,A)",
+        halo: ["220,60,180", "140,40,255"], rim: ["255,80,190", "160,60,255"]
+      },
+      "Brand lime": {
+        r1: "rgba(172,208,61,A), rgba(0,220,180,A), rgba(230,255,120,A), rgba(20,120,90,A), rgba(172,208,61,A)",
+        r2: "rgba(200,255,120,A), transparent 32%, rgba(0,210,160,A) 56%, transparent 80%, rgba(120,200,60,A)",
+        r3: "rgba(255,255,255,A), rgba(190,240,90,A), rgba(0,200,160,A), rgba(255,255,255,A)",
+        halo: ["150,200,70", "40,200,150"], rim: ["190,235,90", "40,210,160"]
+      }
+    }[pal];
+
+    const a = (base) => (v) => v.replace(/A/g, (base * (0.35 + e * 0.95)).toFixed(2));
+    const ring = (spec, base) => spec.replace(/A/g, (base * (0.35 + e * 0.95)).toFixed(2));
+    const spd = (s) => (s / (0.45 + e * 1.25)).toFixed(1) + "s";
+    const m = (a2, b2, c, d) =>
+      `radial-gradient(closest-side,transparent ${a2}%,#000 ${b2}%,#000 ${c}%,transparent ${d}%)`;
+
+    const ring1 = `position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,${ring(P.r1, 0.55)});mask-image:${m(28,42,56,72)};-webkit-mask-image:${m(28,42,56,72)};animation:spinA ${spd(34)} linear infinite`;
+    const ring2 = `position:absolute;inset:180px;border-radius:50%;background:conic-gradient(from 120deg,${ring(P.r2, 0.55)});mask-image:${m(34,48,48,78)};-webkit-mask-image:${m(34,48,48,78)};animation:ribbon ${spd(22)} ease-in-out infinite`;
+    const ring3 = `position:absolute;inset:330px;border-radius:50%;background:conic-gradient(from 240deg,${ring(P.r3, 0.45)});mask-image:${m(44,62,62,88)};-webkit-mask-image:${m(44,62,62,88)};animation:spinB ${spd(17)} linear infinite`;
+
+    const blur = Math.round(120 - e * 55);
+    const auraWrap = `position:absolute;left:50%;top:40%;width:1500px;height:1500px;margin:-750px 0 0 -750px;filter:blur(${blur}px) saturate(${(100 + e * 70).toFixed(0)}%);opacity:${(0.5 + e * 0.5).toFixed(2)};animation:drift ${spd(26)} ease-in-out infinite`;
+    const halo = `position:absolute;left:50%;top:40%;width:900px;height:900px;margin:-450px 0 0 -450px;border-radius:50%;background:radial-gradient(closest-side,rgba(${P.halo[0]},${(0.14 + e * 0.3).toFixed(2)}),rgba(${P.halo[1]},${(0.06 + e * 0.16).toFixed(2)}) 45%,transparent 72%);filter:blur(30px);animation:breathe ${spd(9)} ease-in-out infinite`;
+    const rim = `position:absolute;left:50%;top:40%;width:264px;height:264px;margin:-132px 0 0 -132px;border-radius:50%;pointer-events:none;box-shadow:0 0 60px rgba(${P.rim[0]},${(0.1 + e * 0.28).toFixed(2)}) inset,0 0 40px rgba(${P.rim[1]},${(0.06 + e * 0.16).toFixed(2)}) inset`;
+
+    let disc, sheen;
+    if (stage === "Open field") {
+      disc = "display:none";
+      sheen = "display:none";
+    } else if (stage === "Halo ring") {
+      disc = `position:absolute;left:50%;top:40%;width:480px;height:480px;margin:-240px 0 0 -240px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:transparent;box-shadow:0 0 60px rgba(${P.halo[0]},${(0.15 + e * 0.35).toFixed(2)}),0 0 0 14px rgba(255,255,255,.03)`;
+      sheen = `position:absolute;left:50%;top:40%;width:600px;height:600px;margin:-300px 0 0 -300px;border-radius:50%;pointer-events:none;border:1px solid rgba(255,255,255,.07)`;
+    } else {
+      disc = `position:absolute;left:50%;top:40%;width:480px;height:480px;margin:-240px 0 0 -240px;border-radius:50%;border:1px solid rgba(255,255,255,.10);background:radial-gradient(120% 120% at 30% 20%,rgba(255,255,255,.11),rgba(255,255,255,.02) 45%,rgba(0,0,0,.28));backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:0 0 0 1px rgba(255,255,255,.04) inset,0 40px 120px rgba(0,0,0,.55),0 0 140px rgba(${P.halo[0]},${(0.14 + e * 0.3).toFixed(2)})`;
+      sheen = "position:absolute;left:50%;top:40%;width:480px;height:480px;margin:-240px 0 0 -240px;border-radius:50%;pointer-events:none;background:linear-gradient(150deg,rgba(255,255,255,.22) 0%,transparent 34%),linear-gradient(330deg,rgba(120,220,255,.18) 0%,transparent 30%);mix-blend-mode:screen";
+    }
+
+    return {
+      auraWrap, ring1, ring2, ring3, halo, rim, disc, sheen,
+      auraPaletteName: pal,
+      auraSparks: this.props.sparks ?? true,
+      auraIntensity: 0.45 + e * 0.85,
+    };
+  }
+}
+</script>
+</body>
+</html>
