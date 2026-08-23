@@ -389,6 +389,17 @@ textarea.input { min-height: 90px; resize: vertical; }
   .ak-gate[data-leaving="yes"] { animation: ak-gate-out .6s cubic-bezier(.4,0,.2,1) forwards; pointer-events: none; }
   .ak-gate-item { animation: ak-gate-in .8s cubic-bezier(.16,1,.3,1) both; flex: none; }
   @media (max-height: 720px) { .ak-gate { gap: 20px !important; } }
+  .ak-sound:hover, .ak-sound:focus-visible { color: var(--color-text); }
+  .ak-sound-eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 13px; }
+  .ak-sound-eq i { width: 2px; border-radius: 1px; background: currentColor; height: 4px; transform-origin: bottom; }
+  .ak-sound-eq[data-on="true"] i { animation: ak-eq .9s ease-in-out infinite; }
+  .ak-sound-eq[data-on="true"] i:nth-child(2) { animation-delay: .15s; }
+  .ak-sound-eq[data-on="true"] i:nth-child(3) { animation-delay: .3s; }
+  .ak-sound-eq[data-on="true"] i:nth-child(4) { animation-delay: .45s; }
+  .ak-sound-ico { display: none; }
+  header .ak-sound .ak-sound-eq[data-on="false"] { display: none; }
+  header .ak-sound .ak-sound-eq[data-on="false"] ~ .ak-sound-ico { display: block; }
+  @keyframes ak-eq { 0%, 100% { height: 4px; } 50% { height: 13px; } }
   @keyframes ak-glow-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
   @keyframes ak-glow-pulse { 0%, 100% { opacity: .16; } 50% { opacity: .26; } }
   .ak-gate-glow {
@@ -451,12 +462,16 @@ textarea.input { min-height: 90px; resize: vertical; }
     <div class="ak-gate" role="dialog" aria-modal="true" aria-labelledby="ak-gate-title" data-leaving="{{ introLeaving }}" style="position:fixed;inset:0;z-index:120;background:var(--color-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;text-align:center;padding:32px;overflow:auto">
       <div class="ak-gate-glow" aria-hidden="true"></div>
       <div class="ak-gate-item" aria-hidden="true" style="position:relative;width:min(340px,40vh);height:min(340px,40vh);pointer-events:none;overflow:hidden">
-        <x-import component-from-global-scope="AuraHeader" from="./aura-header.jsx" height="100%" hint-size="100%,100%"></x-import>
+        <x-import component-from-global-scope="AuraHeader" from="./aura-header.jsx" height="100%" audio-src="{{ introAudio }}" hint-size="100%,100%"></x-import>
       </div>
-      <h1 id="ak-gate-title" class="ak-gate-item" style="position: relative; margin: 0; font-family: var(--font-heading); font-weight: 400; font-size: clamp(34px,6vw,70px); line-height: 1.05; letter-spacing: -0.035em; text-wrap: balance; animation-delay: .05s">Ashish Kapoor<br>Portfolio 2026</h1>
+      <h1 id="ak-gate-title" class="ak-gate-item" style="position: relative; margin: 0; font-family: var(--font-heading); font-weight: 400; font-size: clamp(34px,6vw,70px); line-height: 1.05; letter-spacing: -0.035em; text-wrap: balance; animation-delay: .05s">Ashish Kapoor<br><span style="font-size:0.52em;letter-spacing:-0.01em;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Portfolio 2026</span></h1>
       <button type="button" class="ak-gate-item ak-gate-btn" onClick="{{ onEnter }}" aria-label="Enter the portfolio" data-tip="Enter the portfolio" data-tip-pos="below" style="position:relative;display:inline-flex;align-items:center;gap:12px;padding:14px 30px;border-radius:999px;border:1px solid color-mix(in srgb, var(--color-text) 34%, transparent);background:transparent;color:var(--color-text);font-family:var(--font-heading);font-size:15px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;min-height:48px;transition:background .25s, color .25s, border-color .25s, box-shadow .3s ease;animation-delay:.28s">
         <span>Enter</span>
         <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg>
+      </button>
+      <button type="button" class="ak-gate-item ak-sound" onClick="{{ onToggleIntro }}" aria-pressed="{{ introPlayingStr }}" aria-label="{{ soundLabel }}" data-tip="{{ soundLabel }}" data-tip-pos="below" style="position:relative;display:inline-flex;align-items:center;gap:9px;margin-top:-14px;padding:8px 14px;border:0;border-radius:999px;background:transparent;color:color-mix(in srgb, var(--color-text) 52%, transparent);font-family:var(--font-body);font-size:13px;letter-spacing:0.02em;cursor:pointer;min-height:40px;transition:color .25s ease;animation-delay:.42s">
+        <span class="ak-sound-eq" data-on="{{ introPlayingStr }}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span>{{ soundLabel }}</span>
       </button>
     </div>
   </sc-if>
@@ -467,6 +482,10 @@ textarea.input { min-height: 90px; resize: vertical; }
         <img src="uploads/AkpixelsLogo2.png" alt="" width="28" height="28" style="display:block;width:28px;height:28px;object-fit:contain;flex:none">
         Ashish Kapoor
       </a>
+      <button type="button" class="ak-sound" onClick="{{ onToggleIntro }}" aria-pressed="{{ introPlayingStr }}" aria-label="{{ soundLabel }}" data-tip="{{ soundLabel }}" data-tip-pos="below" style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0;border:0;border-radius:50%;background:transparent;color:color-mix(in srgb, var(--color-text) 52%, transparent);cursor:pointer;transition:color .25s ease">
+        <span class="ak-sound-eq" data-on="{{ introPlayingStr }}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <svg class="ak-sound-ico" width="17" height="17" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM32,96H72v64H32ZM144,207.64,88,164.09V91.91l56-43.55Zm54-106.3a40,40,0,0,1,0,53.32,8,8,0,0,1-12-10.58,24,24,0,0,0,0-32.16,8,8,0,1,1,12-10.58Z"></path></svg>
+      </button>
       <nav aria-label="Primary" style="display:flex;gap:20px;font-size:14px">
         <a href="#work" data-tip="Four case studies" data-tip-pos="below" style="color:color-mix(in srgb, var(--color-text) 66%, transparent)">Work</a>
         <a href="#now" data-tip="What I'm working on" data-tip-pos="below" style="color:color-mix(in srgb, var(--color-text) 66%, transparent)">Right Now</a>
@@ -506,7 +525,7 @@ textarea.input { min-height: 90px; resize: vertical; }
 
    <div data-reveal="" class="ak-aura" style="position:relative;aspect-ratio:1/1">
      
-     <x-import component-from-global-scope="AuraHeader" from="./aura-header.jsx" height="{{ 420 }}" hint-size="100%,420px"></x-import>
+     <x-import component-from-global-scope="AuraHeader" from="./aura-header.jsx" height="{{ 420 }}" audio-src="{{ introAudio }}" hint-size="100%,420px"></x-import>
    </div>
   <img src="uploads/pasted-1787419133851-0.png" alt="HFI Certified User Experience Analyst (CXA)" width="104" height="104" style="position: absolute; top: 473px; z-index: 2; width: 108px; height: 96px; object-fit: contain; transform: rotate(-9deg); filter: drop-shadow(0 8px 22px rgba(0,0,0,.55)); left: 513px"></section>
 
@@ -734,9 +753,15 @@ textarea.input { min-height: 90px; resize: vertical; }
   }
 }">
 class Component extends DCLogic {
-  state = { list: [], unlocked: {}, inputs: {}, errors: {}, prompt: null, entered: false, leaving: false };
+  state = { list: [], unlocked: {}, inputs: {}, errors: {}, prompt: null, entered: false, leaving: false, introPlaying: false };
 
   componentDidMount() {
+    // the aura publishes window.__akIntro once its audio graph exists
+    this._introHook = setInterval(() => {
+      if (!window.__akIntro || this._unsubIntro) return;
+      this._unsubIntro = window.__akIntro.subscribe((p) => this.setState({ introPlaying: p }));
+      clearInterval(this._introHook);
+    }, 150);
     const deadline = Date.now() + 4000;
     this._gateFocus = setInterval(() => {
       if (this.state.entered || Date.now() > deadline) { clearInterval(this._gateFocus); return; }
@@ -873,7 +898,11 @@ class Component extends DCLogic {
       studies,
       extras: this._extras || [],
       domains: this._domains || [],
+      introAudio: (window.INTRO_AUDIO || "audio/intro.wav"),
       showIntro: !this.state.entered,
+      introPlayingStr: this.state.introPlaying ? "true" : "false",
+      soundLabel: this.state.introPlaying ? "Pause intro" : "Play intro",
+      onToggleIntro: () => { if (window.__akIntro) window.__akIntro.toggle(); },
       introLeaving: this.state.leaving ? "yes" : "no",
       onEnter: () => {
         this.setState({ leaving: true });
