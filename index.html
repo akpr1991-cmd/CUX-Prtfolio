@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style id="ak-ds-inline">
+/* Nocturne — design-system tokens and component classes. This file is the source of truth for the system's look; retune it here and see readme.md. */
+:root {
+  --color-bg: #161826;
+  --color-surface: #232532;
+  --color-text: #e9e9ed;
+  --color-accent: #9184d9; /* review round 7 (Barron): the accent moves to
+     the product's blurple — OKLCH hue 289.2, the hue of the app's own Pro
+     accent (#9a8fe0, --om-accent-pro) — at the same lightness the steel
+     accent held (L 0.660, so the documented ratios survive) and chroma
+     in the product blurple's own range (its token sits at C 0.118; the
+     accent takes 0.125, from the old steel's 0.030):
+     the accent now reads as an accent rather than another neutral. */
+  --color-accent-2: #a7a1db; /* the machine-derived stand-in follows: same
+     hue, same L 0.734, chroma at the same 2:3 proportion it held */
+  --color-divider: color-mix(in srgb, #e9e9ed 16%, transparent);
+
+  /* Tonal ramps — generated in OKLCH on one shared lightness scale, so the
+     same step of any role matches the others in visual value. */
+  --color-neutral-100: #f3f5fe;
+  --color-neutral-200: #e4e7f5;
+  --color-neutral-300: #cfd3e5;
+  --color-neutral-400: #b2b6ca;
+  --color-neutral-500: #9397ab;
+  --color-neutral-600: #75798c;
+  --color-neutral-700: #595d6c;
+  --color-neutral-800: #3f424d;
+  --color-neutral-900: #292b31;
+
+  --color-accent-100: #f5f4ff;
+  --color-accent-200: #e7e5fe;
+  --color-accent-300: #d2cefd;
+  --color-accent-400: #b5abfc;
+  --color-accent-500: #968ae0;
+  --color-accent-600: #796cbf;
+  --color-accent-700: #5d5294;
+  --color-accent-800: #423a6a;
+  --color-accent-900: #2b2741;
+
+  --color-accent-2-100: #f5f4ff;
+  --color-accent-2-200: #e7e5fe;
+  --color-accent-2-300: #d2cefd;
+  --color-accent-2-400: #b5afe8;
+  --color-accent-2-500: #9690c9;
+  --color-accent-2-600: #7972a9;
+  --color-accent-2-700: #5c5783;
+  --color-accent-2-800: #423e5d;
+  --color-accent-2-900: #2b293a;
+
+  /* Deck section-divider ground — review round 3: saturation as presence.
+     Dividers take a saturated deep indigo (hue 277, the neutral ramp's own
+     family; C 0.094 — written when the accent held C 0.030, before the
+     round-7 blurple raised it past the ground's) with a lighter bloom and
+     a ghost tint of the same hue, while the slide grounds stay
+     desaturated. Deck-scale fills only — not interface colors. */
+  --color-section: #262a60;
+  --color-section-glow: #353b80;
+  --color-section-ghost: #4c5397;
+
+  --font-heading: "Inter", system-ui, sans-serif;
+  --font-heading-weight: 500;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --space-1: 2.8px;
+  --space-2: 5.6px;
+  --space-3: 8.4px;
+  --space-4: 11.2px;
+  --space-6: 16.8px;
+  --space-8: 22.4px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+
+  /* Elevation — derived from the ground: soft ink-tinted shadows on a
+     light theme, a hairline edge + ambient darkness on a dark one. */
+  --shadow-sm: 0 0 0 1px #3f424d;
+  --shadow-md: 0 0 0 1px #595d6c, 0 6px 18px rgba(0,0,0,0.55);
+  --shadow-lg: 0 0 0 1px #9397ab, 0 16px 40px rgba(0,0,0,0.65);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: var(--font-heading-weight); }
+
+.lighten{mix-blend-mode:lighten;background-color:transparent}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Components — built with the tokens above. Plain CSS
+   on plain HTML: no JavaScript, no build step. Each class is documented in
+   readme.md and demonstrated in foundations/ and components/.
+   ══════════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-size: 15px; line-height: 1.55; font-weight: 400; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  line-height: 1.12; letter-spacing: -0.015em; margin: 0 0 var(--space-2);
+}
+h1 { font-size: 42px; }
+h2 { font-size: 32px; }
+h3 { font-size: 25px; }
+h4 { font-size: 20px; }
+h5 { font-size: 16px; }
+h6 { font-size: 13px; }
+h6 { letter-spacing: 0.08em; text-transform: uppercase; }
+p { margin: 0 0 var(--space-3); }
+a { color: var(--color-accent); text-underline-offset: 3px; }
+img { display: block; max-width: 100%; }
+figure { margin: 0; }
+figcaption {
+  font-size: 11px; margin-top: var(--space-1);
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+.text-muted { color: color-mix(in srgb, var(--color-text) 55%, transparent); }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+::selection { background: color-mix(in srgb, var(--color-accent) 30%, transparent); }
+
+/* — rules — */
+/* Rules fade to transparent at both ends instead of stopping cleanly — a
+   Nocturne signature. The ramp is 48px an end (one deck baseline unit),
+   painted from the same divider token. Freestanding rules fade; box
+   outlines, in-control separators, and short accent marks stay solid. */
+.hr {
+  height: 1px; border: 0; margin: var(--space-4) 0;
+  background: linear-gradient(to right,
+    transparent, var(--color-divider) 48px,
+    var(--color-divider) calc(100% - 48px), transparent);
+}
+
+/* — buttons — */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  cursor: pointer; text-decoration: none;
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 14px; line-height: 1.2; color: var(--color-text); /* matches the .input's 14px —
+     the pair sits side by side in sign-up rows */
+  background: transparent; border: 1px solid transparent;
+  padding: var(--space-2) calc(var(--space-3) * 1.2);
+  border-radius: var(--radius-md);
+}
+.btn svg { display: block; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { color: var(--color-accent); border-color: var(--color-accent); }
+.btn-primary:hover { background: color-mix(in srgb, var(--color-accent) 12%, transparent); }
+.btn-primary:active { background: color-mix(in srgb, var(--color-accent) 22%, transparent); }
+.btn-secondary { border-color: var(--color-divider); }
+.btn-secondary:hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.btn-secondary:active { background: color-mix(in srgb, var(--color-text) 14%, transparent); }
+.btn-ghost { color: var(--color-accent); padding-inline: var(--space-1); }
+.btn-ghost:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+.btn-ghost:active { background: color-mix(in srgb, var(--color-accent) 18%, transparent); }
+.btn-icon { width: 36px; height: 36px; padding: 0; }
+.btn-block { width: 100%; margin-top: var(--space-2); }
+
+/* — forms — */
+.field > label {
+  display: block; font-size: 12px; margin-bottom: 5px;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+.input {
+  width: 100%; min-height: 36px; padding: 6px 10px; font: inherit;
+  font-size: 14px; color: var(--color-text); caret-color: var(--color-accent);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+}
+.input:hover { border-color: color-mix(in srgb, var(--color-text) 45%, transparent); }
+.input:focus-visible { border-color: var(--color-accent); outline-offset: 0; }
+textarea.input { min-height: 90px; resize: vertical; }
+.radio { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+.radio input, .seg-opt input {
+  position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
+}
+.radio .dot {
+  width: 16px; height: 16px; flex: none; border-radius: 50%;
+  border: 1.5px solid var(--color-divider);
+}
+.radio:hover .dot { border-color: var(--color-accent); }
+.radio input:checked + .dot {
+  border-color: var(--color-accent); background: var(--color-accent);
+  box-shadow: inset 0 0 0 4px var(--color-bg);
+}
+.radio input:focus-visible + .dot { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.seg {
+  display: inline-flex; overflow: hidden;
+  border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+}
+.seg-opt {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; font-size: 13px; cursor: pointer;
+}
+.seg-opt + .seg-opt { border-left: 1px solid var(--color-divider); }
+.seg-opt:has(input:checked) { color: var(--color-accent); box-shadow: inset 0 0 0 1px var(--color-accent); }
+.seg-opt:not(:has(input:checked)):hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+.seg-opt:has(input:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+
+/* — cards — */
+.card {
+  display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-surface);
+}
+.card-kicker { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); }
+.card-title {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 17px; line-height: 1.2;
+}
+.card-body { margin: 0; font-size: 13px; opacity: 0.8; flex: 1; }
+.card-meta {
+  display: flex; align-items: center; gap: 6px; font-size: 11px;
+  color: color-mix(in srgb, var(--color-text) 50%, transparent);
+}
+.elev-sm { box-shadow: var(--shadow-sm); }
+.elev-md { box-shadow: var(--shadow-md); }
+.elev-lg { box-shadow: var(--shadow-lg); }
+
+/* — tags — */
+.tag {
+  display: inline-flex; align-items: center; font-size: 11px;
+  letter-spacing: 0.02em; padding: 3px 10px;
+  border-radius: calc(var(--radius-md) * 0.75);
+}
+.tag-accent { background: var(--color-accent-800); color: var(--color-accent-100); }
+.tag-accent-2 { background: var(--color-accent-2-800); color: var(--color-accent-2-100); }
+.tag-neutral { background: var(--color-neutral-800); color: var(--color-neutral-100); }
+.tag-outline { border: 1px solid var(--color-accent); color: var(--color-accent); }
+
+/* — navigation — */
+.nav {
+  display: flex; align-items: center; gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: none;
+}
+.nav-brand {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 18px; margin-right: auto;
+}
+.nav a { color: inherit; text-decoration: none; font-size: 14px; }
+.nav a:hover, .nav a[aria-current='page'] { color: var(--color-accent); }
+
+/* — tables — */
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th {
+  text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  padding: var(--space-2); border-bottom: 1px solid transparent; /* keeps layout; the row paints the fading rule */
+}
+.table td {
+  padding: var(--space-2);
+  border-bottom: 1px solid transparent;
+}
+/* Row rules as row-level strips so the end-fade spans the row, not each cell. */
+.table thead tr {
+  background: linear-gradient(to right,
+    transparent, var(--color-divider) 48px,
+    var(--color-divider) calc(100% - 48px), transparent) no-repeat bottom / 100% 1px;
+}
+.table tbody tr {
+  background: linear-gradient(to right,
+    transparent, color-mix(in srgb, var(--color-text) 8%, transparent) 48px,
+    color-mix(in srgb, var(--color-text) 8%, transparent) calc(100% - 48px), transparent) no-repeat bottom / 100% 1px;
+}
+.table tbody tr:hover {
+  /* the hover tint layers over the row rule, which keeps painting */
+  background:
+    linear-gradient(color-mix(in srgb, var(--color-text) 4%, transparent),
+                    color-mix(in srgb, var(--color-text) 4%, transparent)) no-repeat 0 0 / 100% 100%,
+    linear-gradient(to right,
+      transparent, color-mix(in srgb, var(--color-text) 8%, transparent) 48px,
+      color-mix(in srgb, var(--color-text) 8%, transparent) calc(100% - 48px), transparent) no-repeat bottom / 100% 1px;
+}
+
+/* — dialog — */
+.dialog-backdrop {
+  position: fixed; inset: 0; display: grid; place-items: center;
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--color-neutral-900) 50%, transparent);
+}
+.dialog {
+  width: min(440px, 100%); display: flex; flex-direction: column; gap: var(--space-3);
+  padding: var(--space-4); border-radius: var(--radius-lg);
+  background: var(--color-surface); box-shadow: var(--shadow-lg);
+}
+.dialog-title {
+  font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+  font-size: 20px;
+}
+.dialog-body { font-size: 14px; opacity: 0.85; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-2); }
+
+
+</style>
+<script src="./image-slot.js"></script>
+<script src="./EDIT-MY-PROJECTS.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap">
+<style>
+  :root {
+    --color-bg: #08070f;
+    --color-surface: #16142a;
+    --color-accent: #5ceaff;
+    --color-accent-100: #e2fbff;
+    --color-accent-200: #bdf5ff;
+    --color-accent-300: #93efff;
+    --color-accent-400: #75ecff;
+    --color-accent-500: #5ceaff;
+    --color-accent-600: #35b4cc;
+    --color-accent-700: #21808f;
+    --color-accent-800: #123f4d;
+    --color-accent-900: #0b2530;
+    --color-accent-2: #ff2fd0;
+    --color-accent-2-100: #ffe0f8;
+    --color-accent-2-300: #ff8ee6;
+    --color-accent-2-500: #ff2fd0;
+    --color-accent-2-800: #4d0e3f;
+    --color-accent-2-900: #2d0825;
+  }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--color-bg); color: var(--color-text); }
+  a { color: var(--color-accent); text-decoration: none; }
+  a:hover { color: var(--color-accent-300); text-decoration: underline; }
+  [data-reveal] { transition: opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1); }
+  .js-reveal [data-reveal]:not(.is-in) { opacity: 0; transform: translateY(18px); }
+  @media (prefers-reduced-motion: reduce) { .js-reveal [data-reveal]:not(.is-in) { opacity: 1; transform: none; } }
+
+  /* rhythm + cover treatment: tweak overrides on top of the inline defaults */
+  [data-rhythm="compact"] .ak-band { padding-top: 44px; }
+  [data-rhythm="compact"] .ak-hero { padding-top: 64px; padding-bottom: 44px; }
+  [data-rhythm="compact"] .ak-h1 { font-size: clamp(30px, 3.6vw, 42px); max-width: 30ch; margin-bottom: 22px; }
+  [data-rhythm="compact"] .ak-lede { font-size: 17px; }
+  [data-rhythm="compact"] .ak-story { padding-top: 22px; }
+  [data-rhythm="airy"] .ak-band { padding-top: 132px; }
+  [data-rhythm="airy"] .ak-hero { padding-top: 152px; padding-bottom: 116px; }
+  [data-rhythm="airy"] .ak-h1 { font-size: clamp(40px, 6.4vw, 76px); max-width: 20ch; margin-bottom: 44px; }
+  [data-rhythm="airy"] .ak-lede { font-size: 21px; }
+  [data-rhythm="airy"] .ak-story { padding-top: 48px; }
+  [data-cover="framed"] .ak-cover-wrap { max-width: 940px; }
+
+  [data-cover="typographic"] .ak-story { padding-top: 0; border-top: 1px solid var(--color-divider); margin-top: 8px; padding-block: 34px 0; }
+  [data-cover="typographic"] .ak-story h3 { font-size: 38px; }
+  /* blur only a cover that actually holds an image, so empty drop targets stay readable */
+  .ak-cover[data-locked="yes"] .ak-img { filter: blur(14px) saturate(0.55); transform: scale(1.06); }
+  .ak-monogram { display: grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-sm); flex: none; background: color-mix(in srgb, var(--color-accent) 22%, transparent); color: var(--color-accent-100); font-size: 11px; }
+  .ak-aura > *:not(img) { position: absolute; inset: 0; }
+  .ak-shot .ak-overlay { opacity: 0; transition: opacity .4s cubic-bezier(.22,.61,.36,1); }
+  .ak-shot:hover .ak-overlay, .ak-shot:focus-within .ak-overlay, [data-cover="typographic"] .ak-overlay { opacity: 1; }
+  .ak-shot .ak-ov-item { transform: translateY(14px); transition: transform .45s cubic-bezier(.22,.61,.36,1); }
+  .ak-shot:hover .ak-ov-item, .ak-shot:focus-within .ak-ov-item, [data-cover="typographic"] .ak-ov-item { transform: none; }
+  .ak-shot .ak-ov-item:nth-child(2) { transition-delay: .04s; }
+  .ak-shot .ak-ov-item:nth-child(3) { transition-delay: .08s; }
+  .ak-shot .ak-ov-item:nth-child(4) { transition-delay: .12s; }
+  .ak-shot .ak-ov-item:nth-child(5) { transition-delay: .16s; }
+  .ak-shot .ak-img { transition: transform .6s cubic-bezier(.22,.61,.36,1); }
+  .ak-shot:hover .ak-img { transform: scale(1.03); }
+  .ak-img { background: color-mix(in srgb, var(--color-surface) 60%, transparent); font-size: 12px; color: color-mix(in srgb, var(--color-text) 45%, transparent); }
+  .ak-shot .ak-rest { transition: opacity .35s ease; }
+  .ak-shot:hover .ak-rest, .ak-shot:focus-within .ak-rest, [data-cover="typographic"] .ak-rest { opacity: 0; }
+  @media (max-width: 860px) { .ak-grid { grid-template-columns: 1fr !important; } }
+  @media (max-width: 720px) { .ak-shot .ak-overlay { opacity: 1; } .ak-shot .ak-ov-item { transform: none; } .ak-shot .ak-rest { opacity: 0; } }
+  .ak-step { transition: transform .35s cubic-bezier(.22,.61,.36,1), border-color .35s ease, background .35s ease; }
+  .ak-step:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--color-accent) 46%, transparent); background: color-mix(in srgb, var(--color-surface) 74%, transparent); }
+  #extras .ak-img { transition: transform .5s cubic-bezier(.22,.61,.36,1), opacity .3s ease; }
+  #extras a:hover .ak-img { transform: scale(1.03); opacity: .88; }
+  .ak-domain { transition: border-color .3s ease, color .3s ease, background .3s ease; }
+  .ak-domain:hover { border-color: color-mix(in srgb, var(--color-accent) 55%, transparent); color: var(--color-accent-100); background: color-mix(in srgb, var(--color-accent) 12%, transparent); }
+  @media (max-width: 720px) { .ak-collection-grid { grid-template-columns: 1fr !important; gap: 22px !important; } }
+  .ak-step .ak-step-glow { transition: opacity .35s ease; }
+  .ak-step:hover .ak-step-glow { opacity: 1; }
+  @media (max-width: 1080px) {
+    .ak-hero { grid-template-columns: 1fr !important; }
+    .ak-aura { order: -1; max-width: 400px; }
+  }
+  @keyframes ak-gate-out { to { opacity: 0; transform: scale(1.04); } }
+  @keyframes ak-gate-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .ak-gate[data-leaving="yes"] { animation: ak-gate-out .6s cubic-bezier(.4,0,.2,1) forwards; pointer-events: none; }
+  .ak-gate-item { animation: ak-gate-in .8s cubic-bezier(.16,1,.3,1) both; flex: none; }
+  @media (max-height: 720px) { .ak-gate { gap: 20px !important; } }
+  @keyframes ak-glow-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+  @keyframes ak-glow-pulse { 0%, 100% { opacity: .16; } 50% { opacity: .26; } }
+  .ak-gate-glow {
+    position: fixed; left: 50%; top: 50%; width: 110vmax; height: 110vmax;
+    transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none; z-index: 0;
+    background: conic-gradient(from 0deg, #2f6bff, #ff2fd0, #7a2cff, #5ceaff, #2f6bff);
+    filter: blur(160px); opacity: .2;
+    mask-image: radial-gradient(closest-side, #000 22%, transparent 72%);
+    -webkit-mask-image: radial-gradient(closest-side, #000 22%, transparent 72%);
+    animation: ak-glow-spin 46s linear infinite, ak-glow-pulse 11s ease-in-out infinite;
+  }
+  .ak-gate-btn { position: relative; overflow: hidden; }
+  .ak-gate-btn > * { position: relative; z-index: 1; }
+  .ak-gate-btn > span { position: relative; z-index: 1; }
+  .ak-gate-btn::before { content: ""; position: absolute; inset: 0; z-index: 0; border-radius: inherit; background: var(--color-accent); transform: scale(0.6); opacity: 0; transition: transform .38s cubic-bezier(.16,1,.3,1), opacity .28s ease; }
+  .ak-gate-btn:hover, .ak-gate-btn:focus-visible { color: #05050a !important; border-color: var(--color-accent) !important; box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-accent) 16%, transparent), 0 14px 40px -12px color-mix(in srgb, var(--color-accent) 60%, transparent); }
+  .ak-gate-btn:hover::before, .ak-gate-btn:focus-visible::before { transform: scale(1); opacity: 1; }
+  .ak-gate-btn svg { transition: transform .38s cubic-bezier(.16,1,.3,1); }
+  .ak-gate-btn:hover svg, .ak-gate-btn:focus-visible svg { transform: translateX(5px); }
+  .ak-gate-btn:active { transform: translateY(1px); }
+
+  /* tooltips */
+  [data-tip] { position: relative; }
+  [data-tip]::after {
+    content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 10px);
+    transform: translate(-50%, 5px); white-space: nowrap; pointer-events: none; opacity: 0;
+    padding: 6px 10px; border-radius: var(--radius-sm); z-index: 200;
+    background: var(--color-neutral-900, #101018); color: var(--color-text);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 34%, transparent);
+    box-shadow: 0 10px 30px -12px rgba(0,0,0,.8);
+    font-family: var(--font-body); font-size: 12px; font-weight: 400; line-height: 1.4;
+    letter-spacing: 0.01em; text-transform: none;
+    transition: opacity .18s ease, transform .18s cubic-bezier(.16,1,.3,1);
+  }
+  [data-tip]:hover::after, [data-tip]:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+  [data-tip][data-tip-pos="below"]::after { bottom: auto; top: calc(100% + 10px); transform: translate(-50%, -5px); }
+  [data-tip][data-tip-pos="below"]:hover::after, [data-tip][data-tip-pos="below"]:focus-visible::after { transform: translate(-50%, 0); }
+  @media (hover: none) { [data-tip]::after { display: none; } }
+
+  /* focus + skip link */
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: var(--radius-sm);
+  }
+  .ak-skip { position: fixed; top: 10px; left: 10px; z-index: 300; padding: 10px 16px; border-radius: 999px;
+    background: var(--color-accent); color: var(--color-bg); font-size: 14px; text-decoration: none;
+    transform: translateY(-160%); transition: transform .2s ease; }
+  .ak-skip:focus-visible { transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  }
+</style>
+</helmet>
+
+<div data-rhythm="{{ rhythm }}" data-cover="{{ coverTreatment }}" style="position:relative;min-height:100vh;overflow-x:hidden;background:var(--color-bg);font-family:var(--font-body);font-size:17px;line-height:1.65">
+
+  <a class="ak-skip" href="#main">Skip to content</a>
+
+  <sc-if value="{{ showIntro }}" hint-placeholder-val="{{ true }}">
+    <div class="ak-gate" role="dialog" aria-modal="true" aria-labelledby="ak-gate-title" data-leaving="{{ introLeaving }}" style="position:fixed;inset:0;z-index:120;background:var(--color-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;text-align:center;padding:32px;overflow:auto">
+      <div class="ak-gate-glow" aria-hidden="true"></div>
+      <div class="ak-gate-item" aria-hidden="true" style="position:relative;width:min(340px,40vh);height:min(340px,40vh);pointer-events:none;overflow:hidden">
+        <x-import component-from-global-scope="AuraHeader" from="./aura-header.jsx" height="100%" hint-size="100%,100%"></x-import>
+      </div>
+      <h1 id="ak-gate-title" class="ak-gate-item" style="position: relative; margin: 0; font-family: var(--font-heading); font-weight: 400; font-size: clamp(34px,6vw,70px); line-height: 1.05; letter-spacing: -0.035em; text-wrap: balance; animation-delay: .05s">Ashish Kapoor<br>Portfolio 2026</h1>
+      <button type="button" class="ak-gate-item ak-gate-btn" onClick="{{ onEnter }}" aria-label="Enter the portfolio" data-tip="Enter the portfolio" data-tip-pos="below" style="position:relative;display:inline-flex;align-items:center;gap:12px;padding:14px 30px;border-radius:999px;border:1px solid color-mix(in srgb, var(--color-text) 34%, transparent);background:transparent;color:var(--color-text);font-family:var(--font-heading);font-size:15px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;min-height:48px;transition:background .25s, color .25s, border-color .25s, box-shadow .3s ease;animation-delay:.28s">
+        <span>Enter</span>
+        <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg>
+      </button>
+    </div>
+  </sc-if>
+
+  <header style="position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px); background: color-mix(in srgb, var(--color-bg) 84%, transparent)">
+    <div style="max-width: 940px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; gap: 24px; height: 52px">
+      <a href="#top" aria-label="Ashish Kapoor — back to top" data-tip="Back to top" data-tip-pos="below" style="display:flex;align-items:center;gap:10px;font-family:var(--font-heading);font-weight:500;font-size:16px;color:var(--color-text);text-decoration:none;margin-right:auto">
+        <img src="uploads/AkpixelsLogo2.png" alt="" width="28" height="28" style="display:block;width:28px;height:28px;object-fit:contain;flex:none">
+        Ashish Kapoor
+      </a>
+      <nav aria-label="Primary" style="display:flex;gap:20px;font-size:14px">
+        <a href="#work" data-tip="Four case studies" data-tip-pos="below" style="color:color-mix(in srgb, var(--color-text) 66%, transparent)">Work</a>
+        <a href="#now" data-tip="What I'm working on" data-tip-pos="below" style="color:color-mix(in srgb, var(--color-text) 66%, transparent)">Right Now</a>
+        <a href="#contact" data-tip="Email, LinkedIn, résumé" data-tip-pos="below" style="color:color-mix(in srgb, var(--color-text) 66%, transparent)">Say hello</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main"><section id="top" class="ak-hero" style="position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:40px 32px 64px;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:56px;align-items:center">
+   <div style="width: 597px; height: 580px">
+    <div data-reveal="" style="display:flex;align-items:center;gap:20px;margin-bottom:24px">
+      <span style="width:86px;height:86px;border-radius:50%;overflow:hidden;flex:none;box-shadow:var(--shadow-sm);display:block">
+        
+      <img class="ak-img" src="images/headshot.jpg" alt="Ashish Kapoor" style="width:100%;height:100%;object-fit:cover;display:block"></span>
+      <span style="font-size:15px;color:color-mix(in srgb, var(--color-text) 58%, transparent);line-height:1.5">Lead CUX Designer at Evalueserve<br>Gurugram, India · Open to conversations</span>
+    </div>
+    <h1 data-reveal="" class="ak-h1" style="font-size: clamp(28px,3.4vw,40px); line-height: 1.15; letter-spacing: -0.03em; margin: 0 0 20px; max-width: 24ch; text-wrap: pretty; font-weight: 400; width: 510px; height: 136px">Hey, I'm Ashish Kapoor.<br>I design enterprise software that people use all day.</h1>
+    <div data-reveal="" class="ak-lede" style="max-width: 60ch; display: flex; flex-direction: column; gap: 12px; font-size: 16px; color: color-mix(in srgb, var(--color-text) 80%, transparent); width: 622px; height: 263px">
+      <p style="margin:0;text-wrap:pretty"><span data-path-to-node="6,0"></span></p><p data-path-to-node="4,0" style="width: 500px; height: 123px"><b data-path-to-node="4,0" data-index-in-node="0">HFI Certified Experience Analyst</b> and Enterprise UX Lead with 12+ years scaling products across <b data-path-to-node="4,0" data-index-in-node="97">FinTech, EdTech, and complex data systems</b>. Currently CUX Lead at Evalueserve, leading multiple countries design team building scalable design systems and AI-driven workflows.</p><p data-path-to-node="4,1" style="width: 494px; height: 84px">I embed with users to map real workflows and design minimal interfaces that eliminate manual work. When AI is involved, I design for trust, making source data, confidence levels, and human control crystal clear.</p><span data-path-to-node="6,1"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><source-footnote _nghost-ng-c2584201272="" class="ng-star-inserted"><sup _ngcontent-ng-c2584201272="" class="superscript"><!----></sup></source-footnote><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></span><span data-path-to-node="6,3"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><source-footnote _nghost-ng-c2584201272="" class="ng-star-inserted"><sup _ngcontent-ng-c2584201272="" class="superscript"><!----></sup></source-footnote><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></span><span data-path-to-node="6,5"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><source-footnote _nghost-ng-c2584201272="" class="ng-star-inserted"><sup _ngcontent-ng-c2584201272="" class="superscript"><!----></sup></source-footnote><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></span><span data-path-to-node="6,7"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><source-footnote _nghost-ng-c2584201272="" class="ng-star-inserted"><sup _ngcontent-ng-c2584201272="" class="superscript"><!----></sup></source-footnote><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></span><sources-carousel-inline ng-version="0.0.0-PLACEHOLDER" _nghost-ng-c1337200219=""></sources-carousel-inline><p></p>
+      
+    </div>
+    <div data-reveal="" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:24px">
+      <a class="btn btn-primary" href="uploads/Ashish_Kapoor_UX2026PDF.pdf" download="Ashish_Kapoor_UX2026.pdf" data-tip="PDF, downloads to your device" style="text-decoration:none">
+        <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-40.49-71.51a8,8,0,0,1,0,11.31l-26.34,26.35a8,8,0,0,1-11.32,0L95.51,155.8a8,8,0,0,1,11.31-11.31L120,157.67V112a8,8,0,0,1,16,0v45.67l13.17-13.18A8,8,0,0,1,159.51,144.49Z"></path></svg>
+        Download my résumé
+      </a>
+      <a class="btn btn-secondary" href="https://www.linkedin.com/in/ashish-kapoor-18aa5a59" target="_blank" rel="noopener" data-tip="Opens LinkedIn in a new tab" style="text-decoration:none">
+        <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72A12,12,0,0,1,100,84Z"></path></svg>
+        LinkedIn
+      </a>
+      <a class="btn btn-secondary" href="mailto:a.kpr1991@gmail.com" data-tip="a.kpr1991@gmail.com" style="text-decoration:none">
+        <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z"></path></svg>
+        a.k••••@gmail.com
+      </a>
+    </div>
+   </div>
+
+   <div data-reveal="" class="ak-aura" style="position:relative;aspect-ratio:1/1">
+     
+     <x-import component-from-global-scope="AuraHeader" from="./aura-header.jsx" height="{{ 420 }}" hint-size="100%,420px"></x-import>
+   </div>
+  <img src="uploads/pasted-1787419133851-0.png" alt="HFI Certified User Experience Analyst (CXA)" width="104" height="104" style="position: absolute; top: 473px; z-index: 2; width: 108px; height: 96px; object-fit: contain; transform: rotate(-9deg); filter: drop-shadow(0 8px 22px rgba(0,0,0,.55)); left: 513px"></section>
+
+  <div style="max-width:940px;margin:0 auto;padding:0 32px"><div style="height:1px;background:linear-gradient(to right, transparent, var(--color-divider) 48px, var(--color-divider) calc(100% - 48px), transparent)"></div></div>
+
+  <section id="how" style="max-width:1180px;margin:0 auto;padding:56px 32px 0">
+    <h2 data-reveal="" style="font-size:13px;letter-spacing:0.14em;text-transform:uppercase;margin:0 0 18px;color:var(--color-accent)">How I work</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+      <div data-reveal="" class="ak-step" style="position:relative;padding:18px 18px 20px;border-radius:var(--radius-md);border:1px solid var(--color-divider);background:color-mix(in srgb, var(--color-surface) 42%, transparent);overflow:hidden">
+        <span class="ak-step-glow" style="position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:0;background:radial-gradient(140% 100% at 0% 0%, color-mix(in srgb, var(--color-accent) 20%, transparent) 0%, transparent 62%)"></span>
+        <span style="position:relative;display:block;font-family:var(--font-heading);color:var(--color-accent);font-size:12px;letter-spacing:0.12em;margin-bottom:12px">01</span>
+        <div style="position:relative;font-family:var(--font-heading);font-size:16px;line-height:1.3;margin-bottom:6px">I sit with the work first</div>
+        <div style="position:relative;font-size:14px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 62%, transparent)">Shadowing sessions, workflow maps, and the real people have quietly built to survive the current tool.</div>
+      </div>
+      <div data-reveal="" class="ak-step" style="position:relative;padding:18px 18px 20px;border-radius:var(--radius-md);border:1px solid var(--color-divider);background:color-mix(in srgb, var(--color-surface) 42%, transparent);overflow:hidden">
+        <span class="ak-step-glow" style="position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:0;background:radial-gradient(140% 100% at 0% 0%, color-mix(in srgb, var(--color-accent) 20%, transparent) 0%, transparent 62%)"></span>
+        <span style="position:relative;display:block;font-family:var(--font-heading);color:var(--color-accent);font-size:12px;letter-spacing:0.12em;margin-bottom:12px">02</span>
+        <div style="position:relative;font-family:var(--font-heading);font-size:16px;line-height:1.3;margin-bottom:6px">Then I frame the decision</div>
+        <div style="position:relative;font-size:14px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 62%, transparent)">What is being judged, on what evidence, by whom. Enterprise UX is mostly decision design wearing a table.</div>
+      </div>
+      <div data-reveal="" class="ak-step" style="position:relative;padding:18px 18px 20px;border-radius:var(--radius-md);border:1px solid var(--color-divider);background:color-mix(in srgb, var(--color-surface) 42%, transparent);overflow:hidden">
+        <span class="ak-step-glow" style="position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:0;background:radial-gradient(140% 100% at 0% 0%, color-mix(in srgb, var(--color-accent) 20%, transparent) 0%, transparent 62%)"></span>
+        <span style="position:relative;display:block;font-family:var(--font-heading);color:var(--color-accent);font-size:12px;letter-spacing:0.12em;margin-bottom:12px">03</span>
+        <div style="position:relative;font-family:var(--font-heading);font-size:16px;line-height:1.3;margin-bottom:6px">I prototype at real density</div>
+        <div style="position:relative;font-size:14px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 62%, transparent)">Ten rows of dummy data proves nothing. I test with the volume and messiness of the real thing.</div>
+      </div>
+      <div data-reveal="" class="ak-step" style="position:relative;padding:18px 18px 20px;border-radius:var(--radius-md);border:1px solid var(--color-divider);background:color-mix(in srgb, var(--color-surface) 42%, transparent);overflow:hidden">
+        <span class="ak-step-glow" style="position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:0;background:radial-gradient(140% 100% at 0% 0%, color-mix(in srgb, var(--color-accent) 20%, transparent) 0%, transparent 62%)"></span>
+        <span style="position:relative;display:block;font-family:var(--font-heading);color:var(--color-accent);font-size:12px;letter-spacing:0.12em;margin-bottom:12px">04</span>
+        <div style="position:relative;font-family:var(--font-heading);font-size:16px;line-height:1.3;margin-bottom:6px">Ship, then watch the usage</div>
+        <div style="position:relative;font-size:14px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 62%, transparent)">Adoption data decides the next iteration, not the loudest opinion in the review.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="collection" style="max-width:1180px;margin:72px auto 0;padding:0 32px">
+    <div data-reveal="" style="position:relative;overflow:hidden;border-radius:var(--radius-lg);border:1px solid var(--color-divider);background:color-mix(in srgb, var(--color-surface) 38%, transparent);padding:44px 40px">
+      <span style="position:absolute;inset:-40% -10% auto auto;width:520px;height:520px;border-radius:50%;pointer-events:none;background:radial-gradient(circle, color-mix(in srgb, var(--color-accent) 26%, transparent) 0%, transparent 68%);filter:blur(60px)"></span>
+      <div class="ak-collection-grid" style="position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:36px;align-items:center">
+        <div>
+          <div style="font-family:var(--font-heading);font-size:clamp(46px,5vw,66px);line-height:1;letter-spacing:-0.04em;color:var(--color-accent)">30+</div>
+          <div style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 52%, transparent);margin-top:10px">Projects shipped</div>
+        </div>
+        <div>
+          <p style="margin:0 0 18px;font-size:17px;line-height:1.6;max-width:56ch;color:color-mix(in srgb, var(--color-text) 82%, transparent);text-wrap:pretty">A curated collection of 30+ projects spanning FinTech, Risk &amp; Quant, Agentic AI, Data Analytics, EdTech, VR, and Enterprise Accelerators.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <sc-for list="{{ domains }}" as="d" hint-placeholder-count="7">
+          <span class="ak-domain" style="padding:9px 16px;border-radius:999px;border:1px solid var(--color-divider);font-size:14px;color:color-mix(in srgb, var(--color-text) 80%, transparent);background:color-mix(in srgb, var(--color-surface) 40%, transparent)">{{ d }}</span>
+        </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" style="padding:64px 0 0">
+    <div style="max-width:940px;margin:0 auto;padding:0 32px 8px">
+      <h2 data-reveal="" style="font-size:13px;letter-spacing:0.14em;text-transform:uppercase;margin:0 0 14px;color:var(--color-accent)">The work</h2>
+      <p data-reveal="" style="max-width:56ch;font-size:18px;color:color-mix(in srgb, var(--color-text) 72%, transparent);margin:0">Four projects I can talk about. Everything below is client-confidential, so each one opens with its own access code, ask me and I'll send you the one you need.</p>
+    </div>
+
+    <div class="ak-grid" style="max-width:1180px;margin:0 auto;padding:26px 32px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px">
+    <sc-for list="{{ studies }}" as="s" hint-placeholder-count="4">
+      <article>
+        <div data-reveal="" class="ak-cover-wrap" data-tip="Hover or focus for project details" data-tip-pos="below">
+          <div class="ak-shot" tabindex="0" role="group" aria-label="{{ s.title }}" style="position:relative;aspect-ratio:16/10;border-radius:var(--radius-lg);overflow:hidden;background:var(--color-neutral-800);box-shadow:var(--shadow-sm)">
+            <div class="ak-cover" data-locked="{{ s.coverLocked }}" style="position:absolute;inset:0">
+              <img class="ak-img" src="{{ s.cover }}" alt="{{ s.title }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+            </div>
+
+            <div class="ak-rest" style="position:absolute;inset:auto 0 0 0;pointer-events:none;padding:22px 24px;background:linear-gradient(to top, rgba(5,5,10,.9) 0%, rgba(5,5,10,.45) 60%, transparent 100%)">
+              <h3 style="font-size:20px;letter-spacing:-0.02em;margin:0">{{ s.title }}</h3>
+            </div>
+
+            <div class="ak-overlay" style="position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;padding:24px;background:linear-gradient(to top, rgba(5,5,10,.95) 0%, rgba(5,5,10,.8) 48%, rgba(5,5,10,.3) 100%)">
+              <span class="ak-ov-item" style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-accent)">{{ s.org }}</span>
+              <h3 class="ak-ov-item" style="font-size:22px;letter-spacing:-0.025em;margin:0;max-width:22ch">{{ s.title }}</h3>
+              <p class="ak-ov-item" style="font-size:14px;line-height:1.5;margin:0;color:color-mix(in srgb, var(--color-text) 82%, transparent);text-wrap:pretty">{{ s.summary }}</p>
+              <div class="ak-ov-item" style="display:flex;flex-wrap:wrap;gap:6px">
+                <sc-for list="{{ s.tags }}" as="t" hint-placeholder-count="3">
+                  <span class="tag tag-outline">{{ t }}</span>
+                </sc-for>
+              </div>
+
+              <div class="ak-ov-item" style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;pointer-events:auto;margin-top:4px">
+                <sc-if value="{{ s.unlocked }}" hint-placeholder-val="{{ true }}">
+                  <a class="btn btn-primary" href="{{ s.href }}" target="_blank" rel="noopener" data-tip="Opens the case study PDF in a new tab" style="text-decoration:none;font-size:13px;padding:9px 16px">Open case study</a>
+                  <button type="button" onClick="{{ s.onLock }}" aria-label="Lock this case study again" data-tip="Lock again" style="background:none;border:0;padding:6px;color:color-mix(in srgb, var(--color-text) 58%, transparent);font-size:12px;cursor:pointer;font-family:var(--font-body)">Lock</button>
+                </sc-if>
+
+                <sc-if value="{{ s.locked }}" hint-placeholder-val="{{ true }}">
+                  <sc-if value="{{ s.promptOpen }}" hint-placeholder-val="{{ false }}">
+                    <form onSubmit="{{ s.onSubmit }}" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                      <label for="code-{{ s.slug }}" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Access code for {{ s.title }}</label>
+                      <input id="code-{{ s.slug }}" type="password" value="{{ s.value }}" onChange="{{ s.onChange }}" placeholder="Access code" autoComplete="off" aria-invalid="{{ s.error }}" aria-describedby="err-{{ s.slug }}" style="padding:9px 12px;border-radius:var(--radius-sm);border:1px solid color-mix(in srgb, var(--color-text) 26%, transparent);background:rgba(255,255,255,.06);color:var(--color-text);font-size:13px;font-family:var(--font-body);width:150px">
+                      <button class="btn btn-primary" type="submit" style="font-size:13px;padding:9px 16px">Unlock</button>
+                      <button type="button" onClick="{{ s.onClose }}" style="background:none;border:0;padding:6px;color:color-mix(in srgb, var(--color-text) 58%, transparent);font-size:12px;cursor:pointer;font-family:var(--font-body)">Cancel</button>
+                      <span id="err-{{ s.slug }}" role="alert" style="flex:1 0 100%;font-size:12px;color:{{ s.errorColor }}">{{ s.errorText }}</span>
+                    </form>
+                  </sc-if>
+                  <sc-if value="{{ s.promptClosed }}" hint-placeholder-val="{{ true }}">
+                    <button class="btn btn-secondary" type="button" onClick="{{ s.onOpen }}" data-tip="Ask me for the code and I'll send it" style="font-size:13px;padding:9px 16px">
+                      <svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Zm-68-56a12,12,0,1,1-12-12A12,12,0,0,1,140,152Z"></path></svg>
+                      Enter access code
+                    </button>
+                  </sc-if>
+                </sc-if>
+              </div>
+  </div></div></div></article></sc-for></div></section>
+
+  <sc-if value="{{ showOddsEnds }}" hint-placeholder-val="{{ true }}">
+  <section id="extras" style="max-width:1180px;margin:0 auto;padding:72px 32px 0">
+    <div style="max-width:940px;margin:0 auto;padding:0 0 26px">
+      <h2 data-reveal="" style="font-size:13px;letter-spacing:0.14em;text-transform:uppercase;margin:0 0 12px;color:var(--color-accent)">Odds and ends</h2>
+      <p data-reveal="" style="max-width:52ch;font-size:17px;color:color-mix(in srgb, var(--color-text) 68%, transparent);margin:0">Screens I can show without a code. Click one to open the PDF.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
+      <sc-for list="{{ extras }}" as="x" hint-placeholder-count="3">
+      <figure data-reveal="" style="display:flex;flex-direction:column;gap:10px">
+        <div style="position:relative;aspect-ratio:4/3;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm)">
+          <a href="{{ x.href }}" target="_blank" rel="noopener" aria-label="{{ x.ariaLabel }}" data-tip="Open PDF in a new tab" style="display:block;width:100%;height:100%"><img class="ak-img" src="{{ x.image }}" alt="{{ x.caption }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></a>
+        </div>
+        <figcaption style="font-size:14px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">{{ x.caption }}</figcaption>
+      </figure>
+      </sc-for>
+    </div>
+  </section>
+  </sc-if>
+
+
+  <sc-if value="{{ showNow }}" hint-placeholder-val="{{ true }}">
+  <section id="now" style="max-width:940px;margin:0 auto;padding:96px 32px 0">
+    <h2 data-reveal="" style="font-size:13px;letter-spacing:0.14em;text-transform:uppercase;margin:0 0 12px;color:var(--color-accent)">Right now</h2>
+    <p data-reveal="" style="max-width:52ch;font-size:17px;color:color-mix(in srgb, var(--color-text) 68%, transparent);margin:0 0 30px">Beyond the case studies, my playground for ideas, experiments, and notes.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px">
+      <div data-reveal="" class="card elev-sm"><span class="card-kicker">WHAT I'M EXPLORING</span><div class="card-title">AI review patterns</div><div class="card-body">Making complex AI workflows feel obvious.</div></div>
+      <div data-reveal="" class="card elev-sm"><span class="card-kicker">WHAT I'M READING</span><div class="card-title">To Sell is Human</div><div class="card-body">Because good UX doesn't just inform. It moves people.</div></div>
+      <div data-reveal="" class="card elev-sm"><span class="card-kicker">Tools I live in</span><div class="card-title">Figma . FigJam . Claude</div><div class="card-body">... and whatever helps turn an idea into something testable.</div></div>
+      <div data-reveal="" class="card elev-sm"><span class="card-kicker">MY PLAYGROUND</span><div class="card-title">AI x UX</div><div class="card-body">Small experiments. Strange Ideas. Working Prototypes.</div></div>
+      <div data-reveal="" class="card elev-sm"><span class="card-kicker">Away from screens</span><div class="card-title">Photography</div><div class="card-body">Training myself to notice the details.</div></div>
+      <div data-reveal="" class="card elev-sm"><span class="card-kicker">Happy to talk about</span><div class="card-title">Enterprise UX x AI trust</div><div class="card-body">Making AI feel powerful without making users feel powerless.</div></div>
+    </div>
+  </section>
+  </sc-if>
+
+  <section id="contact" style="margin-top:56px;border-top:1px solid var(--color-divider);background:color-mix(in srgb, var(--color-surface) 50%, var(--color-bg))">
+    <div style="max-width:940px;margin:0 auto;padding:44px 32px 40px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:40px;align-items:center">
+        <div data-reveal="">
+          <h2 style="font-size:clamp(24px,2.6vw,30px);letter-spacing:-0.03em;margin:0 0 8px">Say hello</h2>
+          <p style="font-size:15px;max-width:44ch;color:color-mix(in srgb, var(--color-text) 74%, transparent);margin:0">If you're hiring, building something in this space, or just want a code for one of the case studies, write to me. I answer everything.</p>
+        </div>
+        <div data-reveal="" style="display:flex;flex-direction:column;gap:10px;font-size:14px">
+          <a href="mailto:a.kpr1991@gmail.com" aria-label="Email a.kpr1991@gmail.com" data-tip="a.kpr1991@gmail.com" style="display:flex;align-items:center;gap:10px">
+            <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z"></path></svg>
+            a.k••••@gmail.com
+          </a>
+          <a href="https://www.linkedin.com/in/ashish-kapoor-18aa5a59" target="_blank" rel="noopener" data-tip="Opens LinkedIn in a new tab" style="display:flex;align-items:center;gap:10px">
+            <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none"><path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72A12,12,0,0,1,100,84Z"></path></svg>
+            linkedin.com/in/ashish-kapoor
+          </a>
+          <a href="uploads/Ashish_Kapoor_UX2026PDF.pdf" download="Ashish_Kapoor_UX2026.pdf" data-tip="PDF, downloads to your device" style="display:flex;align-items:center;gap:10px">
+            <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-40.49-71.51a8,8,0,0,1,0,11.31l-26.34,26.35a8,8,0,0,1-11.32,0L95.51,155.8a8,8,0,0,1,11.31-11.31L120,157.67V112a8,8,0,0,1,16,0v45.67l13.17-13.18A8,8,0,0,1,159.51,144.49Z"></path></svg>
+            Download my résumé
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer style="max-width:940px;margin:0 auto;padding:20px 32px 28px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;font-size:13px;color:color-mix(in srgb, var(--color-text) 42%, transparent)">
+    <img src="uploads/AkpixelsLogo2.png" alt="AKpixels" width="44" height="44" style="width:44px;height:44px;object-fit:contain;display:block">
+    <span>© 2026 Ashish Kapoor · AKpixels</span>
+  </footer>
+
+
+</div></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accentColor&quot;: {
+    &quot;editor&quot;: &quot;color&quot;,
+    &quot;default&quot;: &quot;#5ceaff&quot;,
+    &quot;tsType&quot;: &quot;string&quot;,
+    &quot;section&quot;: &quot;Feel&quot;,
+    &quot;options&quot;: [&quot;#5ceaff&quot;, &quot;#ff2fd0&quot;, &quot;#7a2cff&quot;, &quot;#2f6bff&quot;]
+  },
+  &quot;rhythm&quot;: {
+    &quot;editor&quot;: &quot;enum&quot;,
+    &quot;default&quot;: &quot;editorial&quot;,
+    &quot;options&quot;: [&quot;compact&quot;, &quot;editorial&quot;, &quot;airy&quot;],
+    &quot;tsType&quot;: &quot;string&quot;,
+    &quot;section&quot;: &quot;Feel&quot;
+  },
+  &quot;coverTreatment&quot;: {
+    &quot;editor&quot;: &quot;enum&quot;,
+    &quot;default&quot;: &quot;bleed&quot;,
+    &quot;options&quot;: [&quot;bleed&quot;, &quot;framed&quot;, &quot;typographic&quot;],
+    &quot;tsType&quot;: &quot;string&quot;,
+    &quot;section&quot;: &quot;Feel&quot;
+  },
+  &quot;blurLockedCovers&quot;: {
+    &quot;editor&quot;: &quot;boolean&quot;,
+    &quot;default&quot;: true,
+    &quot;tsType&quot;: &quot;boolean&quot;,
+    &quot;section&quot;: &quot;Case studies&quot;
+  },
+  &quot;revealMotion&quot;: {
+    &quot;editor&quot;: &quot;boolean&quot;,
+    &quot;default&quot;: true,
+    &quot;tsType&quot;: &quot;boolean&quot;,
+    &quot;section&quot;: &quot;Case studies&quot;
+  },
+  &quot;showOddsEnds&quot;: {
+    &quot;editor&quot;: &quot;boolean&quot;,
+    &quot;default&quot;: true,
+    &quot;tsType&quot;: &quot;boolean&quot;,
+    &quot;section&quot;: &quot;Sections&quot;
+  },
+  &quot;showNow&quot;: {
+    &quot;editor&quot;: &quot;boolean&quot;,
+    &quot;default&quot;: true,
+    &quot;tsType&quot;: &quot;boolean&quot;,
+    &quot;section&quot;: &quot;Sections&quot;
+  }
+}">
+class Component extends DCLogic {
+  state = { list: [], unlocked: {}, inputs: {}, errors: {}, prompt: null, entered: false, leaving: false };
+
+  componentDidMount() {
+    const deadline = Date.now() + 4000;
+    this._gateFocus = setInterval(() => {
+      if (this.state.entered || Date.now() > deadline) { clearInterval(this._gateFocus); return; }
+      const b = document.querySelector(".ak-gate-btn");
+      if (!b) return;
+      b.focus();
+      if (document.activeElement === b) clearInterval(this._gateFocus);
+    }, 100);
+    let unlocked = {};
+    try { unlocked = JSON.parse(localStorage.getItem("ak-portfolio-unlocked") || "{}"); } catch (e) {}
+    this.setState({ list: window.CASE_STUDIES || [], unlocked });
+    this._extras = (window.EXTRAS || []).map((x) => ({ ...x, ariaLabel: x.caption + " — open PDF in a new tab" }));
+    this._domains = window.DOMAINS || [];
+    this.applyAccent();
+    if (this.props.revealMotion !== false) this.arm();
+  }
+
+  componentDidUpdate() {
+    this.applyAccent();
+    if (this.props.revealMotion === false) this.revealAll();
+    else if (document.documentElement.classList.contains("js-reveal")) this.observe();
+  }
+
+  // Rebuilds the accent ramp around the picked hue so hovers, tints and
+  // pressed states move with it instead of drifting off-system.
+  applyAccent() {
+    const a = this.props.accentColor || "#5ceaff";
+    if (a === this.lastAccent) return;
+    this.lastAccent = a;
+    const r = document.documentElement.style;
+    const mixText = (p) => "color-mix(in srgb, " + a + " " + p + "%, var(--color-text))";
+    const mixBg = (p) => "color-mix(in srgb, " + a + " " + p + "%, var(--color-bg))";
+    const steps = {
+      "--color-accent": a,
+      "--color-accent-100": mixText(18),
+      "--color-accent-200": mixText(40),
+      "--color-accent-300": mixText(62),
+      "--color-accent-400": mixText(82),
+      "--color-accent-500": a,
+      "--color-accent-600": mixBg(78),
+      "--color-accent-700": mixBg(55),
+      "--color-accent-800": mixBg(30),
+      "--color-accent-900": mixBg(18)
+    };
+    Object.keys(steps).forEach((k) => {
+      r.setProperty(k, steps[k]);
+      r.setProperty(k.replace("--color-accent", "--color-accent-2"), steps[k]);
+    });
+  }
+
+  revealAll() {
+    document.documentElement.classList.remove("js-reveal");
+    document.querySelectorAll("[data-reveal]").forEach((el) => {
+      el.classList.add("is-in");
+      el.style.transition = "none";
+      el.style.opacity = "1";
+      el.style.transform = "none";
+    });
+  }
+
+  arm() {
+    if (this.armed) return;
+    this.armed = true;
+    const t0 = document.timeline.currentTime || 0;
+    setTimeout(() => {
+      const t1 = document.timeline.currentTime || 0;
+      if (t1 > t0) {
+        document.documentElement.classList.add("js-reveal");
+        this.observe();
+        this.fallback = setTimeout(() => this.revealAll(), 1800);
+      }
+    }, 120);
+  }
+
+  observe() {
+    if (!("IntersectionObserver" in window)) { this.revealAll(); return; }
+    if (!this.io) {
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); this.io.unobserve(e.target); } });
+      }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+    }
+    document.querySelectorAll("[data-reveal]:not(.is-in)").forEach((el) => this.io.observe(el));
+  }
+
+  componentWillUnmount() { if (this.io) this.io.disconnect(); clearTimeout(this.fallback); }
+
+  persist(unlocked) {
+    try { localStorage.setItem("ak-portfolio-unlocked", JSON.stringify(unlocked)); } catch (e) {}
+  }
+
+  renderVals() {
+    const blur = this.props.blurLockedCovers !== false;
+    const studies = (this.state.list || []).map((s) => {
+      const open = !!this.state.unlocked[s.slug];
+      return {
+        ...s,
+        slotId: "v2-cover-" + s.slug,
+        coverLocked: !open && blur ? "yes" : "no",
+        unlocked: open,
+        locked: !open,
+        value: this.state.inputs[s.slug] || "",
+        error: !!this.state.errors[s.slug],
+        promptOpen: !open && this.state.prompt === s.slug,
+        promptClosed: !open && this.state.prompt !== s.slug,
+        errorText: this.state.errors[s.slug] ? "That code doesn't match. Try again or ask me for it." : "",
+        errorColor: "#ff7a9a",
+        onOpen: () => this.setState({ prompt: s.slug }),
+        onClose: () => this.setState((st) => ({ prompt: null, errors: { ...st.errors, [s.slug]: false } })),
+        onChange: (e) => {
+          const v = e.target.value;
+          this.setState((st) => ({ inputs: { ...st.inputs, [s.slug]: v }, errors: { ...st.errors, [s.slug]: false } }));
+        },
+        onSubmit: (e) => {
+          e.preventDefault();
+          const entered = (this.state.inputs[s.slug] || "").trim().toLowerCase();
+          if (entered && entered === String(s.password).toLowerCase()) {
+            const unlocked = { ...this.state.unlocked, [s.slug]: true };
+            this.persist(unlocked);
+            this.setState({ unlocked, prompt: null, errors: { ...this.state.errors, [s.slug]: false } });
+            if (s.href) window.open(s.href, "_blank", "noopener");
+          } else {
+            this.setState((st) => ({ errors: { ...st.errors, [s.slug]: true } }));
+          }
+        },
+        onLock: () => {
+          const unlocked = { ...this.state.unlocked };
+          delete unlocked[s.slug];
+          this.persist(unlocked);
+          this.setState({ unlocked, inputs: { ...this.state.inputs, [s.slug]: "" } });
+        }
+      };
+    });
+    return {
+      studies,
+      extras: this._extras || [],
+      domains: this._domains || [],
+      showIntro: !this.state.entered,
+      introLeaving: this.state.leaving ? "yes" : "no",
+      onEnter: () => {
+        this.setState({ leaving: true });
+        setTimeout(() => {
+          this.setState({ entered: true, leaving: false });
+          setTimeout(() => {
+            const m = document.getElementById("main");
+            if (m) { m.setAttribute("tabindex", "-1"); m.focus({ preventScroll: true }); }
+          }, 40);
+        }, 620);
+      },
+      rhythm: this.props.rhythm || "editorial",
+      coverTreatment: this.props.coverTreatment || "bleed",
+      showOddsEnds: this.props.showOddsEnds !== false,
+      showNow: this.props.showNow !== false
+    };
+  }
+}
+
+</script>
+</body>
+</html>
