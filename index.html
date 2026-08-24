@@ -310,8 +310,8 @@ textarea.input { min-height: 90px; resize: vertical; }
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap">
 <style>
   :root {
-    --color-bg: #08070f;
-    --color-surface: #16142a;
+    --color-bg: #070c1a;
+    --color-surface: #121a33;
     --color-accent: #5ceaff;
     --color-accent-100: #e2fbff;
     --color-accent-200: #bdf5ff;
@@ -331,6 +331,16 @@ textarea.input { min-height: 90px; resize: vertical; }
   }
   html { scroll-behavior: smooth; }
   body { margin: 0; background: var(--color-bg); color: var(--color-text); }
+  /* faint dot lattice + soft colour fields so large dark areas never read as blank */
+  .ak-weave {
+    background-color: var(--color-bg);
+    background-image:
+      radial-gradient(circle at center, color-mix(in srgb, var(--color-accent) 13%, transparent) 0.9px, transparent 1.1px),
+      radial-gradient(ellipse 70% 55% at 15% 8%, color-mix(in srgb, var(--color-accent) 7%, transparent), transparent 70%),
+      radial-gradient(ellipse 62% 52% at 88% 82%, color-mix(in srgb, var(--color-accent-2) 6%, transparent), transparent 72%);
+    background-size: 26px 26px, 100% 100%, 100% 100%;
+    background-attachment: fixed, fixed, fixed;
+  }
   a { color: var(--color-accent); text-decoration: none; }
   a:hover { color: var(--color-accent-300); text-decoration: underline; }
   [data-reveal] { transition: opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1); }
@@ -447,6 +457,20 @@ textarea.input { min-height: 90px; resize: vertical; }
     background: var(--color-accent); color: var(--color-bg); font-size: 14px; text-decoration: none;
     transform: translateY(-160%); transition: transform .2s ease; }
   .ak-skip:focus-visible { transform: none; }
+  .ak-cur, .ak-cur-dot { position: fixed; top: 0; left: 0; z-index: 400; pointer-events: none;
+    border-radius: 50%; will-change: transform; opacity: 0; }
+  .ak-cur { width: 26px; height: 26px; margin: -13px 0 0 -13px;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+    background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 9%, transparent), transparent 70%);
+    transition: opacity .3s ease, width .28s cubic-bezier(.22,.61,.36,1), height .28s cubic-bezier(.22,.61,.36,1), margin .28s cubic-bezier(.22,.61,.36,1), border-color .28s ease, background .28s ease; }
+  .ak-cur-dot { width: 4px; height: 4px; margin: -2px 0 0 -2px; background: var(--color-accent);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 60%, transparent); transition: opacity .3s ease; }
+  .ak-cur[data-on="1"], .ak-cur-dot[data-on="1"] { opacity: 1; }
+  .ak-cur[data-hot="1"] { width: 38px; height: 38px; margin: -19px 0 0 -19px;
+    border-color: color-mix(in srgb, var(--color-accent) 70%, transparent);
+    background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 72%); }
+  .ak-cur[data-press="1"] { width: 20px; height: 20px; margin: -10px 0 0 -10px; }
+  @media (hover: none), (prefers-reduced-motion: reduce) { .ak-cur, .ak-cur-dot { display: none; } }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
@@ -454,12 +478,12 @@ textarea.input { min-height: 90px; resize: vertical; }
 </style>
 </helmet>
 
-<div data-rhythm="{{ rhythm }}" data-cover="{{ coverTreatment }}" style="position:relative;min-height:100vh;overflow-x:hidden;background:var(--color-bg);font-family:var(--font-body);font-size:17px;line-height:1.65">
+<div class="ak-weave" data-rhythm="{{ rhythm }}" data-cover="{{ coverTreatment }}" style="position:relative;min-height:100vh;overflow-x:hidden;font-family:var(--font-body);font-size:17px;line-height:1.65">
 
   <a class="ak-skip" href="#main">Skip to content</a>
 
   <sc-if value="{{ showIntro }}" hint-placeholder-val="{{ true }}">
-    <div class="ak-gate" role="dialog" aria-modal="true" aria-labelledby="ak-gate-title" data-leaving="{{ introLeaving }}" style="position:fixed;inset:0;z-index:120;background:var(--color-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;text-align:center;padding:32px;overflow:auto">
+    <div class="ak-gate ak-weave" role="dialog" aria-modal="true" aria-labelledby="ak-gate-title" data-leaving="{{ introLeaving }}" style="position:fixed;inset:0;z-index:120;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;text-align:center;padding:32px;overflow:auto">
       <div class="ak-gate-glow" aria-hidden="true"></div>
       <div class="ak-gate-item" aria-hidden="true" style="position:relative;width:min(340px,40vh);height:min(340px,40vh);pointer-events:none;overflow:hidden">
         <x-import component-from-global-scope="AuraHeader" from="./aura-header.jsx" height="100%" audio-src="{{ introAudio }}" hint-size="100%,100%"></x-import>
@@ -664,7 +688,7 @@ textarea.input { min-height: 90px; resize: vertical; }
       <div data-reveal="" class="card elev-sm"><span class="card-kicker">WHAT I'M EXPLORING</span><div class="card-title">AI review patterns</div><div class="card-body">Making complex AI workflows feel obvious.</div></div>
       <div data-reveal="" class="card elev-sm"><span class="card-kicker">WHAT I'M READING</span><div class="card-title">To Sell is Human</div><div class="card-body">Because good UX doesn't just inform. It moves people.</div></div>
       <div data-reveal="" class="card elev-sm"><span class="card-kicker">Tools I live in</span><div class="card-title">Figma . FigJam . Claude</div><div class="card-body">... and whatever helps turn an idea into something testable.</div></div>
-      <div data-reveal="" class="card elev-sm"><span class="card-kicker">MY PLAYGROUND</span><div class="card-title">AI x UX</div><div class="card-body">Small experiments. Strange Ideas. Working Prototypes.</div></div>
+      <a href="playground.html" data-reveal="" class="card elev-sm" data-tip="Open my AI playground" style="display:block;text-decoration:none;color:var(--color-text);border-color:color-mix(in srgb, var(--color-accent) 45%, transparent);background:linear-gradient(160deg, color-mix(in srgb, var(--color-accent) 12%, var(--color-surface)), var(--color-surface) 70%);transition:border-color .25s ease, box-shadow .3s ease, transform .3s cubic-bezier(.22,.61,.36,1)" style-hover="border-color:color-mix(in srgb, var(--color-accent) 80%, transparent);box-shadow:0 12px 40px -18px color-mix(in srgb, var(--color-accent) 60%, transparent);transform:translateY(-3px)"><span class="card-kicker" style="color:var(--color-accent)">MY PLAYGROUND</span><div class="card-title" style="display:flex;align-items:center;gap:8px">AI x UX<svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="color:var(--color-accent)"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"></path></svg></div><div class="card-body">Small experiments. Strange Ideas. Working Prototypes.</div></a>
       <div data-reveal="" class="card elev-sm"><span class="card-kicker">Away from screens</span><div class="card-title">Photography</div><div class="card-body">Training myself to notice the details.</div></div>
       <div data-reveal="" class="card elev-sm"><span class="card-kicker">Happy to talk about</span><div class="card-title">Enterprise UX x AI trust</div><div class="card-body">Making AI feel powerful without making users feel powerless.</div></div>
     </div>
@@ -776,7 +800,44 @@ class Component extends DCLogic {
     this._extras = (window.EXTRAS || []).map((x) => ({ ...x, ariaLabel: x.caption + " — open PDF in a new tab" }));
     this._domains = window.DOMAINS || [];
     this.applyAccent();
+    this.armCursor();
     if (this.props.revealMotion !== false) this.arm();
+  }
+
+  armCursor() {
+    if (!window.matchMedia || !window.matchMedia("(hover: hover)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const ring = document.createElement("div"); ring.className = "ak-cur";
+    const dot = document.createElement("div"); dot.className = "ak-cur-dot";
+    document.body.appendChild(ring); document.body.appendChild(dot);
+    this._cur = { ring, dot };
+    const HOT = 'a,button,[role="button"],input,select,textarea,summary,[data-tip],image-slot';
+    let tx = innerWidth / 2, ty = innerHeight / 2, rx = tx, ry = ty;
+    const move = (e) => {
+      tx = e.clientX; ty = e.clientY;
+      ring.dataset.on = "1"; dot.dataset.on = "1";
+      const hot = e.target && e.target.closest && e.target.closest(HOT);
+      ring.dataset.hot = hot ? "1" : "0";
+    };
+    const leave = () => { ring.dataset.on = "0"; dot.dataset.on = "0"; };
+    const down = () => { ring.dataset.press = "1"; };
+    const up = () => { ring.dataset.press = "0"; };
+    addEventListener("pointermove", move, { passive: true });
+    addEventListener("pointerdown", down, { passive: true });
+    addEventListener("pointerup", up, { passive: true });
+    document.addEventListener("mouseleave", leave);
+    this._curOff = () => {
+      removeEventListener("pointermove", move); removeEventListener("pointerdown", down);
+      removeEventListener("pointerup", up); document.removeEventListener("mouseleave", leave);
+      cancelAnimationFrame(this._curRaf); ring.remove(); dot.remove();
+    };
+    const loop = () => {
+      rx += (tx - rx) * 0.16; ry += (ty - ry) * 0.16;
+      ring.style.transform = "translate3d(" + rx + "px," + ry + "px,0)";
+      dot.style.transform = "translate3d(" + tx + "px," + ty + "px,0)";
+      this._curRaf = requestAnimationFrame(loop);
+    };
+    this._curRaf = requestAnimationFrame(loop);
   }
 
   componentDidUpdate() {
@@ -846,7 +907,7 @@ class Component extends DCLogic {
     document.querySelectorAll("[data-reveal]:not(.is-in)").forEach((el) => this.io.observe(el));
   }
 
-  componentWillUnmount() { if (this.io) this.io.disconnect(); clearTimeout(this.fallback); }
+  componentWillUnmount() { if (this.io) this.io.disconnect(); clearTimeout(this.fallback); if (this._curOff) this._curOff(); }
 
   persist(unlocked) {
     try { localStorage.setItem("ak-portfolio-unlocked", JSON.stringify(unlocked)); } catch (e) {}

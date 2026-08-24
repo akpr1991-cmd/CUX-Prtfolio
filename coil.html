@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-23b14038-7914-4e6e-ab0a-2314fb0704a3/styles.css">
+<script src="_ds/modernist-23b14038-7914-4e6e-ab0a-2314fb0704a3/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap">
+<style>
+  :root {
+    --color-bg: #070c1a;
+    --color-surface: #121a33;
+    --color-text: #e9e9ed;
+    --color-accent: #5ceaff;
+    --color-accent-2: #ff2fd0;
+    --color-accent-600: #93efff;
+    --color-accent-700: #5ceaff;
+    --color-neutral-200: #16203c;
+    --color-neutral-400: #8f9bbd;
+    --color-neutral-600: #5d6a8c;
+    --color-neutral-700: #8f9bbd;
+    --color-neutral-800: #a9b3cd;
+    --color-divider: color-mix(in srgb, #e9e9ed 16%, transparent);
+    --font-heading: "Inter", system-ui, sans-serif;
+    --font-body: "Inter", system-ui, sans-serif;
+  }
+  body { margin: 0; background: var(--color-bg); color: var(--color-text);
+    background-image:
+      radial-gradient(circle at center, color-mix(in srgb, var(--color-accent) 11%, transparent) 0.9px, transparent 1.1px),
+      radial-gradient(ellipse 70% 55% at 12% 6%, color-mix(in srgb, var(--color-accent) 7%, transparent), transparent 70%),
+      radial-gradient(ellipse 62% 52% at 90% 86%, color-mix(in srgb, var(--color-accent-2) 6%, transparent), transparent 72%);
+    background-size: 26px 26px, 100% 100%, 100% 100%;
+    background-attachment: fixed, fixed, fixed; }
+  a { color: var(--color-accent); text-decoration: none; }
+  a:hover { color: var(--color-accent-600); }
+  :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+</style>
+</helmet>
+<div style="min-height:100vh;color:var(--color-text);font-family:var(--font-body);padding:40px 48px;display:flex;flex-direction:column;align-items:flex-start;gap:24px">
+
+  <div style="width:824px;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <div style="display:flex;align-items:baseline;gap:16px">
+        <h1 style="font-family:var(--font-heading);font-weight:600;font-size:44px;line-height:1;letter-spacing:-0.03em;margin:0">COIL</h1>
+        <span style="font-family:var(--font-heading);font-size:13px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-accent)">Endless grid</span>
+      </div>
+      <a href="playground.html" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-heading);font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;padding:9px 16px;border-radius:999px;border:1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);color:var(--color-accent);transition:background .25s ease, color .25s ease, border-color .25s ease" style-hover="background:var(--color-accent);border-color:var(--color-accent);color:var(--color-bg)"><svg width="13" height="13" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg><span>Exit to playground</span></a>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <span style="font-family:var(--font-heading);font-size:13px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-neutral-700)">Arrows to steer · Space to jump</span>
+    </div>
+    <div style="height:1px;background:var(--color-divider)"></div>
+  </div>
+
+  <div style="width:824px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--color-divider);border:1px solid var(--color-divider);border-radius:12px;overflow:hidden;font-variant-numeric:tabular-nums">
+    <div style="background:var(--color-surface);padding:14px 18px;display:flex;flex-direction:column;gap:4px">
+      <span style="font-family:var(--font-heading);font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--color-accent)">Score</span>
+      <span style="font-family:var(--font-heading);font-size:32px;font-weight:700;line-height:1;letter-spacing:0.02em;color:var(--color-text)">{{ scorePad }}</span>
+    </div>
+    <div style="background:var(--color-surface);padding:14px 18px;display:flex;flex-direction:column;gap:4px">
+      <span style="font-family:var(--font-heading);font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--color-accent)">Top</span>
+      <span style="font-family:var(--font-heading);font-size:32px;font-weight:700;line-height:1;letter-spacing:0.02em;color:var(--color-text)">{{ highPad }}</span>
+    </div>
+    <div style="background:var(--color-surface);padding:14px 18px;display:flex;flex-direction:column;gap:6px">
+      <span style="font-family:var(--font-heading);font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--color-accent)">Coil ×{{ lives }}</span>
+      <div style="display:flex;gap:5px;padding-top:4px">
+        <sc-for list="{{ lifeCells }}" as="life" hint-placeholder-count="3">
+          <div style="width:16px;height:16px;border-radius:3px;border:1px solid var(--color-divider);background:{{ life.fill }}"></div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="background:var(--color-surface);padding:14px 18px;display:flex;flex-direction:column;gap:4px">
+      <span style="font-family:var(--font-heading);font-size:11px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--color-accent)">Jump</span>
+      <span style="font-family:var(--font-heading);font-size:32px;font-weight:700;line-height:1;letter-spacing:0.04em;color:{{ jumpColor }}">{{ jumpLabel }}</span>
+    </div>
+  </div>
+
+  <div style="position:relative;width:824px;height:564px;border:1px solid var(--color-divider);border-radius:14px;overflow:hidden;background:var(--color-bg);box-shadow:0 24px 70px -40px color-mix(in srgb, var(--color-accent) 65%, transparent)">
+    <canvas ref="{{ canvasRef }}" width="1640" height="1120" style="display:block;width:820px;height:560px"></canvas>
+
+    <sc-if value="{{ overlay }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;inset:0;background:color-mix(in srgb, var(--color-bg) 88%, transparent);backdrop-filter:blur(6px);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 64px;gap:18px">
+        <span style="font-family:var(--font-heading);font-size:13px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:var(--color-accent)">{{ overlayKicker }}</span>
+        <h2 style="font-family:var(--font-heading);font-weight:700;font-weight:500;font-size:80px;line-height:0.92;letter-spacing:-0.03em;margin:0;max-width:640px;color:var(--color-text);text-shadow:0 0 44px color-mix(in srgb, var(--color-accent) 55%, transparent)">{{ overlayTitle }}</h2>
+        <p style="font-family:var(--font-body);font-size:17px;line-height:1.5;margin:12px 0 0;max-width:480px;text-wrap:pretty;color:var(--color-neutral-400)">{{ overlayBody }}</p>
+        <button onClick="{{ start }}" style="font-family:var(--font-heading);font-size:14px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;padding:15px 26px;border-radius:999px;background:var(--color-accent);color:var(--color-bg);border:none;cursor:pointer;text-align:left;transition:box-shadow .25s ease" style-hover="box-shadow:0 0 0 6px color-mix(in srgb, var(--color-accent) 22%, transparent)">{{ overlayCta }}</button>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="width:824px;display:flex;flex-direction:column;gap:12px">
+    <div style="height:1px;background:var(--color-divider)"></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-family:var(--font-heading);font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--color-accent)">Steer</span>
+        <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">Arrow keys turn the head. No reversing into your own neck.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-family:var(--font-heading);font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--color-accent)">Jump</span>
+        <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">Space lifts the head for two steps — pass over your tail or a block. Then it recharges.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-family:var(--font-heading);font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--color-neutral-800)">Ramp</span>
+        <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-800)">Every fourth pickup drops a block and quickens the tick. Walls are always fatal.</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startingLives&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:3,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:1,&quot;max&quot;:6,&quot;section&quot;:&quot;Rules&quot;},&quot;speedRamp&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:0.4,&quot;max&quot;:2,&quot;step&quot;:0.1,&quot;section&quot;:&quot;Rules&quot;},&quot;showGrid&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Board&quot;}}">
+const KEY = 'coil-high-score';
+
+class Component extends DCLogic {
+  state = { score: 0, high: 0, lives: 3, status: 'ready', eaten: 0, jumpReady: true };
+
+  canvasRef = React.createRef();
+  cols = 41; rows = 28; cell = 40; // canvas is 1640x1120 backing px
+
+  componentDidMount() {
+    const css = getComputedStyle(document.documentElement);
+    const tok = (n, f) => (css.getPropertyValue(n) || '').trim() || f;
+    this.C = {
+      bg: tok('--color-bg', '#f3f2f2'),
+      ink: tok('--color-text', '#201e1d'),
+      accent: tok('--color-accent', '#ec3013'),
+      grid: 'rgba(233,233,237,0.07)',
+      soft: 'rgba(92,234,255,0.25)'
+    };
+    this.ctx = this.canvasRef.current.getContext('2d');
+    let high = 0;
+    try { high = parseInt(localStorage.getItem(KEY) || '0', 10) || 0; } catch (e) {}
+    this.setState({ high });
+    this.resetWorld();
+    this.frames = 0;
+    this.acc = 0;
+    this.last = performance.now();
+    this.onKey = this.handleKey.bind(this);
+    window.addEventListener('keydown', this.onKey);
+    this.loop = this.loop.bind(this);
+    this.raf = requestAnimationFrame(this.loop);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onKey);
+    cancelAnimationFrame(this.raf);
+  }
+
+  lives0() { const n = parseInt(this.props.startingLives, 10); return n > 0 ? n : 3; }
+
+  resetWorld() {
+    this.rocks = [];
+    this.spawnSnake();
+    this.placeFood();
+  }
+
+  spawnSnake() {
+    const cy = Math.floor(this.rows / 2), cx = Math.floor(this.cols / 2) - 4;
+    this.snake = [{ x: cx + 3, y: cy }, { x: cx + 2, y: cy }, { x: cx + 1, y: cy }, { x: cx, y: cy }];
+    this.dir = { x: 1, y: 0 };
+    this.next = { x: 1, y: 0 };
+    this.air = 0;
+    this.cd = 0;
+    this.invuln = 10;
+    this.rocks = this.rocks.filter(r => Math.abs(r.y - cy) > 1 || r.x < cx - 1 || r.x > cx + 10);
+  }
+
+  free(x, y) {
+    if (this.snake.some(s => s.x === x && s.y === y)) return false;
+    if (this.rocks.some(r => r.x === x && r.y === y)) return false;
+    if (this.food && this.food.x === x && this.food.y === y) return false;
+    return true;
+  }
+
+  placeFood() {
+    for (let i = 0; i < 400; i++) {
+      const x = 1 + Math.floor(Math.random() * (this.cols - 2));
+      const y = 1 + Math.floor(Math.random() * (this.rows - 2));
+      if (this.free(x, y)) { this.food = { x, y }; return; }
+    }
+  }
+
+  addRock() {
+    const head = this.snake[0];
+    for (let i = 0; i < 300; i++) {
+      const x = 1 + Math.floor(Math.random() * (this.cols - 2));
+      const y = 1 + Math.floor(Math.random() * (this.rows - 2));
+      if (this.free(x, y) && Math.abs(x - head.x) + Math.abs(y - head.y) > 6) { this.rocks.push({ x, y }); return; }
+    }
+  }
+
+  start() {
+    this.resetWorld();
+    this.setState({ score: 0, eaten: 0, lives: this.lives0(), status: 'playing', jumpReady: true });
+  }
+
+  handleKey(e) {
+    const k = e.key;
+    const nav = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Spacebar'];
+    if (nav.indexOf(k) !== -1) e.preventDefault();
+    if (this.state.status !== 'playing') {
+      if (k === ' ' || k === 'Spacebar' || k === 'Enter') this.start();
+      return;
+    }
+    const d = { ArrowUp: { x: 0, y: -1 }, ArrowDown: { x: 0, y: 1 }, ArrowLeft: { x: -1, y: 0 }, ArrowRight: { x: 1, y: 0 } }[k];
+    if (d) {
+      if (d.x === -this.dir.x && d.y === -this.dir.y) return;
+      this.next = d;
+      return;
+    }
+    if ((k === ' ' || k === 'Spacebar') && this.cd === 0 && this.air === 0) {
+      this.air = 2;
+      this.cd = 7;
+      this.setState({ jumpReady: false });
+    }
+  }
+
+  interval() {
+    const ramp = parseFloat(this.props.speedRamp);
+    const r = isNaN(ramp) ? 1 : ramp;
+    return Math.max(70, 150 - this.state.eaten * 3.6 * r);
+  }
+
+  hit() {
+    const lives = this.state.lives - 1;
+    if (lives <= 0) {
+      const high = Math.max(this.state.high, this.state.score);
+      try { localStorage.setItem(KEY, String(high)); } catch (e) {}
+      this.setState({ lives: 0, high, status: 'over' });
+      return;
+    }
+    this.setState({ lives });
+    this.spawnSnake();
+  }
+
+  tick() {
+    if (this.air > 0) this.air--;
+    if (this.cd > 0) { this.cd--; if (this.cd === 0) this.setState({ jumpReady: true }); }
+    if (this.invuln > 0) this.invuln--;
+    this.dir = this.next;
+    const h = { x: this.snake[0].x + this.dir.x, y: this.snake[0].y + this.dir.y };
+    if (h.x < 0 || h.y < 0 || h.x >= this.cols || h.y >= this.rows) { this.hit(); return; }
+    const airborne = this.air > 0;
+    if (!airborne) {
+      const body = this.snake.slice(0, -1).some(s => s.x === h.x && s.y === h.y);
+      const rock = this.rocks.some(r => r.x === h.x && r.y === h.y);
+      if (body || rock) { this.hit(); return; }
+    }
+    this.snake.unshift(h);
+    if (this.food && h.x === this.food.x && h.y === this.food.y) {
+      const eaten = this.state.eaten + 1;
+      this.setState({ eaten, score: this.state.score + 10 + Math.floor(eaten / 4) * 5 });
+      this.placeFood();
+      if (eaten % 4 === 0) this.addRock();
+    } else {
+      this.snake.pop();
+    }
+  }
+
+  loop(now) {
+    this.raf = requestAnimationFrame(this.loop);
+    const dt = Math.min(now - this.last, 200);
+    this.last = now;
+    this.frames++;
+    if (this.state.status === 'playing') {
+      this.acc += dt;
+      const iv = this.interval();
+      while (this.acc >= iv) { this.acc -= iv; if (this.state.status === 'playing') this.tick(); }
+    }
+    this.draw();
+  }
+
+  draw() {
+    const ctx = this.ctx; if (!ctx) return;
+    const C = this.C, s = this.cell, W = this.cols * s, H = this.rows * s;
+    ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+    if (this.props.showGrid !== false) {
+      ctx.strokeStyle = C.grid; ctx.lineWidth = 1;
+      for (let x = 1; x < this.cols; x++) { ctx.beginPath(); ctx.moveTo(x * s, 0); ctx.lineTo(x * s, H); ctx.stroke(); }
+      for (let y = 1; y < this.rows; y++) { ctx.beginPath(); ctx.moveTo(0, y * s); ctx.lineTo(W, y * s); ctx.stroke(); }
+    }
+    // brick blocks
+    this.rocks.forEach(r => {
+      const x = r.x * s + 2, y = r.y * s + 2, w = s - 4, h = s - 4;
+      ctx.fillStyle = C.ink; ctx.fillRect(x, y, w, h);
+      ctx.fillStyle = C.bg;
+      ctx.fillRect(x, y + h / 2 - 1.5, w, 3);
+      ctx.fillRect(x + w / 2 - 1.5, y, 3, h / 2);
+      ctx.fillRect(x + w / 4 - 1.5, y + h / 2, 3, h / 2);
+      ctx.fillRect(x + (w * 3) / 4 - 1.5, y + h / 2, 3, h / 2);
+    });
+    // coin
+    if (this.food) {
+      const fx = this.food.x * s, fy = this.food.y * s;
+      const bob = Math.round(Math.sin(this.frames / 12) * 3);
+      ctx.fillStyle = C.accent; ctx.fillRect(fx + 7, fy + 4 + bob, s - 14, s - 8);
+      ctx.fillRect(fx + 4, fy + 9 + bob, s - 8, s - 18);
+      ctx.fillStyle = C.bg; ctx.fillRect(fx + s / 2 - 2, fy + 11 + bob, 4, s - 22);
+    }
+    const blink = this.invuln > 0 && Math.floor(this.frames / 5) % 2 === 0;
+    if (!blink) {
+      for (let i = this.snake.length - 1; i >= 0; i--) {
+        const seg = this.snake[i], head = i === 0;
+        const lift = head && this.air > 0 ? 10 : 0;
+        if (lift) { ctx.fillStyle = C.soft; ctx.fillRect(seg.x * s + 8, seg.y * s + 10, s - 16, s - 16); }
+        const bx = seg.x * s + 2, by = seg.y * s + 2 - lift, bw = s - 4;
+        ctx.fillStyle = head ? C.accent : C.ink;
+        ctx.fillRect(bx, by, bw, bw);
+        ctx.fillStyle = C.bg;
+        ctx.fillRect(bx, by, bw, 3);
+        ctx.fillRect(bx, by, 3, bw);
+        if (head) {
+          const d = this.dir, p = { x: -d.y, y: d.x };
+          const cx = bx + bw / 2, cy = by + bw / 2;
+          [-1, 1].forEach(k => {
+            ctx.fillRect(cx + d.x * 7 + p.x * k * 7 - 4, cy + d.y * 7 + p.y * k * 7 - 4, 8, 8);
+          });
+        }
+      }
+    }
+  }
+
+  renderVals() {
+    const st = this.state;
+    const total = this.lives0();
+    const lifeCells = [];
+    for (let i = 0; i < total; i++) lifeCells.push({ fill: i < st.lives ? 'var(--color-accent)' : 'transparent' });
+    const ready = st.status === 'ready', over = st.status === 'over';
+    const pad = n => String(n).padStart(6, '0');
+    return {
+      canvasRef: this.canvasRef,
+      score: st.score,
+      high: st.high,
+      scorePad: pad(st.score),
+      highPad: pad(Math.max(st.high, st.score)),
+      lives: st.lives,
+      lifeCells,
+      overlayKicker: over ? 'Run ended · Grid 1' : 'Grid 1 · Endless',
+      jumpLabel: st.status !== 'playing' ? '—' : (st.jumpReady ? 'READY' : 'CHARGING'),
+      jumpColor: st.jumpReady && st.status === 'playing' ? 'var(--color-accent)' : 'var(--color-neutral-600)',
+      overlay: ready || over,
+      overlayTitle: over ? 'Game over' : 'Coil',
+      overlayBody: over
+        ? 'You scored ' + st.score + '. Best so far ' + Math.max(st.high, st.score) + '. Press space to run it again.'
+        : 'Steer with the arrow keys, eat the marks, and hop your own tail with space when the grid gets tight. Three lives, no end.',
+      overlayCta: over ? 'Play again' : 'Press space to start',
+      start: () => this.start()
+    };
+  }
+}
+</script>
+</body>
+</html>
