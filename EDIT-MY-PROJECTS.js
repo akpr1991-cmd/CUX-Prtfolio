@@ -36,14 +36,14 @@ window.CASE_STUDIES = [
     cover: "case-studies/vessel-management-portal/cover.jpg"
   },
   {
-    slug: "spreadsmart",
+    slug: "numera-spreading",
     title: "AI-Powered Financial Data Extraction Platform",
     org: "Lending · Credit risk",
     summary: "An AI-powered financial spreading tool that replaces conventional manual data entry processes with automated data extraction to configurable templates.",
     tags: ["Data entry", "Document AI", "Credit"],
     password: "akpixels@16",
-    href: "case-studies/spreadsmart.pdf",
-    cover: "case-studies/spreadsmart/cover.jpg"
+    href: "case-studies/numera-spreading.pdf",
+    cover: "case-studies/numera-spreading/cover.jpg"
   },
   {
     slug: "conference-solution",
