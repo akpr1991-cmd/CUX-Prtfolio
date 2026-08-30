@@ -26,34 +26,34 @@ window.CASE_STUDIES = [
     cover: "case-studies/mastercard/cover.jpg"
   },
   {
-    slug: "vessel-management-portal",
+    slug: "procurement-ai",
     title: "Vessel Management Portal",
     org: "Enterprise SaaS · Maritime",
     summary: "Enterprise SaaS for maritime vessel management.",
     tags: ["Enterprise SaaS", "Maritime", "Workflow"],
     password: "akpixels@16",
-    href: "case-studies/vessel-management-portal.pdf",
-    cover: "case-studies/vessel-management-portal/cover.jpg"
+    href: "case-studies/procurement-ai.pdf",
+    cover: "case-studies/procurement-ai/cover.jpg"
   },
   {
-    slug: "numera-spreading",
-    title: "AI-Powered Financial Data Extraction Platform",
+    slug: "spreadsmart",
+    title: "AI-Powered Financial Data Extraction",
     org: "Lending · Credit risk",
     summary: "An AI-powered financial spreading tool that replaces conventional manual data entry processes with automated data extraction to configurable templates.",
     tags: ["Data entry", "Document AI", "Credit"],
     password: "akpixels@16",
-    href: "case-studies/numera-spreading.pdf",
-    cover: "case-studies/numera-spreading/cover.jpg"
+    href: "case-studies/spreadsmart.pdf",
+    cover: "case-studies/spreadsmart/cover.jpg"
   },
   {
-    slug: "conference-solution",
+    slug: "credit-risk-staging",
     title: "Conference Solution",
     org: "Life sciences · AI platform",
     summary: "AI-enabled platform for extracting data from medical conferences and surfacing insights.",
     tags: ["Data extraction", "Insights", "AI platform"],
     password: "akpixels@16",
-    href: "case-studies/conference-solution",
-    cover: "case-studies/conference-solution/cover.jpg"
+    href: "case-studies/credit-risk-staging.pdf",
+    cover: "case-studies/credit-risk-staging/cover.jpg"
   }
 ];
 
@@ -65,9 +65,9 @@ window.CASE_STUDIES = [
    ─────────────────────────────────────────────────────────────── */
 
 window.EXTRAS = [
-  { caption: "Model Risk Validator",      image: "images/extra-1.jpg", href: "extras/extra-1.pdf" },
-  { caption: "VR Training - Maritime", image: "images/extra-2.jpg", href: "extras/extra-2.pdf" },
-  { caption: "Indexing",     image: "images/extra-3.jpg", href: "extras/extra-3.pdf" }
+  { caption: "Usage analytics — Mastercard",      image: "images/extra-1.jpg", href: "extras/extra-1.pdf" },
+  { caption: "Sourcing workflow — Procurement.ai", image: "images/extra-2.jpg", href: "extras/extra-2.pdf" },
+  { caption: "Spreading canvas — Spreadsmart",     image: "images/extra-3.jpg", href: "extras/extra-3.pdf" }
 ];
 
 
@@ -84,3 +84,15 @@ window.DOMAINS = [
   "VR",
   "Enterprise Accelerators"
 ];
+
+
+/* ───────────────────────────────────────────────────────────────
+   4. INTRO AUDIO  (the voice clip the landing aura reacts to)
+   Easiest way to swap it: drop your new file into the audio/ folder
+   named  intro.wav  — it overwrites the old one and nothing else
+   needs changing.
+   Using a different name or format (mp3 / m4a / ogg all work)?
+   Just point this at it.
+   ─────────────────────────────────────────────────────────────── */
+
+window.INTRO_AUDIO = "audio/intro.wav";

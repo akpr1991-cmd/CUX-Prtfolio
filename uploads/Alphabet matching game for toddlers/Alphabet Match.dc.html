@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Bubblegum+Sans&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; overscroll-behavior: none; -webkit-tap-highlight-color: transparent; }
+  body { font-family: "Baloo 2", "Trebuchet MS", sans-serif; background: #E7F3FF; }
+  a { color: #2D9CF0; text-decoration: none; }
+  a:hover { color: #1B7ECB; }
+  @keyframes am-bounce { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-9px) } }
+  @keyframes am-glow { 0%,100% { box-shadow: 0 0 0 6px rgba(255,201,60,.55), 0 8px 0 #E0A400 } 50% { box-shadow: 0 0 0 13px rgba(255,201,60,.25), 0 8px 0 #E0A400 } }
+  @keyframes am-wiggle { 0%,100% { transform: translateX(0) rotate(0) } 15% { transform: translateX(-14px) rotate(-4deg) } 35% { transform: translateX(12px) rotate(4deg) } 55% { transform: translateX(-9px) rotate(-3deg) } 75% { transform: translateX(6px) rotate(2deg) } }
+  @keyframes am-pop { 0% { transform: scale(1) } 40% { transform: scale(1.09) } 100% { transform: scale(1.04) } }
+  @keyframes am-star { 0% { transform: scale(.2) rotate(-40deg); opacity: 0 } 45% { transform: scale(1.25) rotate(8deg); opacity: 1 } 100% { transform: scale(1) rotate(0); opacity: 1 } }
+  @keyframes am-fall { 0% { transform: translate3d(0,-10vh,0) rotate(0); opacity: 1 } 100% { transform: translate3d(var(--dx,0), 105vh, 0) rotate(720deg); opacity: .9 } }
+  @keyframes am-toast { 0% { transform: translate(-50%, 30px) scale(.9); opacity: 0 } 100% { transform: translate(-50%, 0) scale(1); opacity: 1 } }
+  @keyframes am-float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+  @keyframes am-baby { 0%,100% { transform: translateY(0) rotate(-3deg) } 50% { transform: translateY(-14px) rotate(3deg) } }
+  @keyframes am-enter { 0%,100% { transform: scale(1) } 50% { transform: scale(1.045) } }
+  @keyframes am-in { 0% { transform: translateY(18px) scale(.96); opacity: 0 } 100% { transform: none; opacity: 1 } }
+</style>
+</helmet>
+<div style="height: 100dvh; display: flex; flex-direction: column; gap: 0; padding: clamp(10px, 1.6vh, 20px); box-sizing: border-box; background: radial-gradient(120% 90% at 50% 0%, #FFFFFF 0%, #E7F3FF 55%, #D6EAFB 100%);">
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <div style="flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(10px, 2vh, 28px); text-align: center; animation: am-in .4s ease-out;">
+    <div style="font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(46px, 11vh, 130px); line-height: .95; color: #2D9CF0; text-shadow: 0 6px 0 #1B7ECB, 0 10px 22px rgba(27,126,203,.28);">Alphabet<br /><span style="color: #FFC93C; text-shadow: 0 6px 0 #E0A400, 0 10px 22px rgba(224,164,0,.3);">Match</span></div>
+    <div style="font-size: clamp(14px, 2vh, 22px); font-weight: 700; color: #9DB6C9; letter-spacing: 2px; text-transform: uppercase;">Created by AKPixels</div>
+    <div style="position: relative; display: flex; align-items: flex-end; justify-content: center; margin-top: clamp(2px, 1vh, 12px);">
+      <div style="position: absolute; bottom: 4%; width: clamp(150px, 26vh, 300px); height: clamp(150px, 26vh, 300px); border-radius: 50%; background: radial-gradient(circle, #FFF3D1 0%, rgba(255,243,209,0) 70%);"></div>
+      <div style="position: relative; font-size: clamp(90px, 24vh, 240px); line-height: 1; animation: am-baby 3s ease-in-out infinite; filter: drop-shadow(0 14px 16px rgba(20,72,111,.18));">👶</div>
+    </div>
+    <button type="button" onClick="{{ onStart }}" style="border: none; cursor: pointer; font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(26px, 4.6vh, 54px); color: #FFFFFF; background: #5BC236; padding: clamp(12px,2vh,24px) clamp(38px,6vw,86px); border-radius: 999px; box-shadow: 0 10px 0 #43982A, 0 18px 30px rgba(67,152,42,.3); animation: am-enter 1.8s ease-in-out infinite; letter-spacing: 1px;" style-hover="background: #6CD343;" style-active="transform: translateY(6px); box-shadow: 0 4px 0 #43982A;">Enter</button>
+    <div style="font-size: clamp(13px, 1.9vh, 22px); font-weight: 600; color: #5E86A6;">Ages 2–5 · Learn your letters A to Z</div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isName }}" hint-placeholder-val="{{ false }}">
+  <div style="flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(12px, 2.2vh, 30px); text-align: center; animation: am-in .35s ease-out;">
+    <div style="font-size: clamp(60px, 14vh, 150px); line-height: 1; animation: am-baby 3s ease-in-out infinite;">👶</div>
+    <div style="font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(28px, 5.4vh, 64px); color: #2D9CF0; text-shadow: 0 4px 0 #1B7ECB;">What's your name?</div>
+    <input type="text" value="{{ rawName }}" onChange="{{ onName }}" onKeyDown="{{ onNameKey }}" placeholder="Type here" maxLength="14" style="font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: clamp(24px, 4.4vh, 48px); text-align: center; color: #14486F; background: #FFFFFF; border: none; outline: none; border-radius: 999px; padding: clamp(10px,1.8vh,20px) clamp(24px,4vw,50px); width: min(90%, 560px); box-shadow: 0 0 0 5px #FFC93C, 0 8px 0 #E0A400;" />
+    <button type="button" onClick="{{ onBegin }}" style="border: none; cursor: pointer; font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(24px, 4.2vh, 48px); color: #FFFFFF; background: #5BC236; padding: clamp(10px,1.8vh,20px) clamp(34px,5.5vw,78px); border-radius: 999px; box-shadow: 0 10px 0 #43982A, 0 18px 30px rgba(67,152,42,.28); letter-spacing: 1px;" style-hover="background: #6CD343;" style-active="transform: translateY(6px); box-shadow: 0 4px 0 #43982A;">Let's Play!</button>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isLevel }}" hint-placeholder-val="{{ false }}">
+  <div style="flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(14px, 2.6vh, 36px); text-align: center; animation: am-in .35s ease-out;">
+    <div style="font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(28px, 5.4vh, 64px); color: #2D9CF0; text-shadow: 0 4px 0 #1B7ECB;">Pick a level, {{ name }}!</div>
+    <div style="display: flex; gap: clamp(14px, 2.4vw, 32px); flex-wrap: wrap; justify-content: center;">
+      <button type="button" onClick="{{ onEasy }}" style="border: none; cursor: pointer; font-family: inherit; display: flex; flex-direction: column; align-items: center; gap: clamp(4px,1vh,12px); background: #E4F8DA; border-radius: 32px; padding: clamp(16px,2.6vh,34px) clamp(24px,4vw,56px); box-shadow: 0 0 0 5px #5BC236, 0 10px 0 #43982A; width: min(38vw, 300px);" style-active="transform: translateY(6px); box-shadow: 0 0 0 5px #5BC236, 0 4px 0 #43982A;">
+        <div style="font-size: clamp(44px, 9vh, 96px); line-height: 1;">🐢</div>
+        <div style="font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(24px, 4vh, 44px); color: #2F7A18;">Simple</div>
+        <div style="font-size: clamp(13px, 1.9vh, 21px); font-weight: 700; color: #4C7A3A;">Take all the time you need</div>
+      </button>
+      <button type="button" onClick="{{ onHard }}" style="border: none; cursor: pointer; font-family: inherit; display: flex; flex-direction: column; align-items: center; gap: clamp(4px,1vh,12px); background: #FFE5E2; border-radius: 32px; padding: clamp(16px,2.6vh,34px) clamp(24px,4vw,56px); box-shadow: 0 0 0 5px #F2564B, 0 10px 0 #CB3A30; width: min(38vw, 300px);" style-active="transform: translateY(6px); box-shadow: 0 0 0 5px #F2564B, 0 4px 0 #CB3A30;">
+        <div style="font-size: clamp(44px, 9vh, 96px); line-height: 1;">⏱️</div>
+        <div style="font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(24px, 4vh, 44px); color: #CB3A30;">Difficult</div>
+        <div style="font-size: clamp(13px, 1.9vh, 21px); font-weight: 700; color: #A6493F;">Finish A–Z in 3 minutes</div>
+      </button>
+    </div>
+    <button type="button" onClick="{{ onHome }}" style="border: none; cursor: pointer; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: clamp(14px, 2vh, 22px); color: #5E86A6; background: transparent; padding: 8px 16px;">Back</button>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isTimeUp }}" hint-placeholder-val="{{ false }}">
+  <div style="flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(12px, 2.2vh, 30px); text-align: center; animation: am-in .35s ease-out;">
+    <div style="font-size: clamp(60px, 14vh, 150px); line-height: 1; animation: am-baby 3s ease-in-out infinite;">⏰</div>
+    <div style="font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(34px, 7vh, 88px); line-height: 1; color: #F2564B; text-shadow: 0 5px 0 #CB3A30;">Time's up!</div>
+    <div style="font-size: clamp(17px, 3vh, 36px); font-weight: 700; color: #14486F; max-width: 24ch; text-wrap: pretty;">You got {{ stars }} stars, {{ name }}. Let's try again!</div>
+    <div style="display: flex; gap: clamp(10px, 1.6vw, 20px); flex-wrap: wrap; justify-content: center;">
+      <button type="button" onClick="{{ onRetry }}" style="border: none; cursor: pointer; font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(20px, 3.4vh, 40px); color: #FFFFFF; background: #5BC236; padding: clamp(10px,1.6vh,18px) clamp(28px,4.5vw,60px); border-radius: 999px; box-shadow: 0 8px 0 #43982A;" style-active="transform: translateY(5px); box-shadow: 0 3px 0 #43982A;">Try Again</button>
+      <button type="button" onClick="{{ onBegin }}" style="border: none; cursor: pointer; font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(20px, 3.4vh, 40px); color: #14486F; background: #FFFFFF; padding: clamp(10px,1.6vh,18px) clamp(28px,4.5vw,60px); border-radius: 999px; box-shadow: 0 8px 0 #C9DCEC;" style-active="transform: translateY(5px); box-shadow: 0 3px 0 #C9DCEC;">Change Level</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+  <div style="flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(10px, 2vh, 26px); text-align: center; animation: am-in .4s ease-out;">
+    <div style="font-size: clamp(60px, 15vh, 160px); line-height: 1; animation: am-baby 2.6s ease-in-out infinite;">🎉</div>
+    <div style="font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(36px, 8vh, 100px); line-height: 1; color: #FFC93C; text-shadow: 0 6px 0 #E0A400;">Congratulations!</div>
+    <div style="font-size: clamp(18px, 3.2vh, 40px); font-weight: 700; color: #14486F; text-wrap: pretty; max-width: 22ch;">{{ name }}, you have completed the level successfully.</div>
+    <div style="display: flex; align-items: center; gap: 12px; background: #FFFFFF; border-radius: 999px; padding: clamp(8px,1.2vh,14px) clamp(20px,2.4vw,32px); box-shadow: 0 6px 0 #C9DCEC;">
+      <div style="font-size: clamp(24px, 3.6vh, 40px); line-height: 1;">⭐</div>
+      <div style="font-size: clamp(22px, 3.4vh, 40px); font-weight: 800; color: #E0A400;">{{ stars }} stars</div>
+    </div>
+    <div style="display: flex; gap: clamp(10px, 1.6vw, 20px); flex-wrap: wrap; justify-content: center;">
+      <button type="button" onClick="{{ onBegin }}" style="border: none; cursor: pointer; font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(20px, 3.4vh, 40px); color: #FFFFFF; background: #5BC236; padding: clamp(10px,1.6vh,18px) clamp(28px,4.5vw,60px); border-radius: 999px; box-shadow: 0 8px 0 #43982A;" style-active="transform: translateY(5px); box-shadow: 0 3px 0 #43982A;">Play Again</button>
+      <button type="button" onClick="{{ onHome }}" style="border: none; cursor: pointer; font-family: 'Bubblegum Sans', 'Baloo 2', cursive; font-size: clamp(20px, 3.4vh, 40px); color: #14486F; background: #FFFFFF; padding: clamp(10px,1.6vh,18px) clamp(28px,4.5vw,60px); border-radius: 999px; box-shadow: 0 8px 0 #C9DCEC;" style-active="transform: translateY(5px); box-shadow: 0 3px 0 #C9DCEC;">Home</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isPlaying }}" hint-placeholder-val="{{ false }}">
+  <div style="flex: 1; min-height: 0; display: flex; flex-direction: column;">
+  <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 clamp(4px, 1vw, 14px) clamp(8px, 1.2vh, 14px);">
+    <div style="display: flex; align-items: baseline; gap: 12px;">
+      <div style="display: flex; flex-direction: column;">
+        <div style="font-size: clamp(22px, 3.4vh, 40px); font-weight: 800; color: #14486F; letter-spacing: -.5px;">Alphabet Match</div>
+        <div style="font-size: clamp(10px, 1.3vh, 14px); font-weight: 600; color: #9DB6C9; letter-spacing: 2px; text-transform: uppercase;">Created by AKPixels</div>
+      </div>
+      <div style="font-size: clamp(13px, 1.8vh, 20px); font-weight: 600; color: #5E86A6;">Tap the picture that starts with the letter</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: clamp(8px,1vw,14px);">
+      <sc-if value="{{ isTimed }}" hint-placeholder-val="{{ false }}">
+        <div style="{{ clockStyle }}"><span style="font-size: clamp(16px,2.4vh,26px);">⏱️</span>{{ clock }}</div>
+      </sc-if>
+      <div style="display: flex; align-items: center; gap: 10px; background: #FFFFFF; border-radius: 999px; padding: clamp(6px,1vh,10px) clamp(14px,1.6vw,22px); box-shadow: 0 5px 0 #C9DCEC;">
+        <div style="font-size: clamp(15px, 2.4vh, 28px); font-weight: 800; color: #2D9CF0; max-width: 12ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ name }}</div>
+        <div style="width: 2px; height: clamp(16px,2.4vh,28px); background: #E3EDF5;"></div>
+        <div style="font-size: clamp(20px, 3vh, 30px); line-height: 1;">⭐</div>
+        <div style="font-size: clamp(18px, 2.8vh, 32px); font-weight: 800; color: #E0A400;">{{ stars }}</div>
+      </div>
+      <button type="button" onClick="{{ onHome }}" style="border: none; cursor: pointer; font-family: inherit; background: #FFFFFF; border-radius: 999px; padding: clamp(6px,1vh,10px) clamp(14px,1.6vw,20px); box-shadow: 0 5px 0 #C9DCEC; font-size: clamp(20px, 3vh, 30px); line-height: 1;" style-active="transform: translateY(3px); box-shadow: 0 2px 0 #C9DCEC;">🏠</button>
+    </div>
+  </div>
+
+  <div style="flex: 1; min-height: 0; display: flex; gap: clamp(10px, 1.4vw, 20px);">
+
+    <div style="width: clamp(88px, 12vw, 148px); flex: none; background: #FFFFFF; border-radius: 28px; box-shadow: 0 8px 0 #C9DCEC; padding: clamp(8px,1.2vh,14px); box-sizing: border-box; display: flex; flex-direction: column; min-height: 0;">
+      <div style="text-align: center; font-size: clamp(11px, 1.5vh, 15px); font-weight: 700; color: #8AA7BE; letter-spacing: 1.5px; padding-bottom: 8px;">A – Z</div>
+      <div style="flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: clamp(7px, 1vh, 12px); padding: 4px;">
+        <sc-for list="{{ letters }}" as="L" hint-placeholder-count="26">
+          <button type="button" onClick="{{ L.onClick }}" style="{{ L.style }}">{{ L.ch }}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: clamp(10px, 1.4vh, 18px);">
+
+      <div style="display: flex; align-items: center; gap: clamp(12px, 2vw, 24px); background: #FFFFFF; border-radius: 28px; box-shadow: 0 8px 0 #C9DCEC; padding: clamp(8px,1.2vh,16px) clamp(14px,2vw,26px);">
+        <div style="font-size: clamp(44px, 8vh, 96px); font-weight: 800; line-height: 1; color: #2D9CF0; animation: am-float 2.4s ease-in-out infinite;">{{ activeLetter }}</div>
+        <div style="font-size: clamp(18px, 3vh, 34px); font-weight: 700; color: #14486F; text-wrap: pretty;">Which one starts with <span style="color: #F2564B;">{{ activeLetter }}</span>?</div>
+      </div>
+
+      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: clamp(10px, 1.6vw, 22px);">
+        <sc-for list="{{ cards }}" as="c" hint-placeholder-count="4">
+          <button type="button" onClick="{{ c.onClick }}" style="{{ c.style }}">
+            <div style="font-size: clamp(46px, 13vh, 130px); line-height: 1;">{{ c.emoji }}</div>
+            <sc-if value="{{ showLabels }}" hint-placeholder-val="{{ true }}">
+              <div style="font-size: clamp(15px, 2.4vh, 30px); font-weight: 700; color: #14486F;">{{ c.word }}</div>
+            </sc-if>
+            <sc-if value="{{ c.showStar }}" hint-placeholder-val="{{ false }}">
+              <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: clamp(70px, 18vh, 190px); animation: am-star .6s cubic-bezier(.2,1.4,.4,1) forwards; filter: drop-shadow(0 6px 10px rgba(0,0,0,.15));">⭐</div>
+            </sc-if>
+          </button>
+        </sc-for>
+      </div>
+
+    </div>
+  </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; left: 50%; bottom: clamp(18px, 5vh, 60px); transform: translateX(-50%); background: #FFC93C; color: #7A4E00; font-size: clamp(17px, 2.6vh, 30px); font-weight: 800; padding: clamp(12px,1.8vh,20px) clamp(20px,3vw,36px); border-radius: 999px; box-shadow: 0 8px 0 #E0A400; z-index: 40; animation: am-toast .3s cubic-bezier(.2,1.4,.4,1); white-space: nowrap;">Come on, you can select it again!</div>
+  </sc-if>
+
+  <div style="position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 50;">
+    <sc-for list="{{ confetti }}" as="p" hint-placeholder-count="0">
+      <div style="{{ p.style }}"></div>
+    </sc-for>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;autoAdvance&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Gameplay&quot;},&quot;cardCount&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:4,&quot;min&quot;:2,&quot;max&quot;:6,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Gameplay&quot;},&quot;showWordLabels&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Gameplay&quot;},&quot;voiceFeedback&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Audio&quot;}}">
+const WORDS = {
+  A: ['Apple','🍎'], B: ['Ball','⚽'], C: ['Cat','🐱'], D: ['Dog','🐶'], E: ['Elephant','🐘'],
+  F: ['Fish','🐟'], G: ['Grapes','🍇'], H: ['Hat','👒'], I: ['Ice Cream','🍦'], J: ['Juice','🧃'],
+  K: ['Kite','🪁'], L: ['Lion','🦁'], M: ['Moon','🌙'], N: ['Nest','🪹'], O: ['Orange','🍊'],
+  P: ['Pig','🐷'], Q: ['Queen','👑'], R: ['Rainbow','🌈'], S: ['Sun','☀️'], T: ['Tree','🌳'],
+  U: ['Umbrella','☂️'], V: ['Van','🚐'], W: ['Watermelon','🍉'], X: ['Xylophone','🎹'],
+  Y: ['Yarn','🧶'], Z: ['Zebra','🦓']
+};
+const ALPHA = Object.keys(WORDS);
+const TINTS = [
+  ['#FFF3D1','#FFC93C','#E0A400'],
+  ['#DFF3FF','#2D9CF0','#1B7ECB'],
+  ['#E4F8DA','#5BC236','#43982A'],
+  ['#FFE5E2','#F2564B','#CB3A30']
+];
+
+class Component extends DCLogic {
+  state = { screen: 'home', name: '', mode: 'easy', timeLeft: 180, idx: 0, cards: [], wrongId: null, winId: null, stars: 0, toast: false, confetti: [] };
+
+  componentDidMount() { this.deal(0); }
+  componentWillUnmount() {
+    this.timers && this.timers.forEach(clearTimeout);
+    this.stopClock();
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+  }
+  later(fn, ms) { this.timers = this.timers || []; this.timers.push(setTimeout(fn, ms)); }
+
+  stopClock() { if (this._tick) { clearInterval(this._tick); this._tick = null; } }
+
+  startClock() {
+    this.stopClock();
+    this.setState({ timeLeft: 180 });
+    this._tick = setInterval(() => {
+      const t = this.state.timeLeft - 1;
+      if (t <= 0) {
+        this.stopClock();
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        this.setState({ timeLeft: 0, screen: 'timeup', confetti: [], toast: false });
+        this.buzz(); this.say("Time is up! Let's try again.");
+      } else {
+        this.setState({ timeLeft: t });
+      }
+    }, 1000);
+  }
+
+  begin(mode) {
+    this.ctx();
+    this.setState({ screen: 'play', mode, stars: 0 });
+    this.deal(0);
+    if (mode === 'hard') this.startClock(); else this.stopClock();
+  }
+
+  deal(idx) {
+    const n = Math.max(2, Math.min(6, this.props.cardCount ?? 4));
+    const letter = ALPHA[idx];
+    const pool = ALPHA.filter(l => l !== letter).sort(() => Math.random() - 0.5).slice(0, n - 1);
+    const cards = [letter, ...pool]
+      .map(l => ({ id: l + '-' + Math.random().toString(36).slice(2, 6), letter: l, word: WORDS[l][0], emoji: WORDS[l][1], ok: l === letter }))
+      .sort(() => Math.random() - 0.5);
+    this.setState({ idx, cards, wrongId: null, winId: null, toast: false });
+  }
+
+  ctx() {
+    if (!this._ac) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) this._ac = new AC();
+    }
+    if (this._ac && this._ac.state === 'suspended') this._ac.resume();
+    return this._ac;
+  }
+
+  applause() {
+    const ac = this.ctx(); if (!ac) return;
+    const dur = 1.5, sr = ac.sampleRate, buf = ac.createBuffer(1, sr * dur, sr), d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) {
+      const t = i / sr;
+      const env = Math.min(1, t / 0.06) * Math.pow(1 - t / dur, 1.6);
+      const clap = 1 + 1.9 * Math.pow(Math.random(), 6);
+      d[i] = (Math.random() * 2 - 1) * env * 0.5 * clap;
+    }
+    const src = ac.createBufferSource(); src.buffer = buf;
+    const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1700; bp.Q.value = 0.7;
+    const g = ac.createGain(); g.gain.value = 0.55;
+    src.connect(bp).connect(g).connect(ac.destination); src.start();
+
+    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+      const o = ac.createOscillator(), og = ac.createGain(), t0 = ac.currentTime + i * 0.11;
+      o.type = 'triangle'; o.frequency.value = f;
+      og.gain.setValueAtTime(0, t0);
+      og.gain.linearRampToValueAtTime(0.22, t0 + 0.02);
+      og.gain.exponentialRampToValueAtTime(0.001, t0 + 0.5);
+      o.connect(og).connect(ac.destination); o.start(t0); o.stop(t0 + 0.55);
+    });
+  }
+
+  buzz() {
+    const ac = this.ctx(); if (!ac) return;
+    const o = ac.createOscillator(), g = ac.createGain(), t0 = ac.currentTime;
+    o.type = 'sine'; o.frequency.setValueAtTime(420, t0); o.frequency.linearRampToValueAtTime(300, t0 + 0.22);
+    g.gain.setValueAtTime(0.16, t0); g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.3);
+    o.connect(g).connect(ac.destination); o.start(t0); o.stop(t0 + 0.32);
+  }
+
+  say(text) {
+    if (!(this.props.voiceFeedback ?? true)) return;
+    const ss = window.speechSynthesis; if (!ss) return;
+    ss.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.92; u.pitch = 1.35; u.volume = 1;
+    ss.speak(u);
+  }
+
+  burst() {
+    const colors = ['#FFC93C', '#2D9CF0', '#5BC236', '#F2564B', '#FF8FC7', '#FFFFFF'];
+    const pieces = Array.from({ length: 40 }, (_, i) => {
+      const size = 10 + Math.random() * 16;
+      return {
+        id: 'p' + Date.now() + '-' + i,
+        style: {
+          position: 'absolute', top: 0, left: (Math.random() * 100) + '%',
+          width: size + 'px', height: (size * (Math.random() < .5 ? 1 : 0.5)) + 'px',
+          background: colors[i % colors.length],
+          borderRadius: Math.random() < .5 ? '50%' : '3px',
+          '--dx': (Math.random() * 260 - 130) + 'px',
+          animation: `am-fall ${1.5 + Math.random() * 1.1}s linear ${Math.random() * 0.35}s forwards`
+        }
+      };
+    });
+    this.setState({ confetti: pieces });
+    this.later(() => this.setState({ confetti: [] }), 3000);
+  }
+
+  pick(card) {
+    if (this.state.winId) return;
+    if (card.ok) {
+      this.setState(s => ({ winId: card.id, stars: s.stars + 1, toast: false }));
+      this.applause(); this.burst(); this.say('Yes! ' + card.letter + ' for ' + card.word + '. Great job!');
+      const last = this.state.idx >= ALPHA.length - 1;
+      if (last) {
+        this.stopClock();
+        this.later(() => {
+          this.setState({ screen: 'done' });
+          this.applause(); this.burst();
+          this.say('Congratulations ' + (this.state.name || '') + '! You have completed the level successfully.');
+        }, 2100);
+      } else if (this.props.autoAdvance ?? true) {
+        this.later(() => this.deal(this.state.idx + 1), 2100);
+      }
+    } else {
+      this.buzz(); this.say('Come on, you can select it again!');
+      this.setState({ wrongId: card.id, toast: true });
+      this.later(() => this.setState({ wrongId: null }), 700);
+      this.later(() => this.setState({ toast: false }), 2200);
+    }
+  }
+
+  renderVals() {
+    const { idx, cards, wrongId, winId } = this.state;
+    const letters = ALPHA.map((ch, i) => {
+      const on = i === idx;
+      return {
+        ch, onClick: () => this.deal(i),
+        style: {
+          flex: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit',
+          height: 'clamp(44px, 6.2vh, 74px)', borderRadius: '18px',
+          fontSize: 'clamp(20px, 3.4vh, 38px)', fontWeight: 800,
+          background: on ? '#FFC93C' : '#EFF6FC',
+          color: on ? '#7A4E00' : '#5E86A6',
+          boxShadow: on ? '0 0 0 6px rgba(255,201,60,.55), 0 8px 0 #E0A400' : '0 5px 0 #D3E3EF',
+          animation: on ? 'am-bounce 1s ease-in-out infinite, am-glow 1.6s ease-in-out infinite' : 'none',
+          transition: 'background .15s, color .15s'
+        }
+      };
+    });
+
+    const built = cards.map((c, i) => {
+      const t = TINTS[i % TINTS.length];
+      const isWrong = c.id === wrongId, isWin = c.id === winId;
+      return {
+        ...c,
+        onClick: () => this.pick(c),
+        showStar: isWin,
+        style: {
+          position: 'relative', border: 'none', cursor: 'pointer', fontFamily: 'inherit',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          gap: 'clamp(4px, 1vh, 12px)', minHeight: 0, padding: 'clamp(8px,1.5vh,20px)',
+          background: isWin ? '#E4F8DA' : t[0], borderRadius: '30px',
+          boxShadow: isWin ? '0 0 0 8px #5BC236, 0 10px 0 #43982A' : `0 0 0 5px ${t[1]}, 0 10px 0 ${t[2]}`,
+          animation: isWrong ? 'am-wiggle .55s ease-in-out' : (isWin ? 'am-pop .45s ease-out forwards' : 'none'),
+          transition: 'box-shadow .15s'
+        }
+      };
+    });
+
+    return {
+      isHome: this.state.screen === 'home',
+      isName: this.state.screen === 'name',
+      isPlaying: this.state.screen === 'play',
+      isDone: this.state.screen === 'done',
+      name: this.state.name.trim() || 'Friend',
+      rawName: this.state.name,
+      onName: e => this.setState({ name: e.target.value.replace(/[^A-Za-z '-]/g, '') }),
+      onNameKey: e => { if (e.key === 'Enter') { e.preventDefault(); this.setState({ screen: 'level' }); } },
+      onStart: () => { this.ctx(); this.setState({ screen: 'name' }); },
+      onBegin: () => { this.ctx(); this.setState({ screen: 'level' }); },
+      isLevel: this.state.screen === 'level',
+      isTimeUp: this.state.screen === 'timeup',
+      isTimed: this.state.mode === 'hard',
+      clock: Math.floor(this.state.timeLeft / 60) + ':' + String(this.state.timeLeft % 60).padStart(2, '0'),
+      clockStyle: {
+        display: 'flex', alignItems: 'center', gap: '8px', borderRadius: '999px',
+        padding: 'clamp(6px,1vh,10px) clamp(14px,1.6vw,22px)',
+        background: this.state.timeLeft <= 30 ? '#FFE5E2' : '#FFFFFF',
+        boxShadow: this.state.timeLeft <= 30 ? '0 5px 0 #CB3A30' : '0 5px 0 #C9DCEC',
+        color: this.state.timeLeft <= 30 ? '#CB3A30' : '#14486F',
+        fontSize: 'clamp(18px, 2.8vh, 32px)', fontWeight: 800,
+        animation: this.state.timeLeft <= 30 ? 'am-float 1s ease-in-out infinite' : 'none'
+      },
+      onEasy: () => this.begin('easy'),
+      onHard: () => this.begin('hard'),
+      onRetry: () => this.begin(this.state.mode),
+      onHome: () => { this.stopClock(); if (window.speechSynthesis) window.speechSynthesis.cancel(); this.setState({ screen: 'home', confetti: [], toast: false }); },
+      letters, cards: built, activeLetter: ALPHA[idx],
+      stars: this.state.stars, toast: this.state.toast, confetti: this.state.confetti,
+      showLabels: this.props.showWordLabels ?? false
+    };
+  }
+}
+</script>
+</body>
+</html>

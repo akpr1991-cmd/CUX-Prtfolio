@@ -111,11 +111,29 @@
       </div>
     </article>
 
+    <article data-reveal="" class="pg-tile" style="flex:1 1 260px;max-width:330px;margin-top:34px;transform:rotate(1.4deg);border-color:color-mix(in srgb, var(--color-accent) 42%, transparent);background:linear-gradient(160deg, color-mix(in srgb, var(--color-accent) 10%, var(--color-surface)), color-mix(in srgb, var(--color-surface) 72%, transparent) 70%)">
+      <span class="pg-kicker">Interactive 2D · Playable now</span>
+      <h2 class="pg-name" style="font-size:27px;margin:0">Alphabet Match</h2>
+      <p class="pg-line">A letter-matching game for two-to-five year olds. Built for my niece.</p>
+      <div class="pg-links">
+        <a href="alphabet-match.html" style="background:var(--color-accent);border-color:var(--color-accent);color:var(--color-bg)">Play it</a>
+      </div>
+    </article>
+
     <article data-reveal="" class="pg-tile" style="flex:1 1 260px;max-width:330px;margin-top:34px;transform:rotate(1.4deg)">
       <span class="pg-kicker">Interactive 2D</span>
       <h2 class="pg-name" style="font-size:24px;margin:0">Tilt Maze</h2>
       <p class="pg-line">A marble maze steered by tilting your actual phone.</p>
       <span class="pg-soon">Coming soon</span>
+    </article>
+
+    <article data-reveal="" class="pg-tile" style="flex:1 1 300px;max-width:380px;transform:rotate(0.7deg);border-color:color-mix(in srgb, var(--color-accent) 42%, transparent);background:linear-gradient(160deg, color-mix(in srgb, var(--color-accent) 10%, var(--color-surface)), color-mix(in srgb, var(--color-surface) 72%, transparent) 70%)">
+      <span class="pg-kicker">Interactive 2D · Playable now</span>
+      <h2 class="pg-name" style="font-size:28px;margin:0">Road Wagon</h2>
+      <p class="pg-line">Retro arcade driving. Dodge traffic, chase the high score, pixel fonts and all.</p>
+      <div class="pg-links">
+        <a href="blockway.html" style="background:var(--color-accent);border-color:var(--color-accent);color:var(--color-bg)">Play it</a>
+      </div>
     </article>
 
     <article data-reveal="" class="pg-tile" style="flex:1 1 300px;max-width:380px;transform:rotate(0.7deg)">
@@ -137,6 +155,15 @@
       <h2 class="pg-name" style="font-size:25px;margin:0">Prompt to Wire</h2>
       <p class="pg-line">Describe a screen in one sentence, get a wireframe you can push around.</p>
       <span class="pg-soon">Coming soon</span>
+    </article>
+
+    <article data-reveal="" class="pg-tile" style="flex:1 1 340px;max-width:430px;margin-top:30px;transform:rotate(-1.4deg);border-color:color-mix(in srgb, var(--color-accent) 42%, transparent);background:linear-gradient(160deg, color-mix(in srgb, var(--color-accent) 10%, var(--color-surface)), color-mix(in srgb, var(--color-surface) 72%, transparent) 70%)">
+      <span class="pg-kicker">Prototype · Live tool</span>
+      <h2 class="pg-name" style="font-size:29px;margin:0">Pixel Builder</h2>
+      <p class="pg-line">Drag components onto a device canvas and export the screen as a JPEG.</p>
+      <div class="pg-links">
+        <a href="prototype-tool.html" style="background:var(--color-accent);border-color:var(--color-accent);color:var(--color-bg)">Open the tool</a>
+      </div>
     </article>
 
     <article data-reveal="" class="pg-tile" style="flex:1 1 340px;max-width:430px;margin-top:30px;transform:rotate(-1.4deg)">
@@ -162,6 +189,7 @@ class Component extends DCLogic {
       rows.forEach((r) => { if (r.isIntersecting) { r.target.classList.add("is-in"); this.io.unobserve(r.target); } });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
     els.forEach((e) => this.io.observe(e));
+    this.fallback = setTimeout(() => els.forEach((e) => e.classList.add("is-in")), 700);
   }
 
   armCursor() {
@@ -199,7 +227,7 @@ class Component extends DCLogic {
     this._raf = requestAnimationFrame(loop);
   }
 
-  componentWillUnmount() { if (this.io) this.io.disconnect(); if (this._curOff) this._curOff(); }
+  componentWillUnmount() { if (this.io) this.io.disconnect(); clearTimeout(this.fallback); if (this._curOff) this._curOff(); }
 
   renderVals() { return {}; }
 }

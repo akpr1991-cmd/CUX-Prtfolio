@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #0d0b11; height: 100%; overflow: hidden; }
+  * { box-sizing: border-box; }
+  a { color: #7fd3ef; text-decoration: none; }
+  a:hover { color: #f2b233; }
+</style>
+</helmet>
+
+<div style="width: 100vw; height: 100vh; background: #0d0b11; display: flex; align-items: center; justify-content: center;">
+  <x-import component-from-global-scope="blockway-game" from="./blockway-game.js" muted="{{ muted }}" hint-size="100%,100%"></x-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;muted&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return { muted: this.props.muted ? 'true' : 'false' };
+  }
+}
+</script>
+</body>
+</html>

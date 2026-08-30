@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-23b14038-7914-4e6e-ab0a-2314fb0704a3/styles.css">
+<script src="_ds/modernist-23b14038-7914-4e6e-ab0a-2314fb0704a3/_ds_bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js"></script>
+<style>
+html, body { margin:0; padding:0; height:100%; overflow:hidden; background:#f3f2f2; }
+* { box-sizing:border-box; }
+a { color:var(--color-accent-700); text-decoration:none; }
+a:hover { color:var(--color-accent); text-decoration:underline; }
+input, select, button { font-family:inherit; }
+input:focus-visible, select:focus-visible, button:focus-visible { outline:2px solid var(--color-accent); outline-offset:1px; }
+</style>
+</helmet>
+
+<div style="{{ themeVars }}">
+<div style="height:100vh;display:flex;flex-direction:column;background:var(--color-bg);color:var(--color-text);font-family:var(--ak-font);font-size:13px">
+
+  <div style="flex:none;display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;padding:9px 14px;background:var(--ak-panel);border-bottom:2px solid var(--color-divider)">
+    <div style="display:flex;align-items:baseline;gap:9px;white-space:nowrap">
+      <a href="playground.html" title="Exit to playground" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;margin-right:2px;color:inherit;text-decoration:none;border:1px solid var(--color-divider);align-self:center"><svg width="12" height="12" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg></a>
+      <span style="font-family:var(--ak-display);font-weight:800;font-size:17px;letter-spacing:-0.015em">Pixel Builder</span>
+      <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.16em;opacity:0.5">by akpixels</span>
+    </div>
+    <span style="width:1px;height:22px;background:var(--color-divider)"></span>
+    <span style="font-size:11px;letter-spacing:0.06em;opacity:0.65;white-space:nowrap">{{ dimsLabel }}</span>
+
+    <span style="flex:1"></span>
+
+    <div style="display:flex;align-items:center;gap:6px">
+      <button onClick="{{ onToggleGrid }}" style="{{ gridBtn }}" title="Grid">Grid</button>
+      <button onClick="{{ onToggleSnap }}" style="{{ snapBtn }}" title="Snap to grid">Snap</button>
+    </div>
+    <span style="width:1px;height:22px;background:var(--color-divider)"></span>
+    <div style="display:flex;align-items:center;border:1px solid var(--color-divider)">
+      <button onClick="{{ onZoomOut }}" style="border:0;background:transparent;color:inherit;cursor:pointer;padding:5px 9px;font-size:13px;line-height:1">−</button>
+      <span style="min-width:44px;text-align:center;font-size:11px;padding:0 2px;border-left:1px solid var(--color-divider);border-right:1px solid var(--color-divider);line-height:26px">{{ zoomLabel }}</span>
+      <button onClick="{{ onZoomIn }}" style="border:0;background:transparent;color:inherit;cursor:pointer;padding:5px 9px;font-size:13px;line-height:1">+</button>
+      <button onClick="{{ onZoomFit }}" style="border:0;border-left:1px solid var(--color-divider);background:transparent;color:inherit;cursor:pointer;padding:5px 9px;font-size:11px;line-height:1">Fit</button>
+    </div>
+    <span style="width:1px;height:22px;background:var(--color-divider)"></span>
+    <div style="display:flex;align-items:center;gap:6px">
+      <button onClick="{{ onUndo }}" disabled="{{ noUndo }}" style="{{ toolBtn }}">Undo</button>
+      <button onClick="{{ onRedo }}" disabled="{{ noRedo }}" style="{{ toolBtn }}">Redo</button>
+      <button onClick="{{ onForward }}" disabled="{{ noSel }}" style="{{ toolBtn }}">Front</button>
+      <button onClick="{{ onBackward }}" disabled="{{ noSel }}" style="{{ toolBtn }}">Back</button>
+      <button onClick="{{ onDuplicate }}" disabled="{{ noSel }}" style="{{ toolBtn }}">Duplicate</button>
+      <button onClick="{{ onDelete }}" disabled="{{ noSel }}" style="{{ toolBtn }}">Delete</button>
+    </div>
+    <span style="width:1px;height:22px;background:var(--color-divider)"></span>
+    <div style="display:flex;align-items:center;border:1px solid var(--color-divider)">
+      <button onClick="{{ onModern }}" style="{{ modernBtn }}">Modern</button>
+      <button onClick="{{ onClassic }}" style="{{ classicBtn }}">Classic</button>
+    </div>
+    <button onClick="{{ onSave }}" style="{{ toolBtn }}">Save project</button>
+    <button onClick="{{ onExport }}" style="border:1px solid var(--color-accent);background:var(--color-accent);color:var(--color-bg);cursor:pointer;padding:6px 12px;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:700" style-hover="background:var(--color-accent-600);border-color:var(--color-accent-600)">Export JPEG</button>
+  </div>
+
+  <div style="flex:1;display:flex;min-height:0">
+
+    <div style="flex:none;width:118px;background:var(--ak-panel);border-right:2px solid var(--color-divider);display:flex;flex-direction:column;padding:12px 0">
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:0.16em;opacity:0.45;padding:0 12px 8px">Device</div>
+      <sc-for list="{{ devices }}" as="d" hint-placeholder-count="3">
+        <button onClick="{{ d.onClick }}" style="{{ d.style }}">
+          <span style="font-family:var(--ak-display);font-weight:800;font-size:13px;letter-spacing:0.02em">{{ d.label }}</span>
+          <span style="font-size:10px;opacity:0.6;line-height:1.35">{{ d.note }}</span>
+          <span style="font-size:10px;opacity:0.6;letter-spacing:0.04em">{{ d.dims }}</span>
+        </button>
+      </sc-for>
+      <span style="flex:1"></span>
+      <div style="padding:10px 12px;border-top:1px solid var(--color-divider);font-size:10px;line-height:1.5;opacity:0.5">{{ countLabel }}</div>
+    </div>
+
+    <div ref="{{ stageRef }}" onPointerDown="{{ onStageDown }}" onDragOver="{{ onDragOver }}" onDrop="{{ onDrop }}" style="flex:1;position:relative;overflow:hidden;background:var(--ak-stage);min-width:0">
+      <div style="{{ boardWrapStyle }}">
+        <div style="{{ boardLabelStyle }}">{{ dimsLabel }}</div>
+        <div ref="{{ artRef }}" style="{{ artStyle }}">
+          <sc-if value="{{ showEmpty }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 8%;gap:10px;pointer-events:none">
+              <div style="font-family:var(--ak-display);font-weight:800;font-size:48px;line-height:1;letter-spacing:-0.02em">Start prototyping</div>
+              <div style="font-size:17px;opacity:0.55;max-width:36ch">Drag a component from the library onto the canvas.</div>
+              <div style="height:2px;background:var(--color-divider);margin-top:6px;max-width:520px"></div>
+            </div>
+          </sc-if>
+
+          <sc-for list="{{ elements }}" as="el" hint-placeholder-count="0">
+            <div style="{{ el.style }}" onPointerDown="{{ el.onDown }}" onDoubleClick="{{ el.onEdit }}">
+              <sc-if value="{{ el.isText }}" hint-placeholder-val="{{ false }}">{{ el.text }}</sc-if>
+              <sc-if value="{{ el.isNode }}" hint-placeholder-val="{{ false }}">{{ el.node }}</sc-if>
+            </div>
+          </sc-for>
+
+          <sc-for list="{{ guides }}" as="g" hint-placeholder-count="0">
+            <div style="{{ g.style }}"></div>
+          </sc-for>
+
+          <sc-for list="{{ handles }}" as="h" hint-placeholder-count="0">
+            <div onPointerDown="{{ h.onDown }}" style="{{ h.style }}"></div>
+          </sc-for>
+
+          <div style="{{ signStyle }}">{{ brand }}</div>
+        </div>
+      </div>
+      <div style="position:absolute;left:12px;bottom:10px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.4;pointer-events:none">{{ hint }}</div>
+    </div>
+
+    <sc-if value="{{ panelOpen }}" hint-placeholder-val="{{ true }}">
+    <div style="flex:none;width:266px;background:var(--ak-panel);border-left:2px solid var(--color-divider);display:flex;flex-direction:column;min-height:0">
+      <div style="flex:none;display:flex;align-items:stretch;border-bottom:1px solid var(--color-divider)">
+        <button onClick="{{ onTabLib }}" style="{{ tabLibStyle }}">Library</button>
+        <button onClick="{{ onTabProps }}" style="{{ tabPropStyle }}">Properties</button>
+        <button onClick="{{ onTogglePanel }}" title="Collapse panel" style="flex:none;width:34px;border:0;border-left:1px solid var(--color-divider);background:transparent;color:inherit;cursor:pointer;font-size:13px">›</button>
+      </div>
+
+      <sc-if value="{{ tabLib }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;overflow-y:auto;padding:4px 0 20px">
+        <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+          <div style="padding:14px 12px 6px;font-size:9px;text-transform:uppercase;letter-spacing:0.16em;opacity:0.45">{{ c.name }}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;padding:0 12px">
+            <sc-for list="{{ c.items }}" as="i" hint-placeholder-count="6">
+              <div draggable="{{ true }}" onDragStart="{{ i.onDragStart }}" onDragEnd="{{ i.onDragEnd }}" onDoubleClick="{{ i.onAdd }}" title="Drag onto the canvas · double-click to place" style="border:1px solid var(--color-divider);padding:7px 8px;font-size:11px;cursor:grab;background:var(--color-bg);user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" style-hover="border-color:var(--color-accent);color:var(--color-accent-700)">{{ i.label }}</div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ tabProps }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;overflow-y:auto;padding:12px">
+        <sc-if value="{{ noSel }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11px;opacity:0.5;line-height:1.6">Select a component on the canvas to edit it.</div>
+        </sc-if>
+        <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:6px">
+            <span style="font-family:var(--ak-display);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:0.08em">{{ p.typeLabel }}</span>
+            <span style="font-size:10px;opacity:0.5">{{ p.selLabel }}</span>
+          </div>
+
+          <label style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Text</span>
+            <input value="{{ p.text }}" onChange="{{ set.text }}" ref="{{ textRef }}" style="{{ inputStyle }}">
+          </label>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Font size</span>
+              <input type="number" value="{{ p.fs }}" onChange="{{ set.fs }}" style="{{ inputStyle }}">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Weight</span>
+              <select value="{{ p.fw }}" onChange="{{ set.fw }}" style="{{ inputStyle }}">
+                <option value="300">300</option>
+                <option value="400">400</option>
+                <option value="500">500</option>
+                <option value="600">600</option>
+                <option value="700">700</option>
+                <option value="800">800</option>
+              </select>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">X</span>
+              <input type="number" value="{{ p.x }}" onChange="{{ set.x }}" style="{{ inputStyle }}">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Y</span>
+              <input type="number" value="{{ p.y }}" onChange="{{ set.y }}" style="{{ inputStyle }}">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Width</span>
+              <input type="number" value="{{ p.w }}" onChange="{{ set.w }}" style="{{ inputStyle }}">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Height</span>
+              <input type="number" value="{{ p.h }}" onChange="{{ set.h }}" style="{{ inputStyle }}">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Padding</span>
+              <input type="number" value="{{ p.pad }}" onChange="{{ set.pad }}" style="{{ inputStyle }}">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Radius</span>
+              <input type="number" value="{{ p.radius }}" onChange="{{ set.radius }}" style="{{ inputStyle }}">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Border</span>
+              <input type="number" value="{{ p.bw }}" onChange="{{ set.bw }}" style="{{ inputStyle }}">
+            </label>
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Opacity %</span>
+              <input type="number" value="{{ p.op }}" onChange="{{ set.op }}" style="{{ inputStyle }}">
+            </label>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Align</span>
+            <div style="display:flex;gap:6px">
+              <button onClick="{{ set.alignLeft }}" style="{{ p.alStyleL }}">Left</button>
+              <button onClick="{{ set.alignCenter }}" style="{{ p.alStyleC }}">Center</button>
+              <button onClick="{{ set.alignRight }}" style="{{ p.alStyleR }}">Right</button>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Background</span>
+              <span style="display:flex;gap:5px">
+                <input type="color" value="{{ p.bg }}" onChange="{{ set.bg }}" style="width:100%;height:28px;padding:0;border:1px solid var(--color-divider);background:transparent;cursor:pointer">
+                <button onClick="{{ set.bgNone }}" title="No fill" style="{{ smallBtn }}">×</button>
+              </span>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.5">Text color</span>
+              <input type="color" value="{{ p.color }}" onChange="{{ set.color }}" style="width:100%;height:28px;padding:0;border:1px solid var(--color-divider);background:transparent;cursor:pointer">
+            </label>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ panelClosed }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ onTogglePanel }}" style="flex:none;width:34px;background:var(--ak-panel);border:0;border-left:2px solid var(--color-divider);color:inherit;cursor:pointer;writing-mode:vertical-rl;font-size:10px;letter-spacing:0.16em;text-transform:uppercase">‹ Library</button>
+    </sc-if>
+  </div>
+
+  <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:6px 14px;background:var(--ak-panel);border-top:2px solid var(--color-divider);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.6">
+    <span>{{ brand }}</span>
+    <span>{{ status }}</span>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;modern&quot;,&quot;classic&quot;],&quot;default&quot;:&quot;modern&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;options&quot;:[&quot;#ec3013&quot;,&quot;#201e1d&quot;,&quot;#e15b47&quot;],&quot;default&quot;:&quot;#ec3013&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look&quot;},&quot;showGrid&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Canvas&quot;},&quot;snapEnabled&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Canvas&quot;},&quot;brand&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Created by akpixels&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Branding&quot;}}">
+const E = React.createElement;
+const INK = '#201e1d', LN = 'rgba(32,30,29,0.28)', F1 = '#dcdad9', F2 = '#ebeaea', MUT = 'rgba(32,30,29,0.45)', ACC = '#ec3013';
+const DEV = {
+  Large: { w: 1440, h: 900, note: 'PC · Desktop · Laptop' },
+  Medium: { w: 1024, h: 768, note: 'Tablet · iPad' },
+  Small: { w: 390, h: 844, note: 'Mobile · Phone' }
+};
+const LIB = [
+  ['Basic', [['heading', 'Heading'], ['text', 'Text'], ['paragraph', 'Paragraph'], ['button', 'Button'], ['link', 'Link'], ['divider', 'Divider'], ['icon', 'Icon'], ['image', 'Image'], ['avatar', 'Avatar']]],
+  ['Forms', [['input', 'Input'], ['textarea', 'Text area'], ['dropdown', 'Dropdown'], ['checkbox', 'Checkbox'], ['radio', 'Radio'], ['toggle', 'Toggle'], ['search', 'Search'], ['date', 'Date picker']]],
+  ['Navigation', [['navbar', 'Navbar'], ['sidebar', 'Sidebar'], ['tabs', 'Tabs'], ['breadcrumbs', 'Breadcrumbs'], ['pagination', 'Pagination'], ['bottomnav', 'Bottom nav']]],
+  ['Content', [['card', 'Card'], ['list', 'List'], ['table', 'Table'], ['badge', 'Badge'], ['tag', 'Tag'], ['alert', 'Alert'], ['modal', 'Modal'], ['tooltip', 'Tooltip']]],
+  ['Layout', [['container', 'Container'], ['section', 'Section'], ['row', 'Row'], ['column', 'Column'], ['spacer', 'Spacer']]]
+];
+const LABEL = {};
+LIB.forEach(function (c) { c[1].forEach(function (i) { LABEL[i[0]] = i[1]; }); });
+const TEXTY = { heading: 1, text: 1, paragraph: 1, link: 1, button: 1, badge: 1, tag: 1 };
+const DEF = {
+  heading: { w: 560, h: 56, text: 'Heading', fs: 42, fw: 800 },
+  text: { w: 200, h: 26, text: 'Text', fs: 16, fw: 400 },
+  paragraph: { w: 520, h: 96, text: 'Paragraph copy sits here. Replace it with the real thing when the layout holds.', fs: 15, fw: 400 },
+  button: { w: 160, h: 44, text: 'Button', fs: 14, fw: 700, bg: ACC, color: '#f3f2f2', pad: 14, align: 'left' },
+  link: { w: 120, h: 24, text: 'Link', fs: 14, fw: 500, color: ACC },
+  divider: { w: 560, h: 8 },
+  icon: { w: 28, h: 28 },
+  image: { w: 420, h: 260 },
+  avatar: { w: 56, h: 56 },
+  input: { w: 320, h: 44, text: 'Input', fs: 14 },
+  textarea: { w: 320, h: 110, text: 'Text area', fs: 14 },
+  dropdown: { w: 260, h: 44, text: 'Select an option', fs: 14 },
+  checkbox: { w: 200, h: 24, text: 'Checkbox', fs: 14 },
+  radio: { w: 200, h: 24, text: 'Radio button', fs: 14 },
+  toggle: { w: 160, h: 26, text: 'Toggle', fs: 14 },
+  search: { w: 300, h: 44, text: 'Search', fs: 14 },
+  date: { w: 240, h: 44, text: 'MM / DD / YYYY', fs: 14 },
+  navbar: { w: 1200, h: 68, text: 'akpixels', fs: 15 },
+  sidebar: { w: 220, h: 560, text: 'Menu', fs: 13 },
+  tabs: { w: 400, h: 44, text: 'Overview', fs: 14 },
+  breadcrumbs: { w: 320, h: 22, text: 'Home / Section / Page', fs: 13 },
+  pagination: { w: 260, h: 36, fs: 13 },
+  bottomnav: { w: 390, h: 68, fs: 10 },
+  card: { w: 320, h: 200, text: 'Card title', fs: 17 },
+  list: { w: 340, h: 200, text: 'List item', fs: 14 },
+  table: { w: 640, h: 200, text: 'Column', fs: 13 },
+  badge: { w: 72, h: 24, text: 'Badge', fs: 11, fw: 700, bg: '#f9d2cb', color: '#5b241a', align: 'center' },
+  tag: { w: 88, h: 26, text: 'Tag', fs: 11, fw: 500, bw: 1, align: 'center' },
+  alert: { w: 460, h: 60, text: 'Something needs your attention.', fs: 14 },
+  modal: { w: 440, h: 240, text: 'Dialog title', fs: 18 },
+  tooltip: { w: 180, h: 34, text: 'Tooltip', fs: 12 },
+  container: { w: 800, h: 320, text: 'Container' },
+  section: { w: 1200, h: 260, text: 'Section' },
+  row: { w: 800, h: 140, text: 'Row' },
+  column: { w: 260, h: 360, text: 'Column' },
+  spacer: { w: 400, h: 48, text: 'Spacer' }
+};
+
+function bx(s, c) { return E('div', { style: s }, c); }
+function bar(w, h, extra) { return bx(Object.assign({ width: w, height: h, background: F1, flex: 'none' }, extra || {})); }
+function rows(n, node) { const a = []; for (let i = 0; i < n; i++) a.push(E('div', { key: i, style: { display: 'contents' } }, node(i))); return a; }
+const FILL = { width: '100%', height: '100%' };
+
+function renderNode(el) {
+  const t = el.type, tx = el.text || '', fs = el.fs || 13;
+  const field = function (inner, align) {
+    return bx({ width: '100%', height: '100%', border: '1px solid ' + INK, background: '#fff', display: 'flex', alignItems: align || 'center', gap: 8, padding: '0 10px', fontSize: fs, color: MUT, overflow: 'hidden' }, inner);
+  };
+  switch (t) {
+    case 'divider': return bx({ width: '100%', height: '100%', display: 'flex', alignItems: 'center' }, bx({ width: '100%', height: 2, background: INK }));
+    case 'icon': return E('svg', { viewBox: '0 0 24 24', style: FILL, fill: 'none', stroke: INK, strokeWidth: 1.6 }, [E('circle', { key: 'a', cx: 12, cy: 12, r: 9 }), E('path', { key: 'b', d: 'M12 7v10M7 12h10' })]);
+    case 'image': return bx({ width: '100%', height: '100%', background: F1, border: '1px solid ' + LN, overflow: 'hidden' }, E('svg', { viewBox: '0 0 100 100', preserveAspectRatio: 'none', style: { display: 'block', width: '100%', height: '100%' } }, [E('line', { key: 1, x1: 0, y1: 0, x2: 100, y2: 100, stroke: LN, strokeWidth: 0.4 }), E('line', { key: 2, x1: 100, y1: 0, x2: 0, y2: 100, stroke: LN, strokeWidth: 0.4 })]));
+    case 'avatar': return bx({ width: '100%', height: '100%', borderRadius: '50%', background: F1, border: '1px solid ' + LN });
+    case 'input': return field(bx({ overflow: 'hidden', whiteSpace: 'nowrap' }, tx));
+    case 'textarea': return field(bx({ paddingTop: 9 }, tx), 'flex-start');
+    case 'dropdown': return field([bx({ key: 'l', flex: 1, overflow: 'hidden', whiteSpace: 'nowrap' }, tx), bx({ key: 'c', width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '6px solid ' + INK })]);
+    case 'checkbox': return bx({ display: 'flex', alignItems: 'center', gap: 9, height: '100%', fontSize: fs, color: INK }, [bar(16, 16, { key: 'b', background: '#fff', border: '1.5px solid ' + INK }), tx]);
+    case 'radio': return bx({ display: 'flex', alignItems: 'center', gap: 9, height: '100%', fontSize: fs, color: INK }, [bar(16, 16, { key: 'b', background: '#fff', border: '1.5px solid ' + INK, borderRadius: '50%' }), tx]);
+    case 'toggle': return bx({ display: 'flex', alignItems: 'center', gap: 10, height: '100%', fontSize: fs, color: INK }, [bx({ key: 't', width: 40, height: 22, borderRadius: 999, background: ACC, flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: 3 }, bx({ width: 16, height: 16, borderRadius: '50%', background: '#fff' })), tx]);
+    case 'search': return field([E('svg', { key: 's', width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: INK, strokeWidth: 2 }, [E('circle', { key: 'c', cx: 11, cy: 11, r: 7 }), E('path', { key: 'l', d: 'M16.5 16.5 21 21' })]), bx({ key: 'l' }, tx)]);
+    case 'date': return field([bx({ key: 'l', flex: 1 }, tx), bar(14, 14, { key: 'i', background: 'transparent', border: '1.5px solid ' + INK })]);
+    case 'navbar': return bx({ width: '100%', height: '100%', borderBottom: '2px solid ' + INK, display: 'flex', alignItems: 'center', gap: 28, padding: '0 20px', fontSize: fs, color: INK }, [
+      bx({ key: 'b', fontWeight: 800, letterSpacing: '-0.01em', marginRight: 'auto' }, tx),
+      bx({ key: 'n', display: 'flex', gap: 24, opacity: 0.7 }, ['Work', 'Studio', 'Notes', 'Contact'].map(function (s, i) { return bx({ key: i }, s); })),
+      bx({ key: 'c', background: ACC, color: '#f3f2f2', padding: '8px 14px', fontWeight: 700, fontSize: fs - 1 }, 'Start')
+    ]);
+    case 'sidebar': return bx({ width: '100%', height: '100%', borderRight: '2px solid ' + INK, display: 'flex', flexDirection: 'column', gap: 2, padding: '16px 0', fontSize: fs, color: INK }, [
+      bx({ key: 'h', padding: '0 16px 12px', fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', opacity: 0.5 }, tx)
+    ].concat(['Overview', 'Projects', 'Library', 'Exports', 'Team', 'Settings'].map(function (s, i) {
+      return bx({ key: i, padding: '9px 16px', background: i === 0 ? F1 : 'transparent', display: 'flex', gap: 10, alignItems: 'center' }, [bar(12, 12, { key: 'd', background: i === 0 ? INK : F1 }), s]);
+    })));
+    case 'tabs': return bx({ width: '100%', height: '100%', display: 'flex', alignItems: 'stretch', borderBottom: '1px solid ' + LN, fontSize: fs, color: INK }, [tx, 'Details', 'Activity'].map(function (s, i) {
+      return bx({ key: i, padding: '0 16px', display: 'flex', alignItems: 'center', borderBottom: i === 0 ? '2px solid ' + INK : '2px solid transparent', opacity: i === 0 ? 1 : 0.55, fontWeight: i === 0 ? 700 : 400 }, s);
+    }));
+    case 'breadcrumbs': return bx({ display: 'flex', alignItems: 'center', height: '100%', fontSize: fs, color: MUT, whiteSpace: 'nowrap' }, tx);
+    case 'pagination': return bx({ display: 'flex', alignItems: 'center', gap: 4, height: '100%', fontSize: fs, color: INK }, ['1', '2', '3', '…', '9'].map(function (s, i) {
+      return bx({ key: i, minWidth: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid ' + LN, background: i === 0 ? INK : 'transparent', color: i === 0 ? '#f3f2f2' : INK }, s);
+    }));
+    case 'bottomnav': return bx({ width: '100%', height: '100%', borderTop: '2px solid ' + INK, display: 'flex', alignItems: 'center', justifyContent: 'space-around', fontSize: fs, color: INK }, ['Home', 'Search', 'Saved', 'Profile'].map(function (s, i) {
+      return bx({ key: i, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, opacity: i === 0 ? 1 : 0.5 }, [bar(16, 16, { key: 'd', background: i === 0 ? INK : F1 }), s]);
+    }));
+    case 'card': return bx({ width: '100%', height: '100%', border: '1px solid ' + LN, background: '#fff', padding: 16, display: 'flex', flexDirection: 'column', gap: 8, overflow: 'hidden' }, [
+      bx({ key: 'k', fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: ACC }, 'Kicker'),
+      bx({ key: 't', fontSize: fs, fontWeight: 800, color: INK, lineHeight: 1.15 }, tx),
+      bar('100%', 8, { key: 'a', marginTop: 4 }), bar('86%', 8, { key: 'b' }), bar('62%', 8, { key: 'c' }),
+      bx({ key: 'm', marginTop: 'auto', fontSize: 11, color: MUT }, 'Meta · 2 min')
+    ]);
+    case 'list': return bx({ width: '100%', height: '100%', border: '1px solid ' + LN, background: '#fff', overflow: 'hidden' }, [0, 1, 2, 3].map(function (i) {
+      return bx({ key: i, display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', borderTop: i ? '1px solid ' + LN : 'none' }, [bar(20, 20, { key: 'd' }), bx({ key: 'l', flex: 1, fontSize: fs, color: INK }, tx + ' ' + (i + 1)), bar(40, 8, { key: 'r' })]);
+    }));
+    case 'table': return bx({ width: '100%', height: '100%', border: '1px solid ' + LN, background: '#fff', overflow: 'hidden', fontSize: fs, color: INK }, [
+      bx({ key: 'h', display: 'flex', background: F2, borderBottom: '2px solid ' + INK, fontWeight: 700 }, [0, 1, 2, 3].map(function (i) { return bx({ key: i, flex: 1, padding: '9px 12px' }, tx + ' ' + (i + 1)); }))
+    ].concat([0, 1, 2].map(function (r) {
+      return bx({ key: 'r' + r, display: 'flex', borderTop: r ? '1px solid ' + LN : 'none' }, [0, 1, 2, 3].map(function (i) { return bx({ key: i, flex: 1, padding: '9px 12px' }, bar('70%', 8)); }));
+    })));
+    case 'alert': return bx({ width: '100%', height: '100%', border: '1px solid ' + INK, background: '#fff', display: 'flex', alignItems: 'center', gap: 12, padding: '0 14px', fontSize: fs, color: INK }, [bar(10, 10, { key: 'd', background: ACC }), tx]);
+    case 'modal': return bx({ width: '100%', height: '100%', border: '1px solid ' + INK, background: '#fff', boxShadow: '0 18px 40px rgba(32,30,29,0.18)', padding: 20, display: 'flex', flexDirection: 'column', gap: 10, overflow: 'hidden' }, [
+      bx({ key: 't', fontSize: fs, fontWeight: 800, color: INK }, tx),
+      bar('100%', 8, { key: 'a' }), bar('92%', 8, { key: 'b' }), bar('55%', 8, { key: 'c' }),
+      bx({ key: 'ac', marginTop: 'auto', display: 'flex', gap: 8 }, [bx({ key: 1, border: '1px solid ' + LN, padding: '9px 14px', fontSize: 13, color: INK }, 'Cancel'), bx({ key: 2, background: ACC, color: '#f3f2f2', padding: '9px 14px', fontSize: 13, fontWeight: 700 }, 'Confirm')])
+    ]);
+    case 'tooltip': return bx({ width: '100%', height: '100%', background: INK, color: '#f3f2f2', display: 'flex', alignItems: 'center', padding: '0 10px', fontSize: fs }, tx);
+    case 'container': case 'section': case 'spacer': return bx({ width: '100%', height: '100%', border: t === 'section' ? 'none' : '1px dashed ' + LN, borderTop: t === 'section' ? '2px solid ' + INK : undefined, borderBottom: t === 'section' ? '2px solid ' + INK : undefined, display: 'flex', alignItems: t === 'spacer' ? 'center' : 'flex-start', justifyContent: t === 'spacer' ? 'center' : 'flex-start', padding: 8, fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: MUT }, tx);
+    case 'row': case 'column': return bx({ width: '100%', height: '100%', border: '1px dashed ' + LN, display: 'flex', flexDirection: t === 'row' ? 'row' : 'column', gap: 8, padding: 8 }, [0, 1, 2].map(function (i) {
+      return bx({ key: i, flex: 1, border: '1px dashed ' + LN, background: 'rgba(32,30,29,0.03)' });
+    }));
+    default: return null;
+  }
+}
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = { device: 'Large', els: [], sel: [], zoom: 0.55, pan: { x: 0, y: 0 }, theme: null, panel: true, tab: 'lib', guides: [], past: [], future: [], status: 'Ready', grid: null, snap: null, next: 1 };
+    this.stageRef = function (n) { this.stage = n; }.bind(this);
+    this.artRef = function (n) { this.art = n; }.bind(this);
+    this.textRef = function (n) { this.textInput = n; }.bind(this);
+    this.onDragOver = function (e) { e.preventDefault(); };
+    this.onDrop = this.onDrop.bind(this);
+    this.onStageDown = this.onStageDown.bind(this);
+    this.onKey = this.onKey.bind(this);
+    this.onWheel = this.onWheel.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.onKey);
+    if (this.stage) this.stage.addEventListener('wheel', this.onWheel, { passive: false });
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem('akpixels.project') || 'null'); } catch (e) { saved = null; }
+    if (saved && saved.els) this.setState({ els: saved.els, device: saved.device || 'Large', next: saved.next || saved.els.length + 1, status: 'Project restored' }, this.fit);
+    else this.fit();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onKey);
+    if (this.stage) this.stage.removeEventListener('wheel', this.onWheel);
+  }
+
+  dev() { return DEV[this.state.device]; }
+  theme() { return this.state.theme || this.props.theme || 'modern'; }
+  gridOn() { return this.state.grid === null ? (this.props.showGrid !== false) : this.state.grid; }
+  snapOn() { return this.state.snap === null ? (this.props.snapEnabled !== false) : this.state.snap; }
+
+  fit() {
+    if (!this.stage) return;
+    const r = this.stage.getBoundingClientRect(), d = this.dev();
+    const z = Math.min((r.width - 120) / d.w, (r.height - 130) / d.h);
+    this.setState({ zoom: Math.max(0.1, Math.min(2, z)), pan: { x: 0, y: 0 } });
+  }
+  push() { this.setState(function (s) { return { past: s.past.concat([JSON.stringify(s.els)]).slice(-60), future: [] }; }); }
+  mut(fn, label) {
+    this.push();
+    this.setState(function (s) { return { els: fn(s.els.slice()), status: label || s.status }; });
+  }
+  update(ids, patch) {
+    this.setState(function (s) {
+      return { els: s.els.map(function (e) { return ids.indexOf(e.id) < 0 ? e : Object.assign({}, e, typeof patch === 'function' ? patch(e) : patch); }) };
+    });
+  }
+  snapV(v) { return this.snapOn() ? Math.round(v / 8) * 8 : Math.round(v); }
+
+  add(type, x, y) {
+    const d = this.dev(), def = DEF[type] || { w: 200, h: 60 };
+    const w = Math.min(def.w, d.w - 40), h = def.h;
+    const el = Object.assign({ id: 'e' + this.state.next, type: type, x: this.snapV(x === undefined ? (d.w - w) / 2 : x), y: this.snapV(y === undefined ? 64 + (this.state.els.length % 10) * 48 : y), w: w, h: h, text: def.text || '', fs: def.fs || 14, fw: def.fw || 400, pad: def.pad || 0, radius: 0, bw: def.bw || 0, bg: def.bg || '', color: def.color || INK, op: 100, align: def.align || 'left' }, {});
+    this.push();
+    this.setState(function (s) { return { els: s.els.concat([el]), sel: [el.id], next: s.next + 1, status: LABEL[type] + ' added' }; });
+  }
+
+  onDrop(e) {
+    e.preventDefault();
+    const type = e.dataTransfer.getData('text/plain');
+    if (!type || !DEF[type] || !this.art) return;
+    const r = this.art.getBoundingClientRect(), z = this.state.zoom, def = DEF[type];
+    this.add(type, (e.clientX - r.left) / z - def.w / 2, (e.clientY - r.top) / z - def.h / 2);
+  }
+
+  onStageDown(e) {
+    if (e.target !== this.stage && e.target !== this.art && !e.target.hasAttribute('data-board')) {
+      if (e.target !== this.stage) { /* fallthrough for board chrome */ }
+    }
+    if (e.target.closest && e.target.closest('[data-el]')) return;
+    const start = { x: e.clientX, y: e.clientY, pan: this.state.pan }, self = this;
+    let moved = false;
+    const mv = function (ev) {
+      if (Math.abs(ev.clientX - start.x) + Math.abs(ev.clientY - start.y) > 3) moved = true;
+      self.setState({ pan: { x: start.pan.x + (ev.clientX - start.x), y: start.pan.y + (ev.clientY - start.y) } });
+    };
+    const up = function () {
+      window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up);
+      if (!moved) self.setState({ sel: [] });
+    };
+    window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
+  }
+
+  onWheel(e) {
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      const z = Math.max(0.1, Math.min(2, this.state.zoom * (e.deltaY > 0 ? 0.94 : 1.06)));
+      this.setState({ zoom: z });
+    } else {
+      e.preventDefault();
+      const p = this.state.pan;
+      this.setState({ pan: { x: p.x - e.deltaX, y: p.y - e.deltaY } });
+    }
+  }
+
+  onKey(e) {
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'select' || tag === 'textarea') return;
+    const sel = this.state.sel, meta = e.metaKey || e.ctrlKey;
+    if (meta && e.key.toLowerCase() === 'z') { e.preventDefault(); return e.shiftKey ? this.redo() : this.undo(); }
+    if (meta && e.key.toLowerCase() === 'd') { e.preventDefault(); return this.duplicate(); }
+    if (meta && e.key.toLowerCase() === 'a') { e.preventDefault(); return this.setState(function (s) { return { sel: s.els.map(function (x) { return x.id; }) }; }); }
+    if (!sel.length) return;
+    if (e.key === 'Backspace' || e.key === 'Delete') { e.preventDefault(); return this.remove(); }
+    if (e.key === 'Escape') return this.setState({ sel: [] });
+    const step = e.shiftKey ? 8 : 1;
+    const d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[e.key];
+    if (d) {
+      e.preventDefault();
+      this.update(sel, function (el) { return { x: el.x + d[0], y: el.y + d[1] }; });
+    }
+  }
+
+  undo() {
+    const s = this.state; if (!s.past.length) return;
+    const prev = s.past[s.past.length - 1];
+    this.setState({ els: JSON.parse(prev), past: s.past.slice(0, -1), future: s.future.concat([JSON.stringify(s.els)]), sel: [], status: 'Undo' });
+  }
+  redo() {
+    const s = this.state; if (!s.future.length) return;
+    const nx = s.future[s.future.length - 1];
+    this.setState({ els: JSON.parse(nx), future: s.future.slice(0, -1), past: s.past.concat([JSON.stringify(s.els)]), sel: [], status: 'Redo' });
+  }
+  remove() { const sel = this.state.sel; this.mut(function (els) { return els.filter(function (e) { return sel.indexOf(e.id) < 0; }); }, 'Deleted'); this.setState({ sel: [] }); }
+  duplicate() {
+    const s = this.state, sel = s.sel; if (!sel.length) return;
+    const copies = s.els.filter(function (e) { return sel.indexOf(e.id) > -1; }).map(function (e, i) { return Object.assign({}, e, { id: 'e' + (s.next + i), x: e.x + 16, y: e.y + 16 }); });
+    this.push();
+    this.setState({ els: s.els.concat(copies), sel: copies.map(function (c) { return c.id; }), next: s.next + copies.length, status: 'Duplicated' });
+  }
+  order(dir) {
+    const sel = this.state.sel;
+    this.mut(function (els) {
+      const keep = els.filter(function (e) { return sel.indexOf(e.id) < 0; }), move = els.filter(function (e) { return sel.indexOf(e.id) > -1; });
+      return dir > 0 ? keep.concat(move) : move.concat(keep);
+    }, dir > 0 ? 'Brought to front' : 'Sent to back');
+  }
+
+  startMove(el, e) {
+    if (e.button !== 0) return;
+    e.stopPropagation();
+    const s = this.state;
+    let sel = s.sel.slice();
+    if (e.shiftKey) { sel = sel.indexOf(el.id) > -1 ? sel.filter(function (i) { return i !== el.id; }) : sel.concat([el.id]); }
+    else if (sel.indexOf(el.id) < 0) sel = [el.id];
+    this.setState({ sel: sel });
+    if (!sel.length) return;
+    this.push();
+    const self = this, z = s.zoom, start = { x: e.clientX, y: e.clientY };
+    const base = {}; s.els.forEach(function (o) { if (sel.indexOf(o.id) > -1) base[o.id] = { x: o.x, y: o.y }; });
+    const others = s.els.filter(function (o) { return sel.indexOf(o.id) < 0; });
+    const d = this.dev();
+    const mv = function (ev) {
+      let dx = (ev.clientX - start.x) / z, dy = (ev.clientY - start.y) / z;
+      const prim = base[el.id] ? el : null, guides = [];
+      if (prim && base[prim.id]) {
+        const gx = [0, d.w / 2, d.w], gy = [0, d.h / 2, d.h];
+        others.forEach(function (o) { gx.push(o.x, o.x + o.w / 2, o.x + o.w); gy.push(o.y, o.y + o.h / 2, o.y + o.h); });
+        const nx = base[prim.id].x + dx, ny = base[prim.id].y + dy, tol = 6 / z;
+        const edx = [nx, nx + prim.w / 2, nx + prim.w], edy = [ny, ny + prim.h / 2, ny + prim.h];
+        let bx0 = null, by0 = null;
+        edx.forEach(function (e1) { gx.forEach(function (g) { if (Math.abs(e1 - g) < tol && (bx0 === null || Math.abs(e1 - g) < Math.abs(bx0.d))) bx0 = { d: g - e1, g: g }; }); });
+        edy.forEach(function (e1) { gy.forEach(function (g) { if (Math.abs(e1 - g) < tol && (by0 === null || Math.abs(e1 - g) < Math.abs(by0.d))) by0 = { d: g - e1, g: g }; }); });
+        if (bx0) { dx += bx0.d; guides.push({ axis: 'v', at: bx0.g }); }
+        if (by0) { dy += by0.d; guides.push({ axis: 'h', at: by0.g }); }
+      }
+      if (self.snapOn() && !guides.length) {
+        dx = Math.round((base[el.id].x + dx) / 8) * 8 - base[el.id].x;
+        dy = Math.round((base[el.id].y + dy) / 8) * 8 - base[el.id].y;
+      }
+      self.setState(function (st) {
+        return {
+          guides: guides,
+          els: st.els.map(function (o) { return base[o.id] ? Object.assign({}, o, { x: Math.round(base[o.id].x + dx), y: Math.round(base[o.id].y + dy) }) : o; })
+        };
+      });
+    };
+    const up = function () { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); self.setState({ guides: [], status: 'Moved' }); };
+    window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
+  }
+
+  startResize(el, dir, e) {
+    e.stopPropagation();
+    this.push();
+    const self = this, z = this.state.zoom, start = { x: e.clientX, y: e.clientY }, b = { x: el.x, y: el.y, w: el.w, h: el.h };
+    const mv = function (ev) {
+      const dx = (ev.clientX - start.x) / z, dy = (ev.clientY - start.y) / z;
+      let x = b.x, y = b.y, w = b.w, h = b.h;
+      if (dir.indexOf('e') > -1) w = Math.max(12, b.w + dx);
+      if (dir.indexOf('s') > -1) h = Math.max(12, b.h + dy);
+      if (dir.indexOf('w') > -1) { w = Math.max(12, b.w - dx); x = b.x + (b.w - w); }
+      if (dir.indexOf('n') > -1) { h = Math.max(12, b.h - dy); y = b.y + (b.h - h); }
+      self.update([el.id], { x: self.snapV(x), y: self.snapV(y), w: self.snapV(w), h: self.snapV(h) });
+    };
+    const up = function () { window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); self.setState({ status: 'Resized' }); };
+    window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
+  }
+
+  save() {
+    try {
+      localStorage.setItem('akpixels.project', JSON.stringify({ els: this.state.els, device: this.state.device, next: this.state.next }));
+      this.setState({ status: 'Project saved locally' });
+    } catch (err) { this.setState({ status: 'Save failed' }); }
+  }
+
+  exportJpeg() {
+    const lib = window.htmlToImage;
+    if (!lib || !this.art) { this.setState({ status: 'Export library unavailable offline' }); return; }
+    const self = this, d = this.dev(), name = 'prototype-' + this.state.device.toLowerCase() + '.jpg';
+    this.setState({ sel: [], guides: [], status: 'Exporting…' });
+    requestAnimationFrame(function () {
+      lib.toJpeg(self.art, { quality: 0.95, backgroundColor: '#ffffff', width: d.w, height: d.h, pixelRatio: 2, style: { transform: 'none' } }).then(function (url) {
+        const a = document.createElement('a'); a.href = url; a.download = name; a.click();
+        self.setState({ status: 'Exported ' + name });
+      }).catch(function () { self.setState({ status: 'Export failed' }); });
+    });
+  }
+
+  renderVals() {
+    const s = this.state, d = this.dev(), self = this, modern = this.theme() === 'modern';
+    const accent = this.props.accent || ACC;
+    const themeVars = {
+      display: 'contents',
+      '--ak-font': modern ? 'Archivo, system-ui, sans-serif' : '"Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif',
+      '--ak-display': modern ? 'Archivo, system-ui, sans-serif' : '"Iowan Old Style", Palatino, Georgia, serif',
+      '--ak-panel': modern ? '#f8f7f7' : '#e6e3df',
+      '--ak-stage': modern ? '#e4e2e1' : '#cfcac4',
+      '--color-accent': accent
+    };
+    const toolBtn = { border: '1px solid var(--color-divider)', background: 'transparent', color: 'inherit', cursor: 'pointer', padding: '6px 10px', fontSize: 11, letterSpacing: modern ? '0.08em' : '0.04em', textTransform: modern ? 'uppercase' : 'none' };
+    const onBtn = Object.assign({}, toolBtn, { background: INK, color: '#f3f2f2', borderColor: INK });
+    const segBtn = function (on) { return { border: 0, background: on ? INK : 'transparent', color: on ? '#f3f2f2' : 'inherit', cursor: 'pointer', padding: '6px 11px', fontSize: 11, letterSpacing: '0.06em', textTransform: modern ? 'uppercase' : 'none' }; };
+    const inputStyle = { width: '100%', height: 28, padding: '0 7px', fontSize: 12, fontFamily: 'inherit', color: 'inherit', background: 'var(--color-bg)', border: '1px solid var(--color-divider)', borderRadius: 0 };
+
+    const sel = s.sel, selSet = {}; sel.forEach(function (i) { selSet[i] = 1; });
+    const elements = s.els.map(function (el, idx) {
+      const on = !!selSet[el.id];
+      const style = {
+        position: 'absolute', left: el.x, top: el.y, width: el.w, height: el.h, zIndex: idx + 2,
+        boxSizing: 'border-box', overflow: 'hidden', cursor: 'move', opacity: (el.op === undefined ? 100 : el.op) / 100,
+        background: el.bg || 'transparent', color: el.color || INK, padding: el.pad || 0,
+        borderRadius: el.radius || 0, border: el.bw ? el.bw + 'px solid ' + (el.color || INK) : 'none',
+        outline: on ? '1.5px solid ' + accent : 'none', outlineOffset: 0,
+        fontSize: el.fs, fontWeight: el.fw, textAlign: el.align || 'left',
+        lineHeight: TEXTY[el.type] ? (el.type === 'paragraph' ? 1.5 : 1.15) : 1,
+        display: TEXTY[el.type] ? 'flex' : 'block',
+        alignItems: TEXTY[el.type] ? (el.type === 'paragraph' ? 'flex-start' : 'center') : undefined,
+        justifyContent: el.align === 'center' ? 'center' : el.align === 'right' ? 'flex-end' : 'flex-start',
+        fontFamily: 'Archivo, system-ui, sans-serif',
+        letterSpacing: el.type === 'heading' ? '-0.02em' : 'normal'
+      };
+      return {
+        id: el.id, text: el.text, isText: !!TEXTY[el.type], isNode: !TEXTY[el.type], style: style,
+        node: TEXTY[el.type] ? null : renderNode(el),
+        onDown: function (e) { self.startMove(el, e); },
+        onEdit: function () { self.setState({ tab: 'props', panel: true }, function () { if (self.textInput) self.textInput.select(); }); }
+      };
+    });
+
+    const one = sel.length === 1 ? s.els.filter(function (e) { return e.id === sel[0]; })[0] : null;
+    const hs = 9 / s.zoom;
+    const handles = one ? ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'].map(function (dir) {
+      const cx = dir.indexOf('w') > -1 ? one.x : dir.indexOf('e') > -1 ? one.x + one.w : one.x + one.w / 2;
+      const cy = dir.indexOf('n') > -1 ? one.y : dir.indexOf('s') > -1 ? one.y + one.h : one.y + one.h / 2;
+      return {
+        onDown: function (e) { self.startResize(one, dir, e); },
+        style: { position: 'absolute', left: cx - hs / 2, top: cy - hs / 2, width: hs, height: hs, background: '#fff', border: (1.5 / s.zoom) + 'px solid ' + accent, zIndex: 9999, cursor: dir + '-resize' }
+      };
+    }) : [];
+
+    const guides = s.guides.map(function (g) {
+      return { style: g.axis === 'v'
+        ? { position: 'absolute', left: g.at, top: -40, width: 1 / s.zoom, height: d.h + 80, background: accent, zIndex: 9998, pointerEvents: 'none' }
+        : { position: 'absolute', top: g.at, left: -40, height: 1 / s.zoom, width: d.w + 80, background: accent, zIndex: 9998, pointerEvents: 'none' } };
+    });
+
+    const grid = this.gridOn() ? {
+      backgroundImage: 'linear-gradient(to right, rgba(32,30,29,0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(32,30,29,0.07) 1px, transparent 1px)',
+      backgroundSize: '8px 8px, 8px 8px'
+    } : {};
+
+    const p = one ? {
+      typeLabel: LABEL[one.type] || one.type, selLabel: '1 selected',
+      text: one.text || '', fs: one.fs || 14, fw: String(one.fw || 400), x: one.x, y: one.y, w: one.w, h: one.h,
+      pad: one.pad || 0, radius: one.radius || 0, bw: one.bw || 0, op: one.op === undefined ? 100 : one.op,
+      bg: one.bg || '#ffffff', color: one.color || INK,
+      alStyleL: one.align === 'left' || !one.align ? onBtn : toolBtn,
+      alStyleC: one.align === 'center' ? onBtn : toolBtn,
+      alStyleR: one.align === 'right' ? onBtn : toolBtn
+    } : { typeLabel: sel.length ? 'Multiple' : '', selLabel: sel.length + ' selected', text: '', fs: 14, fw: '400', x: 0, y: 0, w: 0, h: 0, pad: 0, radius: 0, bw: 0, op: 100, bg: '#ffffff', color: INK, alStyleL: toolBtn, alStyleC: toolBtn, alStyleR: toolBtn };
+
+    const num = function (key) { return function (e) { const v = parseFloat(e.target.value); if (!isNaN(v)) self.update(sel, function () { const o = {}; o[key] = v; return o; }); }; };
+    const set = {
+      text: function (e) { const v = e.target.value; self.update(sel, { text: v }); },
+      fs: num('fs'), x: num('x'), y: num('y'), w: num('w'), h: num('h'), pad: num('pad'), radius: num('radius'), bw: num('bw'), op: num('op'),
+      fw: function (e) { self.update(sel, { fw: parseInt(e.target.value, 10) }); },
+      bg: function (e) { const v = e.target.value; self.update(sel, { bg: v }); },
+      bgNone: function () { self.update(sel, { bg: '' }); },
+      color: function (e) { const v = e.target.value; self.update(sel, { color: v }); },
+      alignLeft: function () { self.update(sel, { align: 'left' }); },
+      alignCenter: function () { self.update(sel, { align: 'center' }); },
+      alignRight: function () { self.update(sel, { align: 'right' }); }
+    };
+
+    return {
+      themeVars: themeVars, brand: this.props.brand || 'Created by akpixels',
+      dimsLabel: s.device + ' · ' + d.w + ' × ' + d.h,
+      countLabel: s.els.length ? s.els.length + ' component' + (s.els.length === 1 ? '' : 's') + ' on canvas' : 'Empty canvas',
+      zoomLabel: Math.round(s.zoom * 100) + '%',
+      status: s.status, hint: 'Scroll to pan · ⌘/Ctrl + scroll to zoom · ⌘Z undo',
+      toolBtn: toolBtn, inputStyle: inputStyle,
+      smallBtn: Object.assign({}, toolBtn, { width: 28, height: 28, padding: 0, flex: 'none' }),
+      gridBtn: this.gridOn() ? onBtn : toolBtn, snapBtn: this.snapOn() ? onBtn : toolBtn,
+      modernBtn: segBtn(modern), classicBtn: segBtn(!modern),
+      onToggleGrid: function () { self.setState({ grid: !self.gridOn() }); },
+      onToggleSnap: function () { self.setState({ snap: !self.snapOn() }); },
+      onModern: function () { self.setState({ theme: 'modern' }); },
+      onClassic: function () { self.setState({ theme: 'classic' }); },
+      onZoomIn: function () { self.setState({ zoom: Math.min(2, s.zoom * 1.15) }); },
+      onZoomOut: function () { self.setState({ zoom: Math.max(0.1, s.zoom / 1.15) }); },
+      onZoomFit: function () { self.fit(); },
+      onUndo: function () { self.undo(); }, onRedo: function () { self.redo(); },
+      noUndo: !s.past.length, noRedo: !s.future.length,
+      onForward: function () { self.order(1); }, onBackward: function () { self.order(-1); },
+      onDuplicate: function () { self.duplicate(); }, onDelete: function () { self.remove(); },
+      onSave: function () { self.save(); }, onExport: function () { self.exportJpeg(); },
+      noSel: !sel.length, hasSel: sel.length > 0,
+      devices: Object.keys(DEV).map(function (k) {
+        const on = s.device === k;
+        return {
+          label: k, note: DEV[k].note, dims: DEV[k].w + ' × ' + DEV[k].h,
+          onClick: function () { self.setState({ device: k, sel: [] }, function () { self.fit(); }); },
+          style: {
+            display: 'flex', flexDirection: 'column', gap: 3, alignItems: 'flex-start', textAlign: 'left',
+            padding: '10px 12px', cursor: 'pointer', background: on ? 'var(--color-bg)' : 'transparent',
+            border: 0, borderLeft: (on ? '3px solid ' + accent : '3px solid transparent'), color: 'inherit',
+            font: 'inherit', opacity: on ? 1 : 0.7
+          }
+        };
+      }),
+      stageRef: this.stageRef, artRef: this.artRef, textRef: this.textRef,
+      onStageDown: this.onStageDown, onDragOver: this.onDragOver, onDrop: this.onDrop,
+      boardWrapStyle: { position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%) translate(' + s.pan.x + 'px,' + s.pan.y + 'px) scale(' + s.zoom + ')', transformOrigin: 'center center' },
+      boardLabelStyle: { position: 'absolute', left: 0, bottom: '100%', marginBottom: 8 / s.zoom, fontSize: 11 / s.zoom, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.45, whiteSpace: 'nowrap' },
+      artStyle: Object.assign({ position: 'relative', width: d.w, height: d.h, background: '#ffffff', boxShadow: '0 2px 0 rgba(32,30,29,0.12), 0 24px 60px rgba(32,30,29,0.12)', outline: '1px solid rgba(32,30,29,0.25)', overflow: 'hidden' }, grid),
+      signStyle: { position: 'absolute', right: 14, bottom: 10, fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(32,30,29,0.3)', zIndex: 1, pointerEvents: 'none', fontFamily: 'Archivo, system-ui, sans-serif' },
+      showEmpty: s.els.length === 0,
+      elements: elements, handles: handles, guides: guides,
+      panelOpen: s.panel, panelClosed: !s.panel,
+      onTogglePanel: function () { self.setState({ panel: !s.panel }, function () { self.fit(); }); },
+      tabLib: s.tab === 'lib', tabProps: s.tab === 'props',
+      onTabLib: function () { self.setState({ tab: 'lib' }); }, onTabProps: function () { self.setState({ tab: 'props' }); },
+      tabLibStyle: { flex: 1, border: 0, background: s.tab === 'lib' ? 'var(--color-bg)' : 'transparent', color: 'inherit', font: 'inherit', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', padding: '10px 0', cursor: 'pointer', borderBottom: s.tab === 'lib' ? '2px solid ' + accent : '2px solid transparent' },
+      tabPropStyle: { flex: 1, border: 0, borderLeft: '1px solid var(--color-divider)', background: s.tab === 'props' ? 'var(--color-bg)' : 'transparent', color: 'inherit', font: 'inherit', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', padding: '10px 0', cursor: 'pointer', borderBottom: s.tab === 'props' ? '2px solid ' + accent : '2px solid transparent' },
+      cats: LIB.map(function (c) {
+        return {
+          name: c[0],
+          items: c[1].map(function (i) {
+            return {
+              label: i[1],
+              onDragStart: function (e) { e.dataTransfer.setData('text/plain', i[0]); e.dataTransfer.effectAllowed = 'copy'; },
+              onDragEnd: function () {},
+              onAdd: function () { self.add(i[0]); }
+            };
+          })
+        };
+      }),
+      p: p, set: set
+    };
+  }
+}
+</script>
+</body>
+</html>
