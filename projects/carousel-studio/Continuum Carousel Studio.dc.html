@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  html, body { margin:0; padding:0; background:#0D0D11; }
+  * { box-sizing:border-box; }
+  a { color:#5EE7FF; } a:hover { color:#9CF2FF; }
+  input[type=range] { -webkit-appearance:none; appearance:none; height:3px; border-radius:2px; background:rgba(255,255,255,.14); outline:none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px; height:13px; border-radius:50%; background:#0D0D11; border:2px solid #5EE7FF; box-shadow:0 0 8px rgba(94,231,255,.8); cursor:pointer; }
+  input[type=range]:focus-visible::-webkit-slider-thumb { box-shadow:0 0 0 4px rgba(94,231,255,.25); }
+  ::selection { background:rgba(94,231,255,.3); }
+  ::-webkit-scrollbar { width:8px; height:8px; }
+  ::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:8px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  @keyframes pulseGlow { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+</style>
+</helmet>
+
+<div style="display:flex; flex-direction:column; height:100vh; background:#0D0D11; color:#E9EEF4; font-family:'Space Grotesk', ui-serif, Georgia, serif; overflow:hidden">
+
+  <div style="display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px; padding:10px 18px; borderBottom:1px solid rgba(255,255,255,.07); background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)); backdrop-filter:blur(14px); flex:0 0 auto">
+    <a href="../../index.html#top" title="Back to portfolio" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:none;padding:5px 10px;border-radius:7px;border:1px solid rgba(233,238,244,.2);color:inherit;text-decoration:none;font-family:system-ui,sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.72;" style-hover="opacity:1;border-color:rgba(233,238,244,.5)"><svg width="13" height="13" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg><span>Portfolio</span></a>
+    <div style="display:flex; align-items:baseline; gap:10px">
+      <div style="font-size:17px; font-weight:700; letter-spacing:.16em; color:#5EE7FF; text-shadow:0 0 18px rgba(94,231,255,.55)">CONTINUUM</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.18em; color:rgba(233,238,244,.45); text-transform:uppercase; white-space:nowrap">Carousel &amp; grid studio</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.14em; color:rgba(233,238,244,.34); white-space:nowrap">© Created by akpixels</div>
+    </div>
+
+    <div style="display:flex; gap:4px; padding:3px; border-radius:9px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08)">
+      <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+        <button onClick="{{ m.onClick }}" style="{{ m.style }}">{{ m.label }}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ isCarousel }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; align-items:center; gap:9px">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.16em; color:rgba(233,238,244,.45); text-transform:uppercase">Slides</span>
+        <input type="range" min="3" max="10" step="1" value="{{ slides }}" onInput="{{ onSlides }}" style="width:110px">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#5EE7FF; width:16px">{{ slides }}</span>
+      </div>
+    </sc-if>
+
+    <button onClick="{{ toggleGuides }}" style="{{ guidesBtnStyle }}">Split guides</button>
+
+    <div style="display:flex; gap:5px">
+      <button onClick="{{ undo }}" title="Undo (⌘Z)" style="{{ undoStyle }}">↺ Undo</button>
+      <button onClick="{{ redo }}" title="Redo (⇧⌘Z)" style="{{ redoStyle }}">↻ Redo</button>
+    </div>
+
+    <div style="flex:1"></div>
+
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.06em; color:#FF4D9D; max-width:200px; text-align:right">{{ busy }}</div>
+
+    <button onClick="{{ exportAll }}" style="flex:0 0 auto; white-space:nowrap; padding:9px 16px; border-radius:9px; border:1px solid rgba(94,231,255,.55); background:linear-gradient(180deg, rgba(94,231,255,.22), rgba(94,231,255,.07)); color:#D9FBFF; font-family:'Space Grotesk'; font-size:12.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; box-shadow:0 0 22px rgba(94,231,255,.28)" style-hover="background:linear-gradient(180deg, rgba(94,231,255,.34), rgba(94,231,255,.14)); box-shadow:0 0 30px rgba(94,231,255,.45)">Slice &amp; export all</button>
+  </div>
+
+  <div style="display:flex; flex:1; min-height:0">
+
+    <div style="width:236px; flex:0 0 236px; border-right:1px solid rgba(255,255,255,.07); background:rgba(255,255,255,.022); display:flex; flex-direction:column; min-height:0">
+      <div style="padding:14px 14px 8px; display:flex; align-items:baseline; justify-content:space-between">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(233,238,244,.5)">Templates</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:#FF4D9D">{{ presetCount }}</span>
+      </div>
+      <div style="padding:0 14px 10px">
+        <input type="search" placeholder="Search 50 templates…" value="{{ q }}" onInput="{{ onSearch }}" style="width:100%; padding:7px 9px; border-radius:8px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05); color:#E9EEF4; font-family:'IBM Plex Mono',monospace; font-size:10.5px; outline:none" style-focus="border-color:rgba(94,231,255,.7); box-shadow:0 0 0 3px rgba(94,231,255,.14)">
+      </div>
+      <div style="flex:1; overflow-y:auto; padding:0 10px 24px">
+        <sc-for list="{{ groups }}" as="g" hint-placeholder-count="5">
+          <div style="margin-bottom:16px">
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:rgba(233,238,244,.36); padding:6px 4px">{{ g.name }}</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:7px">
+              <sc-for list="{{ g.items }}" as="p" hint-placeholder-count="10">
+                <button onClick="{{ p.onClick }}" title="{{ p.name }}" style="{{ p.style }}">
+                  <div style="{{ p.thumbStyle }}"></div>
+                  <div style="font-size:9.5px; line-height:1.25; text-align:left; color:rgba(233,238,244,.72); padding:5px 6px 6px; font-family:'IBM Plex Mono',monospace">{{ p.name }}</div>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex:1; min-width:0; display:flex; flex-direction:column; padding:22px; overflow:auto; background:radial-gradient(120% 90% at 50% -10%, rgba(94,231,255,.07), transparent 60%)">
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:12px; flex-wrap:wrap">
+        <div style="font-size:15px; font-weight:500">{{ presetName }}</div>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:rgba(233,238,244,.42)">{{ canvasSpec }}</div>
+        <div style="flex:1"></div>
+        <div style="display:flex; align-items:center; gap:5px">
+          <sc-for list="{{ zooms }}" as="z" hint-placeholder-count="4">
+            <button onClick="{{ z.onClick }}" style="{{ z.style }}">{{ z.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="overflow-x:auto; overflow-y:hidden; padding-bottom:6px">
+      <div onDragOver="{{ onDragOver }}" onDrop="{{ onDropStage }}" onMouseDown="{{ onStageDown }}" ref="{{ stripRef }}" style="{{ stripStyle }}">
+        <sc-for list="{{ layerViews }}" as="L" hint-placeholder-count="0">
+          <div onMouseDown="{{ L.onDown }}" style="{{ L.boxStyle }}">
+            <div style="{{ L.imgStyle }}"></div>
+            <div style="{{ L.grainStyle }}"></div>
+          </div>
+          <button onClick="{{ L.onDelete }}" onMouseDown="{{ L.stop }}" title="Delete layer" style="{{ L.delStyle }}">×</button>
+        </sc-for>
+        <sc-for list="{{ guideViews }}" as="G" hint-placeholder-count="4">
+          <div style="{{ G.style }}"><span style="{{ G.labelStyle }}">{{ G.label }}</span></div>
+        </sc-for>
+      </div>
+      </div>
+
+      <sc-if value="{{ stageEmpty }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:10px; font-family:'IBM Plex Mono',monospace; font-size:10px; line-height:1.7; letter-spacing:.08em; color:#5EE7FF">Template renders on its own — drag an image from the library onto the canvas to layer it across slides</div>
+      </sc-if>
+      <div style="margin-top:8px; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.1em; color:rgba(233,238,244,.34)">Drag a layer to move it · click to select · Delete removes it · dotted lines are slide splits</div>
+    </div>
+
+    <div style="width:308px; flex:0 0 308px; border-left:1px solid rgba(255,255,255,.07); background:rgba(255,255,255,.022); display:flex; flex-direction:column; min-height:0">
+
+      <div style="padding:14px 14px 10px">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(233,238,244,.5); margin-bottom:10px">Image library</div>
+        <label onDragOver="{{ onDragOver }}" onDrop="{{ onDropFiles }}" style="display:block; padding:16px 12px; border-radius:11px; border:1px dashed rgba(94,231,255,.4); background:rgba(94,231,255,.05); text-align:center; cursor:pointer" style-hover="background:rgba(94,231,255,.1); border-color:rgba(94,231,255,.7)">
+          <div style="font-size:12.5px; color:#D9FBFF">Drop JPEG · PNG · HEIC</div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.08em; color:rgba(233,238,244,.45); margin-top:5px">auto-converted to web JPEG</div>
+          <input type="file" multiple accept="image/*,.heic,.heif" onChange="{{ onPickFiles }}" style="display:none">
+        </label>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:10px">
+          <sc-for list="{{ assetViews }}" as="a" hint-placeholder-count="0">
+            <div style="position:relative">
+              <div draggable="true" onDragStart="{{ a.onDragStart }}" onClick="{{ a.onClick }}" title="{{ a.name }}" style="{{ a.style }}"></div>
+              <button onClick="{{ a.onDelete }}" title="Remove from library" style="position:absolute; top:-5px; right:-5px; width:17px; height:17px; border-radius:50%; border:1px solid rgba(255,77,157,.6); background:rgba(13,13,17,.92); color:#FFB6D4; font-size:11px; line-height:1; cursor:pointer; padding:0; display:flex; align-items:center; justify-content:center" style-hover="background:rgba(255,77,157,.35); color:#fff">×</button>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="flex:1; overflow-y:auto; padding:4px 14px 26px; min-height:0">
+        <sc-if value="{{ hasLayers }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:6px 0 2px">
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(233,238,244,.5); margin-bottom:7px">Layers</div>
+            <div style="display:flex; flex-direction:column; gap:5px">
+              <sc-for list="{{ layerRows }}" as="r" hint-placeholder-count="0">
+                <div onClick="{{ r.onSelect }}" style="{{ r.style }}">
+                  <div style="{{ r.thumbStyle }}"></div>
+                  <div style="flex:1; min-width:0; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.04em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{ r.name }}</div>
+                  <button onClick="{{ r.onHide }}" title="Show / hide" style="{{ r.iconStyle }}">{{ r.eye }}</button>
+                  <button onClick="{{ r.onUp }}" title="Bring forward" style="{{ r.iconStyle }}">↑</button>
+                  <button onClick="{{ r.onDown }}" title="Send backward" style="{{ r.iconStyle }}">↓</button>
+                  <button onClick="{{ r.onDup }}" title="Duplicate" style="{{ r.iconStyle }}">⧉</button>
+                  <button onClick="{{ r.onDel }}" title="Delete layer" style="{{ r.delIconStyle }}">×</button>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 0 8px">
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(233,238,244,.5)">Layer</span>
+              <button onClick="{{ deleteLayer }}" style="border:1px solid rgba(255,77,157,.45); background:rgba(255,77,157,.12); color:#FFB6D4; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.12em; padding:4px 8px; border-radius:7px; cursor:pointer; text-transform:uppercase">Delete</button>
+            </div>
+
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:rgba(233,238,244,.36); margin:8px 0 6px">Crop / aspect</div>
+            <div style="display:flex; flex-wrap:wrap; gap:5px">
+              <sc-for list="{{ aspects }}" as="a" hint-placeholder-count="5">
+                <button onClick="{{ a.onClick }}" style="{{ a.style }}">{{ a.label }}</button>
+              </sc-for>
+            </div>
+
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:rgba(233,238,244,.36); margin:14px 0 6px">Transform</div>
+            <div style="display:flex; flex-wrap:wrap; gap:5px">
+              <sc-for list="{{ actions }}" as="a" hint-placeholder-count="4">
+                <button onClick="{{ a.onClick }}" style="{{ a.style }}">{{ a.label }}</button>
+              </sc-for>
+            </div>
+
+            <sc-for list="{{ sliders }}" as="s" hint-placeholder-count="14">
+              <div onDoubleClick="{{ s.onReset }}" title="Double-click to reset" style="{{ s.wrapStyle }}">
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px">
+                  <span style="font-size:11.5px; color:rgba(233,238,244,.8)">{{ s.label }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:#5EE7FF">{{ s.text }}</span>
+                </div>
+                <input type="range" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" value="{{ s.val }}" onInput="{{ s.onInput }}" style="width:100%">
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ noSel }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:26px 6px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; line-height:1.7; color:rgba(233,238,244,.42); letter-spacing:.05em">
+            No layer selected.<br>Drop an image on the canvas, then use “Span all slides” to run one subject continuously across the whole carousel.
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;watermark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Watermark&quot;},&quot;watermarkText&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;© Created by akpixels&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Watermark&quot;}}">
+class Component extends DCLogic {
+  state = {
+    assets: [], layers: [], sel: null,
+    presetId: 'seamless-0', slides: 5, mode: 'carousel',
+    guides: true, thumbs: {}, stripUrl: '', busy: '', tick: 0,
+    q: '', zoom: 1, canUndo: false, canRedo: false
+  };
+  hist = []; future = [];
+  snap = () => {
+    this.hist.push(JSON.stringify({ layers: this.state.layers, sel: this.state.sel }));
+    if (this.hist.length > 50) this.hist.shift();
+    this.future = [];
+    this.setState({ canUndo: true, canRedo: false });
+  };
+  undo = () => {
+    if (!this.hist.length) return;
+    this.future.push(JSON.stringify({ layers: this.state.layers, sel: this.state.sel }));
+    const p = JSON.parse(this.hist.pop());
+    this.setState({ layers: p.layers, sel: p.sel, canUndo: this.hist.length > 0, canRedo: true });
+  };
+  redo = () => {
+    if (!this.future.length) return;
+    this.hist.push(JSON.stringify({ layers: this.state.layers, sel: this.state.sel }));
+    const p = JSON.parse(this.future.pop());
+    this.setState({ layers: p.layers, sel: p.sel, canUndo: true, canRedo: this.future.length > 0 });
+  };
+  imgs = {};
+  stripEl = null;
+  noiseUrl = '';
+
+  CATS = [
+    { id: 'seamless', name: 'Seamless continuity', names: ['Infinite Horizon','Unbroken Wave','Long Exposure','Tide Line','Ribbon Run','Panorama Drift','Continuous Arc','Split Sun','Endless Field','Slow Pan'] },
+    { id: 'popout', name: '3D pop-out', names: ['Podium Break','Frame Escape','Depth Stack','Shadow Lift','Portal Ring','Layer Burst','Card Rise','Halo Step','Riser Trio','Cutout Stage'] },
+    { id: 'scrap', name: 'Scrapbook & film', names: ['Taped Contact','35mm Strip','Torn Edge','Polaroid Wall','Darkroom Proof','Pinboard','Sprocket Run','Paste-Up','Album Page','Grain Sheet'] },
+    { id: 'cyber', name: 'Cyberpunk neon', names: ['Grid Runner','Neon Horizon','Chrome Bars','Signal Bloom','Night Circuit','Vapor Ridge','Laser Rail','Hologrid','Static Burn','Ion Sweep'] },
+    { id: 'edit', name: 'Minimalist editorial', names: ['Broadsheet','Wide Margin','Index Rule','Numeral','Column Set','Quiet Plate','Folio','Baseline','Dateline','Colophon'] }
+  ];
+  PALS = {
+    seamless: [['#0d0d11','#16324a','#5ee7ff','#e8f7ff'],['#100c14','#2b1140','#ff4d9d','#ffe1ef'],['#0b1110','#123028','#66f2b8','#e6fff5'],['#12100b','#3a2a10','#ffc76b','#fff3e0'],['#0c0f16','#1b2444','#8f9bff','#eaecff']],
+    popout: [['#0d0d11','#1a1a24','#5ee7ff','#ffffff'],['#0f0b10','#241426','#ff4d9d','#ffffff'],['#0b0f0d','#14261f','#7dffc4','#ffffff'],['#100e09','#2a2312','#ffd166','#ffffff'],['#0c0d13','#1d2038','#b39bff','#ffffff']],
+    scrap: [['#efe9dd','#d9cfbc','#c4442f','#2a2622'],['#f2eee6','#ded4c3','#2f5d8a','#241f1b'],['#ece7df','#cfc4b4','#7a6a4f','#1f1c19'],['#f4efe4','#e2d6c0','#b0703a','#26211c'],['#eeeae2','#d5cec2','#3f6b4a','#1e211d']],
+    cyber: [['#07070c','#0f1330','#5ee7ff','#ff4d9d'],['#08060c','#1a0b2e','#ff4d9d','#9b5cff'],['#050a0a','#0b2230','#38f9d7','#5ee7ff'],['#0a0710','#2a0f3d','#ffb347','#ff4d9d'],['#060810','#101c3a','#7cf5ff','#c2ff5e']],
+    edit: [['#f3f2f2','#e2e0dc','#201e1d','#0088b0'],['#f5f4f0','#e6e2d9','#1c1b1a','#d6006c'],['#f2f1ee','#dedcd6','#232120','#3a3a38'],['#f4f3f1','#e4e1db','#1e1c1b','#8a6a1f'],['#f1f1f2','#dcdce0','#1b1b1e','#2b4a8a']]
+  };
+  ADJ = [
+    ['brightness','Brightness'],['contrast','Contrast'],['saturation','Saturation'],['exposure','Exposure'],
+    ['highlights','Highlights'],['shadows','Shadows'],['temperature','Temperature'],['vibrance','Vibrance'],
+    ['blur','Blur'],['grain','Grain']
+  ];
+
+  presets() {
+    if (this._p) return this._p;
+    const out = [];
+    this.CATS.forEach((c, ci) => c.names.forEach((n, i) => out.push({
+      id: c.id + '-' + i, cat: c.id, catName: c.name, name: n,
+      pal: this.PALS[c.id][i % 5], v: i < 5 ? 0 : 1, seed: ci * 977 + i * 131 + 7
+    })));
+    this._p = out; return out;
+  }
+  preset() { return this.presets().find(p => p.id === this.state.presetId) || this.presets()[0]; }
+
+  rng(seed) { let s = seed >>> 0; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+  geom(st) {
+    const s = st || this.state;
+    if (s.mode === 'grid') return { sw: 1080, sh: 1080, cols: 3, rows: 3, n: 9, W: 3240, H: 3240 };
+    return { sw: 1080, sh: 1350, cols: s.slides, rows: 1, n: s.slides, W: 1080 * s.slides, H: 1350 };
+  }
+  rects(g) {
+    const r = [];
+    for (let i = 0; i < g.n; i++) r.push({ x: (i % g.cols) * g.sw, y: Math.floor(i / g.cols) * g.sh, w: g.sw, h: g.sh });
+    return r;
+  }
+
+  paint(ctx, W, H, p) {
+    const r = this.rng(p.seed), P = p.pal;
+    ctx.save();
+    const g0 = ctx.createLinearGradient(0, 0, W, H);
+    g0.addColorStop(0, P[0]); g0.addColorStop(1, P[1]);
+    ctx.fillStyle = g0; ctx.fillRect(0, 0, W, H);
+    const u = Math.min(W, H);
+    if (p.cat === 'seamless') {
+      if (p.v === 0) {
+        for (let b = 0; b < 3; b++) {
+          ctx.beginPath(); ctx.moveTo(0, H);
+          for (let x = 0; x <= W; x += W / 120) {
+            const y = H * (0.34 + b * 0.16) + Math.sin(x / W * 6.2 + b * 1.4 + p.seed % 7) * H * 0.11;
+            ctx.lineTo(x, y);
+          }
+          ctx.lineTo(W, H); ctx.closePath();
+          ctx.globalAlpha = 0.16 + b * 0.16; ctx.fillStyle = b === 2 ? P[2] : P[3]; ctx.fill();
+        }
+        ctx.globalAlpha = 0.5; ctx.fillStyle = P[2];
+        ctx.beginPath(); ctx.arc(W * 0.7, H * 0.28, u * 0.16, 0, 7); ctx.fill();
+      } else {
+        ctx.lineWidth = u * 0.006; ctx.globalAlpha = 0.5;
+        for (let i = 0; i < 14; i++) {
+          ctx.strokeStyle = i % 3 === 0 ? P[2] : P[3];
+          ctx.globalAlpha = 0.12 + (i % 4) * 0.09;
+          ctx.beginPath(); ctx.arc(W * 0.5, H * 1.05, u * 0.2 + i * u * 0.11, Math.PI, 2 * Math.PI); ctx.stroke();
+        }
+        ctx.globalAlpha = 0.7; ctx.fillStyle = P[2];
+        ctx.fillRect(0, H * 0.62, W, u * 0.004);
+      }
+    } else if (p.cat === 'popout') {
+      const cx = W * (p.v === 0 ? 0.5 : 0.42), cy = H * 0.62;
+      ctx.globalAlpha = 0.9; const rg = ctx.createRadialGradient(cx, cy * 0.7, 0, cx, cy, u * 0.9);
+      rg.addColorStop(0, P[1]); rg.addColorStop(1, P[0]); ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+      ctx.globalAlpha = 0.35; ctx.strokeStyle = P[2]; ctx.lineWidth = u * 0.012;
+      ctx.beginPath(); ctx.arc(cx, cy - u * 0.12, u * 0.34, 0, 7); ctx.stroke();
+      ctx.globalAlpha = 0.85; ctx.fillStyle = P[2];
+      ctx.beginPath(); ctx.ellipse(cx, cy + u * 0.2, u * 0.4, u * 0.055, 0, 0, 7); ctx.fill();
+      ctx.globalAlpha = 0.18; ctx.fillStyle = P[3];
+      if (p.v === 0) { for (let i = 0; i < 3; i++) ctx.fillRect(W * (0.1 + i * 0.3), H * 0.12, W * 0.12, H * 0.76); }
+      else { for (let i = 0; i < 4; i++) { ctx.globalAlpha = 0.1 + i * 0.06; ctx.fillRect(cx - u * (0.3 - i * 0.05), cy - u * (0.5 - i * 0.07), u * (0.6 - i * 0.1), u * (0.72 - i * 0.12)); } }
+    } else if (p.cat === 'scrap') {
+      ctx.fillStyle = P[0]; ctx.fillRect(0, 0, W, H);
+      ctx.globalAlpha = 0.5; ctx.fillStyle = P[1];
+      for (let i = 0; i < (W * H) / 5200; i++) ctx.fillRect(r() * W, r() * H, u * 0.004, u * 0.004);
+      if (p.v === 0) {
+        for (let i = 0; i < 8; i++) {
+          ctx.save(); ctx.translate(r() * W, r() * H); ctx.rotate((r() - 0.5) * 0.8);
+          ctx.globalAlpha = 0.35; ctx.fillStyle = P[2]; ctx.fillRect(-u * 0.09, -u * 0.02, u * 0.18, u * 0.04); ctx.restore();
+        }
+        ctx.globalAlpha = 0.9; ctx.strokeStyle = P[3]; ctx.lineWidth = u * 0.002;
+        ctx.strokeRect(u * 0.05, u * 0.05, W - u * 0.1, H - u * 0.1);
+      } else {
+        ctx.globalAlpha = 1; ctx.fillStyle = P[3];
+        ctx.fillRect(0, 0, W, H * 0.09); ctx.fillRect(0, H * 0.91, W, H * 0.09);
+        ctx.fillStyle = P[0];
+        for (let x = u * 0.03; x < W; x += u * 0.1) { ctx.fillRect(x, H * 0.023, u * 0.05, H * 0.045); ctx.fillRect(x, H * 0.932, u * 0.05, H * 0.045); }
+        ctx.globalAlpha = 0.7; ctx.fillStyle = P[2]; ctx.fillRect(0, H * 0.5, W, u * 0.003);
+      }
+    } else if (p.cat === 'cyber') {
+      ctx.fillStyle = P[0]; ctx.fillRect(0, 0, W, H);
+      const hz = H * 0.58;
+      const sg = ctx.createLinearGradient(0, 0, 0, hz); sg.addColorStop(0, P[1]); sg.addColorStop(1, P[0]);
+      ctx.fillStyle = sg; ctx.fillRect(0, 0, W, hz);
+      ctx.globalAlpha = 0.85; ctx.fillStyle = P[2];
+      ctx.beginPath(); ctx.arc(W * (p.v === 0 ? 0.5 : 0.72), hz, u * 0.22, Math.PI, 2 * Math.PI); ctx.fill();
+      ctx.globalAlpha = 0.55; ctx.strokeStyle = P[2]; ctx.lineWidth = u * 0.0022;
+      for (let i = 0; i <= 40; i++) { const x = (i / 40) * W; ctx.beginPath(); ctx.moveTo(W / 2 + (x - W / 2) * 0.25, hz); ctx.lineTo(x, H); ctx.stroke(); }
+      for (let i = 1; i <= 9; i++) { const y = hz + Math.pow(i / 9, 2.1) * (H - hz); ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+      ctx.globalAlpha = 0.16; ctx.fillStyle = '#000';
+      for (let y = 0; y < H; y += u * 0.012) ctx.fillRect(0, y, W, u * 0.005);
+      if (p.v === 1) { ctx.globalAlpha = 0.7; ctx.fillStyle = P[3]; for (let i = 0; i < 6; i++) ctx.fillRect(r() * W, 0, u * 0.006, H * (0.2 + r() * 0.5)); }
+      ctx.globalAlpha = 0.9; ctx.fillStyle = P[3]; ctx.fillRect(0, hz - u * 0.004, W, u * 0.004);
+    } else {
+      ctx.fillStyle = P[0]; ctx.fillRect(0, 0, W, H);
+      ctx.globalAlpha = 1; ctx.fillStyle = P[2];
+      ctx.fillRect(u * 0.08, H * 0.12, W - u * 0.16, u * 0.006);
+      ctx.fillRect(u * 0.08, H * 0.18, W * 0.34, u * 0.0018);
+      ctx.globalAlpha = 0.1;
+      ctx.font = '700 ' + (u * 0.9) + 'px "Space Grotesk", Georgia, serif';
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillText(p.v === 0 ? p.name[0] : String((p.seed % 9) + 1), u * 0.06, H * 0.95);
+      ctx.globalAlpha = 0.55; ctx.fillStyle = P[3];
+      for (let i = 1; i < 6; i++) ctx.fillRect(W * (i / 6), H * 0.86, u * 0.0016, H * 0.06);
+      ctx.globalAlpha = 0.9; ctx.fillStyle = P[3]; ctx.fillRect(u * 0.08, H * 0.14, W * 0.06, u * 0.012);
+      ctx.globalAlpha = 0.06; ctx.fillStyle = P[1]; ctx.fillRect(W * 0.62, 0, W * 0.38, H);
+    }
+    ctx.restore();
+  }
+
+  filterOf(a) {
+    const b = 1 + a.brightness / 130 + a.exposure / 170;
+    const c = 1 + a.contrast / 160 + a.highlights / 380 - a.shadows / 420;
+    const s = 1 + a.saturation / 130 + a.vibrance / 220;
+    let f = 'brightness(' + b.toFixed(3) + ') contrast(' + c.toFixed(3) + ') saturate(' + s.toFixed(3) + ')';
+    if (a.shadows) f += ' brightness(' + (1 + a.shadows / 300).toFixed(3) + ')';
+    if (a.temperature > 0) f += ' sepia(' + (a.temperature / 240).toFixed(3) + ')';
+    if (a.temperature < 0) f += ' hue-rotate(' + (a.temperature / 7).toFixed(1) + 'deg)';
+    if (a.blur) f += ' blur(' + (a.blur / 6).toFixed(2) + 'px)';
+    return f;
+  }
+
+  componentDidMount() {
+    const n = document.createElement('canvas'); n.width = 90; n.height = 90;
+    const nx = n.getContext('2d');
+    for (let i = 0; i < 2600; i++) { nx.fillStyle = 'rgba(255,255,255,' + (0.05 + Math.random() * 0.5) + ')'; nx.fillRect(Math.random() * 90, Math.random() * 90, 1.3, 1.3); }
+    this.noiseUrl = n.toDataURL();
+    this.buildStrip();
+    setTimeout(() => this.buildThumbs(), 60);
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); window.removeEventListener('keydown', this.onKey); }
+  onKey = (e) => {
+    const t = e.target && e.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT') return;
+    const mod = e.metaKey || e.ctrlKey;
+    if (mod && (e.key === 'z' || e.key === 'Z')) { e.preventDefault(); if (e.shiftKey) this.redo(); else this.undo(); return; }
+    if (!this.state.sel) return;
+    if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); this.removeLayer(this.state.sel); return; }
+    const nud = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+    if (nud) {
+      e.preventDefault();
+      const l = this.selLayer(), step = (e.shiftKey ? 0.02 : 0.002);
+      this.patch({ x: l.x + nud[0] * step, y: l.y + nud[1] * step * (this.geom().W / this.geom().H) });
+    }
+  };
+  removeLayer = (id) => { this.snap(); this.setState({ layers: this.state.layers.filter(l => l.id !== id), sel: this.state.sel === id ? null : this.state.sel }); };
+  removeAsset = (id) => {
+    delete this.imgs[id];
+    this.snap();
+    const layers = this.state.layers.filter(l => l.assetId !== id);
+    this.setState({ assets: this.state.assets.filter(a => a.id !== id), layers, sel: layers.some(l => l.id === this.state.sel) ? this.state.sel : null });
+  };
+  onResize = () => this.setState({ tick: this.state.tick + 1 });
+
+  buildThumbs = () => {
+    const thumbs = {};
+    this.presets().forEach(p => {
+      const c = document.createElement('canvas'); c.width = 132; c.height = 84;
+      this.paint(c.getContext('2d'), 132, 84, p);
+      thumbs[p.id] = c.toDataURL('image/jpeg', 0.7);
+    });
+    this.setState({ thumbs });
+  };
+
+  buildStrip = (st) => {
+    const s = st || this.state, g = this.geom(s), p = this.presets().find(x => x.id === s.presetId) || this.presets()[0];
+    const w = Math.min(2000, g.W * 0.5), h = w * g.H / g.W;
+    const c = document.createElement('canvas'); c.width = Math.round(w); c.height = Math.round(h);
+    this.paint(c.getContext('2d'), c.width, c.height, p);
+    this.setState({ stripUrl: c.toDataURL('image/jpeg', 0.86) });
+  };
+
+  toast = (m) => { this.setState({ busy: m }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ busy: '' }), 4200); };
+
+  loadFile = async (file) => {
+    let bmp;
+    try { bmp = await createImageBitmap(file); }
+    catch (e) { this.toast(file.name + ': this browser cannot decode that file (HEIC needs Safari)'); return null; }
+    const c = document.createElement('canvas'); c.width = bmp.width; c.height = bmp.height;
+    const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(bmp, 0, 0);
+    const url = c.toDataURL('image/jpeg', 0.92);
+    const id = 'a' + Math.random().toString(36).slice(2, 8);
+    const img = new Image(); img.src = url;
+    try { await img.decode(); } catch (e) {}
+    this.imgs[id] = img;
+    return { id, name: file.name, url, w: bmp.width, h: bmp.height };
+  };
+  ingest = async (files) => {
+    const arr = Array.from(files || []); if (!arr.length) return;
+    this.setState({ busy: 'Converting ' + arr.length + ' file(s) to JPEG…' });
+    const out = [];
+    for (const f of arr) { const a = await this.loadFile(f); if (a) out.push(a); }
+    this.setState({ assets: this.state.assets.concat(out), busy: out.length ? out.length + ' image(s) ready' : this.state.busy });
+    clearTimeout(this._t); this._t = setTimeout(() => this.setState({ busy: '' }), 3000);
+  };
+
+  newLayer = (assetId, xf, yf) => {
+    const a = this.state.assets.find(z => z.id === assetId); if (!a) return;
+    const g = this.geom(), wpx = g.sw * 0.8, wf = wpx / g.W, ar = a.w / a.h;
+    const hf = (wpx / ar) / g.H;
+    const L = {
+      id: 'L' + Math.random().toString(36).slice(2, 7), assetId: a.id,
+      x: Math.max(0, xf - wf / 2), y: Math.max(0, yf - hf / 2), wf, aspect: 'free',
+      scale: 1, rot: 0, fh: false, fv: false, fx: 0.5, fy: 0.5,
+      brightness: 0, contrast: 0, saturation: 0, exposure: 0, highlights: 0, shadows: 0, temperature: 0, vibrance: 0, blur: 0, grain: 0
+    };
+    this.snap();
+    this.setState({ layers: this.state.layers.concat([L]), sel: L.id });
+  };
+  patch = (o) => {
+    const layers = this.state.layers.map(l => l.id === this.state.sel ? Object.assign({}, l, o) : l);
+    this.setState({ layers });
+  };
+  selLayer = () => this.state.layers.find(l => l.id === this.state.sel);
+  arOf = (l) => {
+    const g = this.geom(), a = this.state.assets.find(z => z.id === l.assetId);
+    if (l.aspect === '1:1') return 1;
+    if (l.aspect === '4:5') return 0.8;
+    if (l.aspect === '16:9') return 16 / 9;
+    if (l.aspect === 'slide') return g.sw / g.sh;
+    if (l.aspect === 'strip') return g.W / g.H;
+    return a ? a.w / a.h : 1;
+  };
+
+  boxPx = (l) => {
+    const g = this.geom(), w = l.wf * g.W, h = w / this.arOf(l);
+    return { x: l.x * g.W, y: l.y * g.H, w, h };
+  };
+  coverPx = (l, box) => {
+    const a = this.state.assets.find(z => z.id === l.assetId); if (!a) return null;
+    const iar = a.w / a.h, bar = box.w / box.h;
+    let w, h;
+    if (iar > bar) { h = box.h * l.scale; w = h * iar; } else { w = box.w * l.scale; h = w / iar; }
+    return { w, h, left: (box.w - w) * l.fx, top: (box.h - h) * l.fy };
+  };
+
+  exportAll = async () => {
+    const g = this.geom(), rects = this.rects(g), p = this.preset();
+    for (let i = 0; i < rects.length; i++) {
+      this.setState({ busy: 'Rendering slide ' + (i + 1) + ' of ' + rects.length + '…' });
+      await new Promise(r => setTimeout(r, 16));
+      const R = rects[i];
+      const c = document.createElement('canvas'); c.width = R.w; c.height = R.h;
+      const ctx = c.getContext('2d');
+      ctx.save(); ctx.translate(-R.x, -R.y); this.paint(ctx, g.W, g.H, p); ctx.restore();
+      for (const l of this.state.layers) {
+        if (l.hidden) continue;
+        const img = this.imgs[l.assetId]; if (!img) continue;
+        const b = this.boxPx(l), cv = this.coverPx(l, b); if (!cv) continue;
+        ctx.save(); ctx.translate(-R.x, -R.y);
+        ctx.translate(b.x + b.w / 2, b.y + b.h / 2);
+        ctx.rotate(l.rot * Math.PI / 180);
+        ctx.scale(l.fh ? -1 : 1, l.fv ? -1 : 1);
+        ctx.beginPath(); ctx.rect(-b.w / 2, -b.h / 2, b.w, b.h); ctx.clip();
+        ctx.filter = this.filterOf(l);
+        ctx.drawImage(img, -b.w / 2 + cv.left, -b.h / 2 + cv.top, cv.w, cv.h);
+        ctx.filter = 'none';
+        if (l.grain) {
+          ctx.globalAlpha = l.grain / 220; ctx.globalCompositeOperation = 'overlay';
+          for (let k = 0; k < (b.w * b.h) / 900; k++) {
+            ctx.fillStyle = Math.random() > 0.5 ? '#fff' : '#000';
+            ctx.fillRect(-b.w / 2 + Math.random() * b.w, -b.h / 2 + Math.random() * b.h, 2, 2);
+          }
+        }
+        ctx.restore();
+      }
+      if (this.props.watermark !== false) {
+        const txt = this.props.watermarkText || '© Created by akpixels';
+        const pad = Math.round(c.width * 0.035);
+        ctx.save();
+        ctx.font = '500 ' + Math.round(c.width * 0.026) + 'px "IBM Plex Mono", monospace';
+        ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
+        ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = Math.round(c.width * 0.012);
+        ctx.fillStyle = 'rgba(255,255,255,.72)';
+        ctx.fillText(txt, c.width - pad, c.height - pad);
+        ctx.restore();
+      }
+      const blob = await new Promise(res => c.toBlob(res, 'image/jpeg', 0.94));
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Slide_' + (i + 1) + '.jpg';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 8000);
+      await new Promise(r => setTimeout(r, 260));
+    }
+    this.toast('Exported ' + rects.length + ' × ' + g.sw + '×' + g.sh + ' JPEG');
+  };
+
+  startDrag = (l, e) => {
+    e.preventDefault(); e.stopPropagation();
+    this.snap();
+    this.setState({ sel: l.id });
+    const rect = this.stripEl.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY, ox = l.x, oy = l.y, id = l.id;
+    const move = (ev) => {
+      const dx = (ev.clientX - sx) / rect.width, dy = (ev.clientY - sy) / rect.height;
+      this.setState({ layers: this.state.layers.map(z => z.id === id ? Object.assign({}, z, { x: ox + dx, y: oy + dy }) : z) });
+    };
+    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+    window.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
+  };
+
+  btn = (on, extra) => Object.assign({
+    padding: '6px 9px', borderRadius: '7px', cursor: 'pointer',
+    fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', letterSpacing: '.1em', textTransform: 'uppercase',
+    border: '1px solid ' + (on ? 'rgba(94,231,255,.6)' : 'rgba(255,255,255,.1)'),
+    background: on ? 'rgba(94,231,255,.16)' : 'rgba(255,255,255,.04)',
+    color: on ? '#D9FBFF' : 'rgba(233,238,244,.7)',
+    boxShadow: on ? '0 0 14px rgba(94,231,255,.25)' : 'none'
+  }, extra || {});
+
+  renderVals() {
+    const s = this.state, g = this.geom(), p = this.preset(), sel = this.selLayer();
+    const vals = {
+      slides: s.slides, busy: s.busy, isCarousel: s.mode === 'carousel',
+      presetName: p.catName + ' — ' + p.name,
+      canvasSpec: s.mode === 'grid' ? '3×3 grid · 9 × 1080×1080' : g.n + ' slides · ' + g.sw + '×' + g.sh + ' each',
+      stageEmpty: s.layers.length === 0,
+      hasSel: !!sel, noSel: !sel,
+      stripRef: (el) => { this.stripEl = el; },
+      onSlides: (e) => { const v = +e.target.value; this.setState({ slides: v }, () => this.buildStrip()); },
+      toggleGuides: () => this.setState({ guides: !s.guides }),
+      guidesBtnStyle: this.btn(s.guides),
+      onDragOver: (e) => e.preventDefault(),
+      onDropFiles: (e) => { e.preventDefault(); this.ingest(e.dataTransfer.files); },
+      onPickFiles: (e) => this.ingest(e.target.files),
+      onStageDown: () => this.setState({ sel: null }),
+      onDropStage: (e) => {
+        e.preventDefault();
+        const id = e.dataTransfer.getData('text/asset');
+        const r = this.stripEl.getBoundingClientRect();
+        if (id) this.newLayer(id, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
+        else if (e.dataTransfer.files && e.dataTransfer.files.length) this.ingest(e.dataTransfer.files);
+      },
+      exportAll: this.exportAll,
+      deleteLayer: () => this.removeLayer(s.sel),
+      q: s.q, onSearch: (e) => this.setState({ q: e.target.value }),
+      hasLayers: s.layers.length > 0,
+      undo: this.undo, redo: this.redo,
+      undoStyle: this.btn(false, s.canUndo ? {} : { opacity: 0.4, cursor: 'not-allowed' }),
+      redoStyle: this.btn(false, s.canRedo ? {} : { opacity: 0.4, cursor: 'not-allowed' }),
+      zooms: [['Fit', 1], ['1.5×', 1.5], ['2×', 2], ['3×', 3]].map(([label, z]) => ({
+        label, style: this.btn(s.zoom === z, { padding: '5px 8px', fontSize: '9.5px' }),
+        onClick: () => this.setState({ zoom: z })
+      })),
+      modes: [['carousel', 'Carousel'], ['grid', '3×3 grid']].map(([id, label]) => ({
+        label, style: this.btn(s.mode === id, { padding: '7px 13px', fontSize: '10.5px', borderRadius: '7px' }),
+        onClick: () => this.setState({ mode: id }, () => this.buildStrip())
+      })),
+      stripStyle: {
+        position: 'relative', width: (s.zoom * 100) + '%', flex: '0 0 auto', aspectRatio: g.W + ' / ' + g.H,
+        backgroundImage: s.stripUrl ? 'url(' + s.stripUrl + ')' : 'none',
+        backgroundSize: '100% 100%', borderRadius: '4px', overflow: 'hidden',
+        border: '1px solid rgba(255,255,255,.1)',
+        boxShadow: '0 0 0 1px rgba(94,231,255,.08), 0 26px 60px -24px rgba(0,0,0,.9)'
+      }
+    };
+
+    const q = s.q.trim().toLowerCase();
+    const match = (x) => !q || (x.name + ' ' + x.catName).toLowerCase().indexOf(q) >= 0;
+    vals.presetCount = this.presets().filter(match).length;
+    vals.groups = this.CATS.map(c => ({
+      name: c.name,
+      items: this.presets().filter(x => x.cat === c.id && match(x)).map(x => ({
+        name: x.name,
+        onClick: () => this.setState({ presetId: x.id }, () => this.buildStrip()),
+        thumbStyle: { width: '100%', aspectRatio: '3 / 2', borderRadius: '3px', backgroundImage: s.thumbs[x.id] ? 'url(' + s.thumbs[x.id] + ')' : 'none', backgroundColor: x.pal[0], backgroundSize: 'cover' },
+        style: {
+          padding: '4px', borderRadius: '8px', cursor: 'pointer', textAlign: 'left',
+          border: '1px solid ' + (s.presetId === x.id ? 'rgba(94,231,255,.7)' : 'rgba(255,255,255,.08)'),
+          background: s.presetId === x.id ? 'rgba(94,231,255,.12)' : 'rgba(255,255,255,.03)',
+          boxShadow: s.presetId === x.id ? '0 0 16px rgba(94,231,255,.3)' : 'none'
+        }
+      }))
+    })).filter(gg => gg.items.length);
+
+    vals.assetViews = s.assets.map(a => ({
+      name: a.name,
+      onDragStart: (e) => e.dataTransfer.setData('text/asset', a.id),
+      onClick: () => this.newLayer(a.id, 0.5, 0.5),
+      onDelete: (e) => { e.stopPropagation(); this.removeAsset(a.id); },
+      style: { aspectRatio: '1 / 1', borderRadius: '6px', backgroundImage: 'url(' + a.url + ')', backgroundSize: 'cover', backgroundPosition: 'center', border: '1px solid rgba(255,255,255,.12)', cursor: 'grab' }
+    }));
+
+    const iconBtn = {
+      width: '19px', height: '19px', flex: '0 0 auto', padding: 0, borderRadius: '5px', cursor: 'pointer',
+      border: '1px solid rgba(255,255,255,.12)', background: 'rgba(255,255,255,.05)', color: 'rgba(233,238,244,.8)',
+      fontSize: '10px', lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center'
+    };
+    vals.layerRows = s.layers.map((l, i) => {
+      const a = s.assets.find(z => z.id === l.assetId) || {};
+      const on = l.id === s.sel;
+      const move = (d) => () => {
+        const j = i + d; if (j < 0 || j >= s.layers.length) return;
+        this.snap();
+        const arr = s.layers.slice(); const t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+        this.setState({ layers: arr, sel: l.id });
+      };
+      return {
+        name: (s.layers.length - i) + ' · ' + (a.name || 'image'),
+        eye: l.hidden ? '◌' : '◉',
+        onSelect: () => this.setState({ sel: l.id }),
+        onHide: (e) => { e.stopPropagation(); this.setState({ layers: s.layers.map(z => z.id === l.id ? Object.assign({}, z, { hidden: !z.hidden }) : z) }); },
+        onUp: (e) => { e.stopPropagation(); move(1)(); },
+        onDown: (e) => { e.stopPropagation(); move(-1)(); },
+        onDup: (e) => {
+          e.stopPropagation(); this.snap();
+          const c = Object.assign({}, l, { id: 'L' + Math.random().toString(36).slice(2, 7), x: l.x + 0.01, y: l.y + 0.01 });
+          this.setState({ layers: s.layers.concat([c]), sel: c.id });
+        },
+        onDel: (e) => { e.stopPropagation(); this.removeLayer(l.id); },
+        iconStyle: iconBtn,
+        delIconStyle: Object.assign({}, iconBtn, { border: '1px solid rgba(255,77,157,.45)', background: 'rgba(255,77,157,.12)', color: '#FFB6D4' }),
+        thumbStyle: { width: '20px', height: '20px', flex: '0 0 auto', borderRadius: '4px', backgroundImage: 'url("' + (a.url || '') + '")', backgroundSize: 'cover', backgroundPosition: 'center', opacity: l.hidden ? 0.35 : 1 },
+        style: {
+          display: 'flex', alignItems: 'center', gap: '5px', padding: '5px 6px', borderRadius: '8px', cursor: 'pointer',
+          border: '1px solid ' + (on ? 'rgba(94,231,255,.6)' : 'rgba(255,255,255,.08)'),
+          background: on ? 'rgba(94,231,255,.12)' : 'rgba(255,255,255,.03)',
+          color: on ? '#D9FBFF' : 'rgba(233,238,244,.72)'
+        }
+      };
+    }).reverse();
+
+    vals.layerViews = s.layers.map(l => {
+      const b = this.boxPx(l), cv = this.coverPx(l, b) || { w: 0, h: 0, left: 0, top: 0 };
+      const on = l.id === s.sel;
+      return {
+        src: (s.assets.find(z => z.id === l.assetId) || {}).url || '',
+        onDown: (e) => this.startDrag(l, e),
+        stop: (e) => e.stopPropagation(),
+        onDelete: (e) => { e.stopPropagation(); this.removeLayer(l.id); },
+        delStyle: on ? {
+          position: 'absolute', left: 'calc(' + ((l.x + l.wf) * 100) + '% - 9px)', top: 'calc(' + (l.y * 100) + '% - 9px)',
+          width: '20px', height: '20px', borderRadius: '50%', padding: 0, zIndex: 5,
+          border: '1px solid rgba(255,77,157,.7)', background: 'rgba(13,13,17,.92)', color: '#FFB6D4',
+          fontSize: '13px', lineHeight: 1, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 0 12px rgba(255,77,157,.45)'
+        } : { display: 'none' },
+        boxStyle: {
+          display: l.hidden ? 'none' : 'block',
+          position: 'absolute', left: (l.x * 100) + '%', top: (l.y * 100) + '%',
+          width: (l.wf * 100) + '%', aspectRatio: this.arOf(l) + ' / 1',
+          transform: 'rotate(' + l.rot + 'deg) scaleX(' + (l.fh ? -1 : 1) + ') scaleY(' + (l.fv ? -1 : 1) + ')',
+          overflow: 'hidden', cursor: 'move',
+          outline: on ? '2px solid rgba(94,231,255,.9)' : 'none', outlineOffset: '-1px',
+          boxShadow: on ? '0 0 26px rgba(94,231,255,.35)' : 'none'
+        },
+        imgStyle: {
+          position: 'absolute', width: (cv.w / b.w * 100) + '%', height: (cv.h / b.h * 100) + '%',
+          left: (cv.left / b.w * 100) + '%', top: (cv.top / b.h * 100) + '%',
+          backgroundImage: 'url("' + ((s.assets.find(z => z.id === l.assetId) || {}).url || '') + '")',
+          backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat',
+          filter: this.filterOf(l), userSelect: 'none', pointerEvents: 'none'
+        },
+        grainStyle: l.grain ? { position: 'absolute', inset: 0, backgroundImage: 'url(' + this.noiseUrl + ')', backgroundSize: '28%', opacity: l.grain / 260, mixBlendMode: 'overlay', pointerEvents: 'none' } : { display: 'none' }
+      };
+    });
+
+    const gv = [];
+    if (s.guides) {
+      this.rects(g).forEach((R, i) => {
+        gv.push({
+          label: (s.mode === 'grid' ? 'G' : 'S') + (i + 1),
+          style: { position: 'absolute', left: (R.x / g.W * 100) + '%', top: (R.y / g.H * 100) + '%', width: (R.w / g.W * 100) + '%', height: (R.h / g.H * 100) + '%', borderRight: i % g.cols === g.cols - 1 ? 'none' : '1px dashed rgba(94,231,255,.55)', borderBottom: Math.floor(i / g.cols) === g.rows - 1 ? 'none' : '1px dashed rgba(94,231,255,.55)', pointerEvents: 'none' },
+          labelStyle: { position: 'absolute', left: '6px', top: '5px', fontFamily: "'IBM Plex Mono', monospace", fontSize: '9px', letterSpacing: '.14em', color: '#5EE7FF', background: 'rgba(13,13,17,.6)', padding: '2px 5px', borderRadius: '4px' }
+        });
+      });
+    }
+    vals.guideViews = gv;
+
+    if (sel) {
+      vals.aspects = [['free', 'Free'], ['1:1', '1:1'], ['4:5', '4:5'], ['16:9', '16:9'], ['slide', 'Slide'], ['strip', 'Full strip']].map(([id, label]) => ({
+        label, style: this.btn(sel.aspect === id), onClick: () => { this.snap(); this.patch({ aspect: id }); }
+      }));
+      vals.actions = [
+        { label: 'Flip H', on: sel.fh, onClick: () => this.patch({ fh: !sel.fh }) },
+        { label: 'Flip V', on: sel.fv, onClick: () => this.patch({ fv: !sel.fv }) },
+        { label: 'Center', on: false, onClick: () => { const b = this.boxPx(sel); const gg = this.geom(); this.patch({ x: (gg.W - b.w) / 2 / gg.W, y: (gg.H - b.h) / 2 / gg.H }); } },
+        { label: 'Span all slides', on: false, onClick: () => this.patch({ aspect: 'strip', x: 0, y: 0, wf: 1, scale: 1 }) },
+        { label: 'Reset adj.', on: false, onClick: () => this.patch({ brightness: 0, contrast: 0, saturation: 0, exposure: 0, highlights: 0, shadows: 0, temperature: 0, vibrance: 0, blur: 0, grain: 0 }) }
+      ].map(a => ({ label: a.label, style: this.btn(a.on), onClick: () => { this.snap(); a.onClick(); } }));
+
+      const mk = (key, label, min, max, step, val, fmt, head) => ({
+        label, min, max, step, val, text: fmt,
+        wrapStyle: { marginTop: head ? '16px' : '11px', paddingTop: head ? '12px' : 0, borderTop: head ? '1px solid rgba(255,255,255,.07)' : 'none' },
+        onInput: (e) => this.patch({ [key]: +e.target.value }),
+        onReset: () => { this.snap(); this.patch({ [key]: key === 'scale' ? 1 : (key === 'wf' ? 0.8 * g2.sw / g2.W : (key === 'fx' || key === 'fy' ? 0.5 : 0)) }); }
+      });
+      const g2 = this.geom();
+      const sliders = [
+        mk('wf', 'Size', 0.05, 1, 0.005, sel.wf, (sel.wf * g2.W / g2.sw).toFixed(2) + '× slide', true),
+        mk('scale', 'Zoom', 1, 3, 0.01, sel.scale, sel.scale.toFixed(2) + '×'),
+        mk('rot', 'Rotate', -180, 180, 1, sel.rot, sel.rot + '°'),
+        mk('fx', 'Focal X', 0, 1, 0.01, sel.fx, Math.round(sel.fx * 100) + '%'),
+        mk('fy', 'Focal Y', 0, 1, 0.01, sel.fy, Math.round(sel.fy * 100) + '%')
+      ];
+      this.ADJ.forEach(([k, lab], i) => sliders.push(mk(k, lab, k === 'blur' || k === 'grain' ? 0 : -100, 100, 1, sel[k], String(sel[k]), i === 0)));
+      vals.sliders = sliders;
+    } else {
+      vals.aspects = []; vals.actions = []; vals.sliders = []; vals.layerRows = vals.layerRows || [];
+    }
+    return vals;
+  }
+}
+
+</script>
+</body>
+</html>

@@ -472,13 +472,68 @@ textarea.input { min-height: 90px; resize: vertical; }
   .ak-cur[data-press="1"] { width: 20px; height: 20px; margin: -10px 0 0 -10px; }
   @media (hover: none), (prefers-reduced-motion: reduce) { .ak-cur, .ak-cur-dot { display: none; } }
 
+  /* ── How I can help ─────────────────────────────────────────── */
+  .ak-help-row { margin-top: 30px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(268px, 1fr);
+    gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: 32px;
+    padding: 4px 32px 22px; margin-left: -32px; margin-right: -32px;
+    scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--color-accent) 45%, transparent) transparent; }
+  .ak-help-row::-webkit-scrollbar { height: 6px; }
+  .ak-help-row::-webkit-scrollbar-track { background: color-mix(in srgb, var(--color-text) 8%, transparent); border-radius: 999px; }
+  .ak-help-row::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--color-accent) 45%, transparent); border-radius: 999px; }
+  .ak-help { position: relative; scroll-snap-align: start;
+    display: flex; flex-direction: column; gap: 18px;
+    padding: 24px 22px 26px; border-radius: var(--radius-md);
+    border: 1px solid var(--color-divider);
+    background: color-mix(in srgb, var(--color-surface) 46%, transparent);
+    transition: transform .35s cubic-bezier(.22,.61,.36,1), border-color .35s ease, background .35s ease; }
+  .ak-help:hover { transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--color-accent) 46%, transparent);
+    background: color-mix(in srgb, var(--color-surface) 76%, transparent); }
+  .ak-help-num { position: absolute; top: 20px; right: 20px;
+    font-family: var(--font-heading); font-size: 11px; letter-spacing: 0.16em;
+    color: color-mix(in srgb, var(--color-accent) 72%, transparent); }
+  .ak-help-ico { flex: none; width: 58px; height: 58px; border-radius: 15px; display: grid; place-items: center;
+    color: var(--color-accent); border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+    background: color-mix(in srgb, var(--color-accent) 11%, transparent); }
+  .ak-help-ico svg { width: 29px; height: 29px; }
+  .ak-help-title { font-family: var(--font-heading); font-weight: 400;
+    font-size: 18px; line-height: 1.28; letter-spacing: -0.02em; margin: 0; text-wrap: pretty; }
+  .ak-help-body { font-size: 14px; line-height: 1.55; margin: 0;
+    color: color-mix(in srgb, var(--color-text) 62%, transparent); text-wrap: pretty; }
+
+  /* ── responsive ─────────────────────────────────────────────── */
+  img, svg, canvas { max-width: 100%; }
+  @media (max-width: 1080px) {
+    .ak-cert { position: static !important; margin: 6px 0 0; width: 88px !important; height: 78px !important; transform: rotate(-6deg); }
+  }
+  @media (max-width: 900px) {
+    .ak-nav { gap: 14px !important; font-size: 13px !important; }
+  }
+  @media (max-width: 700px) {
+    main > section, main > sc-if > section, main > div, #work > div, #work > .ak-grid,
+    #contact > div, header > div, footer { padding-left: 20px !important; padding-right: 20px !important; }
+    main > section, main > sc-if > section { padding-top: 48px !important; }
+    .ak-hero { padding-top: 24px !important; padding-bottom: 40px !important; }
+    .ak-help-row { padding-left: 20px; padding-right: 20px; margin-left: -20px; margin-right: -20px; scroll-padding-left: 20px; }
+    .ak-help { padding: 20px 18px 22px; gap: 15px; }
+    .ak-aura { max-width: 300px; margin: 0 auto; }
+    .ak-gate { padding: 24px 20px !important; }
+  }
+  @media (max-width: 560px) {
+    header > div { flex-wrap: wrap; height: auto !important; gap: 10px !important; padding-top: 12px !important; padding-bottom: 12px !important; }
+    .ak-nav { flex: 1 0 100%; justify-content: flex-start !important; }
+    .btn { width: 100%; justify-content: center; }
+    .ak-help-ico { width: 50px; height: 50px; border-radius: 13px; }
+    .ak-help-ico svg { width: 25px; height: 25px; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   }
 </style>
 </helmet>
 
-<div class="ak-weave" data-rhythm="{{ rhythm }}" data-cover="{{ coverTreatment }}" style="position:relative;min-height:100vh;overflow-x:hidden;font-family:var(--font-body);font-size:17px;line-height:1.65">
+<div class="ak-weave" data-rhythm="{{ rhythm }}" data-cover="{{ coverTreatment }}" style="position:relative;min-height:100vh;overflow-x:clip;font-family:var(--font-body);font-size:17px;line-height:1.65">
 
   <a class="ak-skip" href="#main">Skip to content</a>
 
@@ -510,7 +565,8 @@ textarea.input { min-height: 90px; resize: vertical; }
         <span class="ak-sound-eq" data-on="{{ introPlayingStr }}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
         <svg class="ak-sound-ico" width="17" height="17" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M155.51,24.81a8,8,0,0,0-8.42.88L77.25,80H32A16,16,0,0,0,16,96v64a16,16,0,0,0,16,16H77.25l69.84,54.31A8,8,0,0,0,160,224V32A8,8,0,0,0,155.51,24.81ZM32,96H72v64H32ZM144,207.64,88,164.09V91.91l56-43.55Zm54-106.3a40,40,0,0,1,0,53.32,8,8,0,0,1-12-10.58,24,24,0,0,0,0-32.16,8,8,0,1,1,12-10.58Z"></path></svg>
       </button>
-      <nav aria-label="Primary" style="display:flex;gap:20px;font-size:14px">
+      <nav aria-label="Primary" class="ak-nav" style="display:flex;flex-wrap:wrap;justify-content:flex-end;gap:20px;font-size:14px">
+        <a href="#help" data-tip="What I get brought in for" data-tip-pos="below" style="color:color-mix(in srgb, var(--color-text) 66%, transparent)">How I help</a>
         <a href="#work" data-tip="Four case studies" data-tip-pos="below" style="color:color-mix(in srgb, var(--color-text) 66%, transparent)">Work</a>
         <a href="#now" data-tip="What I'm working on" data-tip-pos="below" style="color:color-mix(in srgb, var(--color-text) 66%, transparent)">Right Now</a>
         <a href="#contact" data-tip="Email, LinkedIn, résumé" data-tip-pos="below" style="color:color-mix(in srgb, var(--color-text) 66%, transparent)">Say hello</a>
@@ -519,16 +575,16 @@ textarea.input { min-height: 90px; resize: vertical; }
   </header>
 
   <main id="main"><section id="top" class="ak-hero" style="position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:40px 32px 64px;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:56px;align-items:center">
-   <div style="width: 597px; height: 580px">
+   <div style="min-width:0">
     <div data-reveal="" style="display:flex;align-items:center;gap:20px;margin-bottom:24px">
       <span style="width:86px;height:86px;border-radius:50%;overflow:hidden;flex:none;box-shadow:var(--shadow-sm);display:block">
         
       <img class="ak-img" src="images/headshot.jpg" alt="Ashish Kapoor" style="width:100%;height:100%;object-fit:cover;display:block"></span>
       <span style="font-size:15px;color:color-mix(in srgb, var(--color-text) 58%, transparent);line-height:1.5">Lead CUX Designer at Evalueserve<br>Gurugram, India · Open to conversations</span>
     </div>
-    <h1 data-reveal="" class="ak-h1" style="font-size: clamp(28px,3.4vw,40px); line-height: 1.15; letter-spacing: -0.03em; margin: 0 0 20px; max-width: 24ch; text-wrap: pretty; font-weight: 400; width: 510px; height: 136px">Hey, I'm Ashish Kapoor.<br>I design enterprise software that people use all day.</h1>
-    <div data-reveal="" class="ak-lede" style="max-width: 60ch; display: flex; flex-direction: column; gap: 12px; font-size: 16px; color: color-mix(in srgb, var(--color-text) 80%, transparent); width: 622px; height: 263px">
-      <p style="margin:0;text-wrap:pretty"><span data-path-to-node="6,0"></span></p><p data-path-to-node="4,0" style="width: 500px; height: 123px"><b data-path-to-node="4,0" data-index-in-node="0">HFI Certified Experience Analyst</b> and Enterprise UX Lead with 12+ years scaling products across <b data-path-to-node="4,0" data-index-in-node="97">FinTech, EdTech, and complex data systems</b>. Currently CUX Lead at Evalueserve, leading multiple countries design team building scalable design systems and AI-driven workflows.</p><p data-path-to-node="4,1" style="width: 494px; height: 84px">I embed with users to map real workflows and design minimal interfaces that eliminate manual work. When AI is involved, I design for trust, making source data, confidence levels, and human control crystal clear.</p><span data-path-to-node="6,1"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><source-footnote _nghost-ng-c2584201272="" class="ng-star-inserted"><sup _ngcontent-ng-c2584201272="" class="superscript"><!----></sup></source-footnote><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></span><span data-path-to-node="6,3"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><source-footnote _nghost-ng-c2584201272="" class="ng-star-inserted"><sup _ngcontent-ng-c2584201272="" class="superscript"><!----></sup></source-footnote><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></span><span data-path-to-node="6,5"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><source-footnote _nghost-ng-c2584201272="" class="ng-star-inserted"><sup _ngcontent-ng-c2584201272="" class="superscript"><!----></sup></source-footnote><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></span><span data-path-to-node="6,7"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><source-footnote _nghost-ng-c2584201272="" class="ng-star-inserted"><sup _ngcontent-ng-c2584201272="" class="superscript"><!----></sup></source-footnote><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></span><sources-carousel-inline ng-version="0.0.0-PLACEHOLDER" _nghost-ng-c1337200219=""></sources-carousel-inline><p></p>
+    <h1 data-reveal="" class="ak-h1" style="font-size: clamp(28px,3.4vw,40px); line-height: 1.15; letter-spacing: -0.03em; margin: 0 0 20px; max-width: 24ch; text-wrap: pretty; font-weight: 400">Hey, I'm Ashish Kapoor.<br>I design enterprise software that people use all day.</h1>
+    <div data-reveal="" class="ak-lede" style="max-width: 60ch; display: flex; flex-direction: column; gap: 12px; font-size: 16px; color: color-mix(in srgb, var(--color-text) 80%, transparent)">
+      <p style="margin:0;text-wrap:pretty"><span data-path-to-node="6,0"></span></p><p data-path-to-node="4,0" style="margin:0;text-wrap:pretty"><b data-path-to-node="4,0" data-index-in-node="0">HFI Certified Experience Analyst</b> and Enterprise UX Lead with 12+ years scaling products across <b data-path-to-node="4,0" data-index-in-node="97">FinTech, EdTech, and complex data systems</b>. Currently CUX Lead at Evalueserve, leading multiple countries design team building scalable design systems and AI-driven workflows.</p><p data-path-to-node="4,1" style="margin:0;text-wrap:pretty">I embed with users to map real workflows and design minimal interfaces that eliminate manual work. When AI is involved, I design for trust, making source data, confidence levels, and human control crystal clear.</p><span data-path-to-node="6,1"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><source-footnote _nghost-ng-c2584201272="" class="ng-star-inserted"><sup _ngcontent-ng-c2584201272="" class="superscript"><!----></sup></source-footnote><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></span><span data-path-to-node="6,3"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><source-footnote _nghost-ng-c2584201272="" class="ng-star-inserted"><sup _ngcontent-ng-c2584201272="" class="superscript"><!----></sup></source-footnote><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></span><span data-path-to-node="6,5"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><source-footnote _nghost-ng-c2584201272="" class="ng-star-inserted"><sup _ngcontent-ng-c2584201272="" class="superscript"><!----></sup></source-footnote><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></span><span data-path-to-node="6,7"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><source-footnote _nghost-ng-c2584201272="" class="ng-star-inserted"><sup _ngcontent-ng-c2584201272="" class="superscript"><!----></sup></source-footnote><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></span><sources-carousel-inline ng-version="0.0.0-PLACEHOLDER" _nghost-ng-c1337200219=""></sources-carousel-inline><p></p>
       
     </div>
     <div data-reveal="" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:24px">
@@ -551,9 +607,50 @@ textarea.input { min-height: 90px; resize: vertical; }
      
      <x-import component-from-global-scope="AuraHeader" from="./aura-header.jsx" height="{{ 420 }}" audio-src="{{ introAudio }}" hint-size="100%,420px"></x-import>
    </div>
-  <img src="uploads/pasted-1787419133851-0.png" alt="HFI Certified User Experience Analyst (CXA)" width="104" height="104" style="position: absolute; top: 473px; z-index: 2; width: 108px; height: 96px; object-fit: contain; transform: rotate(-9deg); filter: drop-shadow(0 8px 22px rgba(0,0,0,.55)); left: 513px"></section>
+  <img src="uploads/pasted-1787419133851-0.png" alt="HFI Certified User Experience Analyst (CXA)" width="104" height="104" class="ak-cert" style="position:absolute;top:473px;left:513px;z-index:2;width:108px;height:96px;object-fit:contain;transform:rotate(-9deg);filter:drop-shadow(0 8px 22px rgba(0,0,0,.55))"></section>
 
   <div style="max-width:940px;margin:0 auto;padding:0 32px"><div style="height:1px;background:linear-gradient(to right, transparent, var(--color-divider) 48px, var(--color-divider) calc(100% - 48px), transparent)"></div></div>
+
+  <section id="help" style="max-width:1180px;margin:0 auto;padding:64px 32px 0">
+    <div style="max-width:940px">
+      <h2 data-reveal="" style="font-size:13px;letter-spacing:0.14em;text-transform:uppercase;margin:0 0 12px;color:var(--color-accent)">How I can help</h2>
+      <p data-reveal="" style="max-width:56ch;font-size:17px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 72%, transparent);margin:0;text-wrap:pretty">Four things teams usually bring me in for. Most engagements are some mix of the first two.</p>
+    </div>
+    <div class="ak-help-row" tabindex="0" role="group" aria-label="How I can help, scrollable">
+        <article class="ak-help" style="--i:0">
+          <span class="ak-help-num">01<span style="opacity:.42"> / 04</span></span>
+          <span class="ak-help-ico"><svg width="46" height="46" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg></span>
+          <div style="min-width:0;display:flex;flex-direction:column;gap:14px">
+            <h3 class="ak-help-title">Find the real problem before drawing screens</h3>
+            <p class="ak-help-body">I shadow the people doing the work, map what they actually do, and redesign around the decisions they are paid to make.</p>
+          </div>
+        </article>
+        <article class="ak-help" style="--i:1">
+          <span class="ak-help-num">02<span style="opacity:.42"> / 04</span></span>
+          <span class="ak-help-ico"><svg width="46" height="46" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,40H136V24a8,8,0,0,0-16,0V40H40A16,16,0,0,0,24,56V176a16,16,0,0,0,16,16H79.36L57.75,219a8,8,0,0,0,12.5,10l29.19-36.49a15.71,15.71,0,0,0,.6-.85h56a15.71,15.71,0,0,0,.6.85L185.75,229a8,8,0,0,0,12.5-10l-21.61-27H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,136H40V56H216V176Z"></path></svg></span>
+          <div style="min-width:0;display:flex;flex-direction:column;gap:14px">
+            <h3 class="ak-help-title">Make dense, complex interfaces readable</h3>
+            <p class="ak-help-body">Heavy tables, long queues, deep hierarchies. I design so the screen tells you what to look at first.</p>
+          </div>
+        </article>
+        <article class="ak-help" style="--i:2">
+          <span class="ak-help-num">03<span style="opacity:.42"> / 04</span></span>
+          <span class="ak-help-ico"><svg width="46" height="46" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,144a15.78,15.78,0,0,1-10.42,14.94l-51.65,19-19,51.61a15.92,15.92,0,0,1-29.88,0L78,178l-51.62-19a15.92,15.92,0,0,1,0-29.88l51.65-19,19-51.61a15.92,15.92,0,0,1,29.88,0l19,51.65,51.61,19A15.78,15.78,0,0,1,208,144Z"></path></svg></span>
+          <div style="min-width:0;display:flex;flex-direction:column;gap:14px">
+            <h3 class="ak-help-title">Design AI features people will trust</h3>
+            <p class="ak-help-body">Sources, confidence, and human override made visible, so the model earns its place in the workflow instead of demanding it.</p>
+          </div>
+        </article>
+        <article class="ak-help" style="--i:3">
+          <span class="ak-help-num">04<span style="opacity:.42"> / 04</span></span>
+          <span class="ak-help-ico"><svg width="46" height="46" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,40H48A16,16,0,0,0,32,56v58.78c0,89.61,75.82,119.34,91,124.39a15.53,15.53,0,0,0,10,0c15.2-5.05,91-34.78,91-124.39V56A16,16,0,0,0,208,40Zm-32.7,78.2-56,56a8,8,0,0,1-11.3,0l-24-24a8,8,0,0,1,11.3-11.32L113.66,157.4l50.35-50.34a8,8,0,0,1,11.29,11.31Z"></path></svg></span>
+          <div style="min-width:0;display:flex;flex-direction:column;gap:14px">
+            <h3 class="ak-help-title">Settle arguments with evidence, not opinions</h3>
+            <p class="ak-help-body">HFI-certified research: usability testing, benchmarking, and adoption data that holds up in the review.</p>
+          </div>
+        </article>
+    </div>
+  </section>
 
   <section id="how" style="max-width:1180px;margin:0 auto;padding:56px 32px 0">
     <h2 data-reveal="" style="font-size:13px;letter-spacing:0.14em;text-transform:uppercase;margin:0 0 18px;color:var(--color-accent)">How I work</h2>
@@ -709,7 +806,7 @@ textarea.input { min-height: 90px; resize: vertical; }
           </a>
           <a href="https://www.linkedin.com/in/ashish-kapoor-~-hfi-certified-cxa%E2%84%A2-18aa5a59" target="_blank" rel="noopener" data-tip="Opens LinkedIn in a new tab" style="display:flex;align-items:center;gap:10px">
             <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none"><path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72A12,12,0,0,1,100,84Z"></path></svg>
-            linkedin.com/in/ashish-kapoor-~-hfi-certified-cxa™-18aa5a59
+            <span style="min-width:0;overflow-wrap:anywhere">linkedin.com/in/ashish-kapoor-~-hfi-certified-cxa™-18aa5a59</span>
           </a>
           <a href="uploads/Ashish_Kapoor_UX2026PDF.pdf" download="Ashish_Kapoor_UX2026.pdf" data-tip="PDF, downloads to your device" style="display:flex;align-items:center;gap:10px">
             <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-40.49-71.51a8,8,0,0,1,0,11.31l-26.34,26.35a8,8,0,0,1-11.32,0L95.51,155.8a8,8,0,0,1,11.31-11.31L120,157.67V112a8,8,0,0,1,16,0v45.67l13.17-13.18A8,8,0,0,1,159.51,144.49Z"></path></svg>
@@ -777,7 +874,7 @@ textarea.input { min-height: 90px; resize: vertical; }
   }
 }">
 class Component extends DCLogic {
-  state = { list: [], unlocked: {}, inputs: {}, errors: {}, prompt: null, entered: false, leaving: false, introPlaying: false };
+  state = { list: [], unlocked: {}, inputs: {}, errors: {}, prompt: null, entered: (typeof location !== "undefined" && location.hash && location.hash !== "#top" ? true : (typeof location !== "undefined" && location.hash === "#top")), leaving: false, introPlaying: false };
 
   componentDidMount() {
     // the aura publishes window.__akIntro once its audio graph exists

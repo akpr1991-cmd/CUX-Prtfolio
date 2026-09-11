@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+<style>
+  html, body { margin: 0; padding: 0; background: #161826; color: #e9e9ed; font-family: "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; }
+  ::selection { background: rgba(145,132,217,0.3); }
+  a { color: #9184d9; }
+  a:hover { color: #b5abfc; }
+  input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; }
+  input[type=range]::-webkit-slider-runnable-track { height: 2px; background: #3f424d; border-radius: 2px; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; margin-top: -5px; border-radius: 50%; background: #9184d9; }
+  input[type=range]:focus-visible { outline: 2px solid #9184d9; outline-offset: 3px; }
+  button:focus-visible, [tabindex]:focus-visible { outline: 2px solid #9184d9; outline-offset: 2px; }
+  .scroll::-webkit-scrollbar { width: 8px; }
+  .scroll::-webkit-scrollbar-thumb { background: #3f424d; border-radius: 4px; }
+  .scroll::-webkit-scrollbar-track { background: transparent; }
+  @keyframes sweep { from { transform: translateX(-100%); } to { transform: translateX(320%); } }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+</style>
+</helmet>
+
+<div style="position: fixed; inset: 0; display: flex; flex-direction: column; background: #161826; overflow: hidden;">
+
+  <div style="display: flex; align-items: center; gap: 16.8px; height: 52px; flex: none; padding: 0 16.8px; borderBottom: 1px solid rgba(233,233,237,0.16); background: linear-gradient(#1b1d2c, #161826);">
+    <a href="../../index.html#top" title="Back to portfolio" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:none;padding:5px 10px;border-radius:7px;border:1px solid rgba(233,238,244,.2);color:inherit;text-decoration:none;font-family:system-ui,sans-serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.72;" style-hover="opacity:1;border-color:rgba(233,238,244,.5)"><svg width="13" height="13" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg><span>Portfolio</span></a>
+    <div style="display: flex; align-items: center; gap: 8.4px; padding-right: 16.8px;">
+      <div style="width: 16px; height: 16px; border: 1.5px solid #9184d9; border-radius: 2px; position: relative;">
+        <div style="position: absolute; left: 50%; top: -1.5px; bottom: -1.5px; width: 1.5px; background: #9184d9;"></div>
+      </div>
+      <span style="font-weight: 600; letter-spacing: -0.01em; font-size: 14px;">Volume</span>
+    </div>
+    <div style="display: flex; align-items: baseline; gap: 8.4px; min-width: 0;">
+      <span style="font-size: 13px; color: #e9e9ed; white-space: nowrap;">{{ planName }}</span>
+      <span style="font-size: 11px; color: #75798c; white-space: nowrap;">{{ savedNote }}</span>
+    </div>
+    <div style="flex: 1;"></div>
+    <div style="display: flex; gap: 2.8px; padding: 2.8px; border: 1px solid #3f424d; border-radius: 8px;">
+      <button onClick="{{ setSplit }}" style="{{ tabSplit }}" style-hover="background: #292b31;">Split</button>
+      <button onClick="{{ set2d }}" style="{{ tab2d }}" style-hover="background: #292b31;">Plan</button>
+      <button onClick="{{ set3d }}" style="{{ tab3d }}" style-hover="background: #292b31;">Model</button>
+    </div>
+    <div style="display: flex; gap: 2.8px; padding: 2.8px; border: 1px solid #3f424d; border-radius: 8px;">
+      <button onClick="{{ setL1 }}" style="{{ tabL1 }}" style-hover="background: #292b31;">L1</button>
+      <button onClick="{{ setL2 }}" style="{{ tabL2 }}" style-hover="background: #292b31;">L2</button>
+    </div>
+    <button onClick="{{ enterWalk }}" style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 14px; font-size: 12px; font-family: Inter, sans-serif; font-weight: 500; color: #d2cefd; background: transparent; border: 1px solid #9184d9; border-radius: 8px; cursor: pointer;" style-hover="background: rgba(145,132,217,0.14);">
+      <span style="display: block; width: 7px; height: 7px; border-radius: 50%; background: #9184d9;"></span>Walkthrough</button>
+    <button onClick="{{ backToImport }}" style="height: 30px; padding: 0 12px; font-size: 12px; font-family: Inter, sans-serif; color: #b2b6ca; background: transparent; border: 1px solid #3f424d; border-radius: 8px; cursor: pointer;" style-hover="border-color: #595d6c; color: #e9e9ed;">New plan</button>
+  </div>
+
+  <sc-if value="{{ isImport }}" hint-placeholder-val="{{ true }}">
+    <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); overflow: hidden;">
+      <div class="scroll" style="padding: 56px 56px 40px; overflow: auto;">
+        <div style="max-width: 560px;">
+          <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #75798c; margin-bottom: 16.8px;">New project</div>
+          <h1 style="font-size: 42px; line-height: 1.12; letter-spacing: -0.015em; font-weight: 500; margin: 0 0 11.2px;">Bring in a floor plan.</h1>
+          <p style="font-size: 15px; line-height: 1.55; color: #b2b6ca; margin: 0 0 22.4px; max-width: 46ch; text-wrap: pretty;">Volume reads walls, doors and openings, then extrudes a measured model you can edit, light and walk through.</p>
+
+          <div style="display: flex; gap: 2.8px; padding: 2.8px; border: 1px solid #3f424d; border-radius: 8px; width: fit-content; margin-bottom: 22.4px;">
+            <button onClick="{{ tabUpload }}" style="{{ eUpload }}" style-hover="background: #292b31;">Upload plan</button>
+            <button onClick="{{ tabDraw }}" style="{{ eDraw }}" style-hover="background: #292b31;">Draw walls</button>
+            <button onClick="{{ tabCad }}" style="{{ eCad }}" style-hover="background: #292b31;">CAD / BIM</button>
+            <button onClick="{{ tabScan }}" style="{{ eScan }}" style-hover="background: #292b31;">Room scan</button>
+          </div>
+
+          <div style="border: 1px dashed #595d6c; border-radius: 14px; background: #1c1e2b; padding: 33.6px; display: flex; flex-direction: column; gap: 11.2px; align-items: flex-start;">
+            <div style="display: flex; align-items: center; gap: 11.2px;">
+              <div style="width: 34px; height: 34px; flex: none; border: 1px solid #3f424d; border-radius: 8px; display: grid; place-items: center;">
+                <div style="width: 12px; height: 12px; border: 1.5px solid #9184d9; border-top-color: transparent; border-right-color: transparent;"></div>
+              </div>
+              <div>
+                <div style="font-size: 15px; font-weight: 500;">{{ dropTitle }}</div>
+                <div style="font-size: 12px; color: #75798c;">{{ dropHint }}</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8.4px; flex-wrap: wrap; margin-top: 5.6px;">
+              <button onClick="{{ runDetect }}" style="height: 32px; padding: 0 16px; font-size: 12px; font-family: Inter, sans-serif; font-weight: 500; color: #d2cefd; background: transparent; border: 1px solid #9184d9; border-radius: 8px; cursor: pointer;" style-hover="background: rgba(145,132,217,0.14);">{{ dropCta }}</button>
+              <button onClick="{{ runDetect }}" style="height: 32px; padding: 0 16px; font-size: 12px; font-family: Inter, sans-serif; color: #b2b6ca; background: transparent; border: 1px solid #3f424d; border-radius: 8px; cursor: pointer;" style-hover="border-color: #595d6c; color: #e9e9ed;">Use sample: Maple St · Unit 4</button>
+            </div>
+          </div>
+
+          <sc-if value="{{ detecting }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top: 22.4px; border: 1px solid #3f424d; border-radius: 14px; background: #1c1e2b; padding: 16.8px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8.4px;">
+                <span style="color: #e9e9ed;">{{ detectLabel }}</span>
+                <span style="color: #9184d9; font-variant-numeric: tabular-nums;">{{ detectPct }}</span>
+              </div>
+              <div style="height: 2px; background: #292b31; border-radius: 2px; overflow: hidden;">
+                <div style="{{ detectBar }}"></div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 11.2px;">
+                <sc-for list="{{ detectSteps }}" as="s" hint-placeholder-count="4">
+                  <div style="display: flex; align-items: center; gap: 8.4px; font-size: 11.5px;">
+                    <span style="{{ s.dot }}"></span>
+                    <span style="{{ s.txt }}">{{ s.label }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11.2px; margin-top: 33.6px;">
+            <sc-for list="{{ importFacts }}" as="f" hint-placeholder-count="3">
+              <div style="border-top: 1px solid rgba(233,233,237,0.16); padding-top: 8.4px;">
+                <div style="font-size: 20px; font-weight: 500; letter-spacing: -0.015em;">{{ f.n }}</div>
+                <div style="font-size: 11px; color: #75798c; line-height: 1.4;">{{ f.l }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <div style="position: relative; border-left: 1px solid rgba(233,233,237,0.16); background: radial-gradient(120% 90% at 70% 20%, #1e2131 0%, #14161f 70%); overflow: hidden;">
+        <div style="position: absolute; inset: 0; opacity: 0.5; background-image: linear-gradient(rgba(145,132,217,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(145,132,217,0.07) 1px, transparent 1px); background-size: 28px 28px;"></div>
+        <div style="{{ heroStage }}">
+          <div style="{{ heroWorld }}">{{ heroFaces }}</div>
+        </div>
+        <div style="position: absolute; left: 22.4px; bottom: 22.4px; font-size: 11px; color: #75798c; letter-spacing: 0.04em;">{{ heroCaption }}</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isWork }}" hint-placeholder-val="{{ false }}">
+    <div style="flex: 1; min-height: 0; display: flex; overflow: hidden;">
+
+      <div style="width: 46px; flex: none; border-right: 1px solid rgba(233,233,237,0.16); background: #1a1c29; display: flex; flex-direction: column; align-items: center; padding: 8.4px 0; gap: 2.8px;">
+        <sc-for list="{{ tools }}" as="t" hint-placeholder-count="6">
+          <button onClick="{{ t.pick }}" title="{{ t.label }}" style="{{ t.st }}" style-hover="background: #292b31;">{{ t.icon }}</button>
+        </sc-for>
+        <div style="flex: 1;"></div>
+        <div style="font-size: 9px; color: #595d6c; writing-mode: vertical-rl; letter-spacing: 0.14em; text-transform: uppercase;">1:50</div>
+      </div>
+
+      <div style="{{ paneWrap }}">
+
+        <div style="{{ pane2d }}">
+          <div style="position: absolute; inset: 0; opacity: 0.45; background-image: linear-gradient(rgba(233,233,237,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(233,233,237,0.05) 1px, transparent 1px); background-size: 24px 24px;"></div>
+          <div style="position: absolute; left: 11.2px; top: 11.2px; z-index: 3; display: flex; align-items: center; gap: 8.4px;">
+            <span style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #75798c;">Plan · Level {{ levelNum }}</span>
+            <span style="{{ toolPill }}">{{ toolHint }}</span>
+          </div>
+          {{ planSvg }}
+          <sc-if value="{{ emptyLevel }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; inset: 0; z-index: 4; display: grid; place-items: center; background: rgba(20,22,31,0.86);">
+              <div style="text-align: center; max-width: 260px;">
+                <div style="font-size: 20px; font-weight: 500; margin-bottom: 5.6px;">Level 2 is empty</div>
+                <p style="font-size: 12px; color: #75798c; margin: 0 0 16.8px;">Trace the level below as a starting shell, or import a second sheet.</p>
+                <button onClick="{{ traceLevel }}" style="height: 32px; padding: 0 16px; font-size: 12px; font-family: Inter, sans-serif; font-weight: 500; color: #d2cefd; background: transparent; border: 1px solid #9184d9; border-radius: 8px; cursor: pointer;" style-hover="background: rgba(145,132,217,0.14);">Trace from Level 1</button>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="{{ pane3d }}" onMouseDown="{{ orbitDown }}">
+          <div style="position: absolute; left: 11.2px; top: 11.2px; z-index: 3; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #75798c;">Model · {{ shadeLabel }}</div>
+          <div style="{{ isoStage }}">
+            <div style="{{ isoWorld }}">{{ faces3d }}</div>
+          </div>
+          <div style="position: absolute; right: 11.2px; bottom: 11.2px; z-index: 3; display: flex; gap: 5.6px;">
+            <button onClick="{{ zoomOut }}" style="width: 26px; height: 26px; font-size: 14px; color: #b2b6ca; background: rgba(22,24,38,0.8); border: 1px solid #3f424d; border-radius: 8px; cursor: pointer; line-height: 1;" style-hover="border-color: #9184d9; color: #e9e9ed;">–</button>
+            <button onClick="{{ zoomIn }}" style="width: 26px; height: 26px; font-size: 14px; color: #b2b6ca; background: rgba(22,24,38,0.8); border: 1px solid #3f424d; border-radius: 8px; cursor: pointer; line-height: 1;" style-hover="border-color: #9184d9; color: #e9e9ed;">+</button>
+            <button onClick="{{ resetView }}" style="height: 26px; padding: 0 10px; font-size: 11px; font-family: Inter, sans-serif; color: #b2b6ca; background: rgba(22,24,38,0.8); border: 1px solid #3f424d; border-radius: 8px; cursor: pointer;" style-hover="border-color: #9184d9; color: #e9e9ed;">Reset</button>
+          </div>
+          <div style="position: absolute; left: 11.2px; bottom: 11.2px; z-index: 3; font-size: 10.5px; color: #595d6c;">Drag to orbit</div>
+        </div>
+      </div>
+
+      <div class="scroll" style="width: 292px; flex: none; border-left: 1px solid rgba(233,233,237,0.16); background: #1a1c29; overflow: auto;">
+
+        <div style="padding: 16.8px; border-bottom: 1px solid rgba(233,233,237,0.16);">
+          <div style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #75798c; margin-bottom: 8.4px;">Selection</div>
+          <div style="font-size: 25px; font-weight: 500; letter-spacing: -0.015em; line-height: 1.12;">{{ selName }}</div>
+          <div style="display: flex; gap: 16.8px; margin-top: 11.2px;">
+            <div>
+              <div style="font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums;">{{ selArea }}</div>
+              <div style="font-size: 10px; color: #75798c;">Floor area</div>
+            </div>
+            <div>
+              <div style="font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums;">{{ selDims }}</div>
+              <div style="font-size: 10px; color: #75798c;">Dimensions</div>
+            </div>
+            <div>
+              <div style="font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums;">{{ selVol }}</div>
+              <div style="font-size: 10px; color: #75798c;">Volume</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 5.6px; flex-wrap: wrap; margin-top: 16.8px;">
+            <sc-for list="{{ materials }}" as="m" hint-placeholder-count="4">
+              <button onClick="{{ m.pick }}" style="{{ m.st }}" style-hover="border-color: #9184d9;">
+                <span style="{{ m.sw }}"></span>{{ m.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding: 16.8px; border-bottom: 1px solid rgba(233,233,237,0.16); display: flex; flex-direction: column; gap: 11.2px;">
+          <div style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #75798c;">Structure</div>
+          <label style="display: block;">
+            <span style="display: flex; justify-content: space-between; font-size: 12px; color: #b2b6ca; margin-bottom: 5.6px;">Wall height<span style="color: #e9e9ed; font-variant-numeric: tabular-nums;">{{ wallHLabel }}</span></span>
+            <input type="range" min="200" max="420" step="5" value="{{ wallH }}" onChange="{{ setWallH }}" style="width: 100%;" />
+          </label>
+          <label style="display: block;">
+            <span style="display: flex; justify-content: space-between; font-size: 12px; color: #b2b6ca; margin-bottom: 5.6px;">Wall thickness<span style="color: #e9e9ed; font-variant-numeric: tabular-nums;">{{ wallTLabel }}</span></span>
+            <input type="range" min="8" max="34" step="1" value="{{ wallT }}" onChange="{{ setWallT }}" style="width: 100%;" />
+          </label>
+        </div>
+
+        <div style="padding: 16.8px; border-bottom: 1px solid rgba(233,233,237,0.16); display: flex; flex-direction: column; gap: 11.2px;">
+          <div style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #75798c;">Daylight</div>
+          <label style="display: block;">
+            <span style="display: flex; justify-content: space-between; font-size: 12px; color: #b2b6ca; margin-bottom: 5.6px;">Time of day<span style="color: #e9e9ed; font-variant-numeric: tabular-nums;">{{ hourLabel }}</span></span>
+            <input type="range" min="5" max="21" step="1" value="{{ hour }}" onChange="{{ setHour }}" style="width: 100%;" />
+          </label>
+          <div style="display: flex; justify-content: space-between; font-size: 10.5px; color: #595d6c;">
+            <span>Sun {{ sunAzLabel }}</span><span>Alt {{ sunElLabel }}</span>
+          </div>
+        </div>
+
+        <div style="padding: 16.8px; border-bottom: 1px solid rgba(233,233,237,0.16);">
+          <div style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #75798c; margin-bottom: 11.2px;">Layers</div>
+          <div style="display: flex; flex-direction: column; gap: 2.8px;">
+            <sc-for list="{{ layers }}" as="l" hint-placeholder-count="5">
+              <button onClick="{{ l.toggle }}" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 5.6px 8.4px; font-size: 12px; font-family: Inter, sans-serif; color: #e9e9ed; background: transparent; border: 0; border-radius: 8px; cursor: pointer; text-align: left;" style-hover="background: #232532;">
+                <span style="{{ l.txt }}">{{ l.label }}</span>
+                <span style="{{ l.sw }}"><span style="{{ l.knob }}"></span></span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding: 16.8px; border-bottom: 1px solid rgba(233,233,237,0.16);">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 11.2px;">
+            <div style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #75798c;">Furniture</div>
+            <div style="font-size: 10px; color: #595d6c;">adds to {{ selName }}</div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5.6px;">
+            <sc-for list="{{ catalog }}" as="c" hint-placeholder-count="8">
+              <button onClick="{{ c.add }}" style="display: flex; flex-direction: column; gap: 5.6px; padding: 8.4px; background: #1e2029; border: 1px solid #292b31; border-radius: 8px; cursor: pointer; text-align: left; font-family: Inter, sans-serif;" style-hover="border-color: #9184d9; background: #232532;">
+                <span style="{{ c.glyph }}"></span>
+                <span style="font-size: 11.5px; color: #e9e9ed;">{{ c.name }}</span>
+                <span style="font-size: 10px; color: #75798c;">{{ c.meta }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <sc-if value="{{ showCost }}" hint-placeholder-val="{{ true }}">
+          <div style="padding: 16.8px;">
+            <div style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #75798c; margin-bottom: 11.2px;">Estimate</div>
+            <div style="display: flex; flex-direction: column; gap: 5.6px;">
+              <sc-for list="{{ costLines }}" as="c" hint-placeholder-count="4">
+                <div style="display: flex; justify-content: space-between; font-size: 12px;">
+                  <span style="color: #b2b6ca;">{{ c.label }}</span>
+                  <span style="color: #e9e9ed; font-variant-numeric: tabular-nums;">{{ c.val }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 11.2px; padding-top: 8.4px; border-top: 1px solid rgba(233,233,237,0.16);">
+              <span style="font-size: 12px; color: #b2b6ca;">Total</span>
+              <span style="font-size: 20px; font-weight: 500; font-variant-numeric: tabular-nums;">{{ costTotal }}</span>
+            </div>
+            <div style="font-size: 10px; color: #595d6c; margin-top: 5.6px; line-height: 1.4;">Indicative only — regional rates, finishes at mid grade.</div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <div style="height: 26px; flex: none; display: flex; align-items: center; gap: 16.8px; padding: 0 16.8px; border-top: 1px solid rgba(233,233,237,0.16); background: #17192500; font-size: 10.5px; color: #75798c;">
+      <span>{{ statusScale }}</span>
+      <span>{{ statusWalls }}</span>
+      <span>{{ statusArea }}</span>
+      <div style="flex: 1;"></div>
+      <span style="color: #9184d9;">{{ statusMeasure }}</span>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isWalk }}" hint-placeholder-val="{{ false }}">
+    <div style="flex: 1; min-height: 0; position: relative; overflow: hidden; background: #0f111a;">
+      <div style="{{ walkStage }}">
+        <div style="{{ walkWorld }}">{{ walkFaces }}</div>
+      </div>
+      <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(85% 80% at 50% 52%, transparent 45%, rgba(10,11,18,0.55) 100%);"></div>
+      <div style="position: absolute; left: 22.4px; top: 22.4px; display: flex; flex-direction: column; gap: 5.6px;">
+        <div style="font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #9184d9;">Walkthrough</div>
+        <div style="font-size: 20px; font-weight: 500;">{{ walkRoom }}</div>
+        <div style="font-size: 11px; color: #75798c; font-variant-numeric: tabular-nums;">{{ walkCoords }}</div>
+      </div>
+      <div style="position: absolute; left: 22.4px; bottom: 22.4px; display: flex; align-items: center; gap: 11.2px;">
+        <div style="display: flex; gap: 4px;">
+          <sc-for list="{{ walkKeys }}" as="k" hint-placeholder-count="6">
+            <span style="{{ k.st }}">{{ k.label }}</span>
+          </sc-for>
+        </div>
+        <span style="font-size: 11px; color: #75798c;">move · turn</span>
+      </div>
+      <button onClick="{{ exitWalk }}" style="position: absolute; right: 22.4px; top: 22.4px; height: 30px; padding: 0 14px; font-size: 12px; font-family: Inter, sans-serif; font-weight: 500; color: #d2cefd; background: rgba(22,24,38,0.7); border: 1px solid #9184d9; border-radius: 8px; cursor: pointer;" style-hover="background: rgba(145,132,217,0.18);">Exit to editor</button>
+      <div style="position: absolute; right: 22.4px; bottom: 22.4px; width: 148px; padding: 8.4px; background: rgba(22,24,38,0.82); border: 1px solid #3f424d; border-radius: 8px;">
+        <div style="font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #75798c; margin-bottom: 5.6px;">Position</div>
+        {{ miniMap }}
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;planName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Maple St · Unit 4&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;wallHeightCm&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:260,&quot;min&quot;:200,&quot;max&quot;:420,&quot;step&quot;:5,&quot;unit&quot;:&quot;cm&quot;,&quot;tsType&quot;:&quot;number&quot;},&quot;showCostPanel&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;import&quot;,&quot;workspace&quot;],&quot;default&quot;:&quot;import&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const PX = 0.62, W = 820, H = 760;
+const R = React.createElement;
+
+const ROOMS = [
+  { id: 'living', name: 'Living Room', x: 0, y: 0, w: 520, h: 420, mat: 'oak' },
+  { id: 'kitchen', name: 'Kitchen', x: 520, y: 0, w: 300, h: 250, mat: 'tile' },
+  { id: 'hall', name: 'Hall', x: 520, y: 250, w: 300, h: 170, mat: 'tile' },
+  { id: 'bed', name: 'Bedroom', x: 0, y: 420, w: 340, h: 340, mat: 'carpet' },
+  { id: 'bath', name: 'Bath', x: 340, y: 420, w: 260, h: 340, mat: 'stone' },
+  { id: 'study', name: 'Study', x: 600, y: 420, w: 220, h: 340, mat: 'oak' }
+];
+
+const WALLS = [
+  [0, 0, 820, 0, 1], [0, 0, 0, 760, 1], [0, 760, 820, 760, 1],
+  [820, 0, 820, 300, 1], [820, 390, 820, 760, 1],
+  [520, 0, 520, 300, 0], [520, 390, 520, 420, 0],
+  [520, 250, 600, 250, 0], [690, 250, 820, 250, 0],
+  [0, 420, 120, 420, 0], [210, 420, 430, 420, 0], [520, 420, 660, 420, 0], [750, 420, 820, 420, 0],
+  [340, 420, 340, 760, 0], [600, 420, 600, 760, 0]
+];
+
+const DOORS = [
+  { x: 520, y: 300, tx: 0, ty: 1, nx: -1, ny: 0, w: 90 },
+  { x: 600, y: 250, tx: 1, ty: 0, nx: 0, ny: 1, w: 90 },
+  { x: 120, y: 420, tx: 1, ty: 0, nx: 0, ny: 1, w: 90 },
+  { x: 430, y: 420, tx: 1, ty: 0, nx: 0, ny: 1, w: 90 },
+  { x: 660, y: 420, tx: 1, ty: 0, nx: 0, ny: 1, w: 90 },
+  { x: 820, y: 300, tx: 0, ty: 1, nx: -1, ny: 0, w: 90, entry: 1 }
+];
+
+const WINDOWS = [
+  [100, 0, 300, 0], [350, 0, 470, 0], [600, 0, 760, 0],
+  [80, 760, 260, 760], [400, 760, 500, 760],
+  [820, 470, 820, 640], [0, 120, 0, 300]
+];
+
+const FURN = [
+  { r: 'living', t: 'Sofa', x: 60, y: 60, w: 220, d: 90, h: 78, p: 1850 },
+  { r: 'living', t: 'Coffee table', x: 110, y: 210, w: 120, d: 60, h: 40, p: 420 },
+  { r: 'living', t: 'Media unit', x: 60, y: 330, w: 240, d: 45, h: 52, p: 690 },
+  { r: 'living', t: 'Planter', x: 430, y: 60, w: 50, d: 50, h: 140, p: 160 },
+  { r: 'kitchen', t: 'Counter run', x: 535, y: 20, w: 265, d: 62, h: 92, p: 4200 },
+  { r: 'kitchen', t: 'Island', x: 570, y: 150, w: 180, d: 70, h: 95, p: 2300 },
+  { r: 'hall', t: 'Bench', x: 545, y: 285, w: 160, d: 45, h: 46, p: 320 },
+  { r: 'bed', t: 'Bed', x: 70, y: 480, w: 180, d: 210, h: 56, p: 1400 },
+  { r: 'bed', t: 'Wardrobe', x: 250, y: 470, w: 80, d: 190, h: 205, p: 1750 },
+  { r: 'bed', t: 'Nightstand', x: 15, y: 480, w: 44, d: 44, h: 52, p: 210 },
+  { r: 'bath', t: 'Tub', x: 355, y: 440, w: 225, d: 78, h: 56, p: 1250 },
+  { r: 'bath', t: 'Vanity', x: 355, y: 620, w: 62, d: 46, h: 86, p: 780 },
+  { r: 'bath', t: 'WC', x: 505, y: 640, w: 44, d: 62, h: 76, p: 460 },
+  { r: 'study', t: 'Desk', x: 620, y: 450, w: 180, d: 70, h: 74, p: 890 },
+  { r: 'study', t: 'Chair', x: 690, y: 540, w: 54, d: 54, h: 96, p: 340 },
+  { r: 'study', t: 'Shelving', x: 620, y: 665, w: 180, d: 38, h: 190, p: 720 }
+];
+
+const CATALOG = [
+  { name: 'Sofa', w: 210, d: 88, h: 78, p: 1850 },
+  { name: 'Dining table', w: 160, d: 90, h: 74, p: 980 },
+  { name: 'Bed, queen', w: 160, d: 210, h: 56, p: 1400 },
+  { name: 'Wardrobe', w: 120, d: 60, h: 205, p: 1750 },
+  { name: 'Desk', w: 140, d: 68, h: 74, p: 890 },
+  { name: 'Armchair', w: 82, d: 84, h: 84, p: 640 },
+  { name: 'Shelving', w: 90, d: 34, h: 190, p: 480 },
+  { name: 'Planter', w: 50, d: 50, h: 140, p: 160 }
+];
+
+const MATS = {
+  oak: { label: 'Oak', L: 0.5, C: 0.035, Hu: 68, rate: 92 },
+  tile: { label: 'Tile', L: 0.46, C: 0.008, Hu: 250, rate: 78 },
+  carpet: { label: 'Carpet', L: 0.42, C: 0.014, Hu: 300, rate: 54 },
+  stone: { label: 'Stone', L: 0.53, C: 0.005, Hu: 240, rate: 118 }
+};
+
+const DETECT_STEPS = ['Rasterising sheet', 'Vectorising wall lines', 'Snapping to orthogonal grid', 'Classifying doors and openings', 'Extruding to 260 cm'];
+
+const ENTRY_COPY = {
+  Upload: ['Drop a PDF, PNG or JPG', 'Scanned sheets welcome — up to 40 MB', 'Choose a file'],
+  Draw: ['Start on a blank grid', 'Click to place wall runs, double-click to close a room', 'Open the canvas'],
+  CAD: ['Drop a DWG, DXF or IFC', 'Layers and room names are read from the file', 'Choose a file'],
+  Scan: ['Scan with your phone', 'Pair a device and sweep each room once', 'Show pairing code']
+};
+
+function ok(L, C, Hu) { return 'oklch(' + Math.max(0.06, Math.min(0.94, L)).toFixed(3) + ' ' + C.toFixed(3) + ' ' + Hu + ')'; }
+
+class Component extends DCLogic {
+  state = {
+    screen: null, entry: 'Upload', detecting: false, prog: 0,
+    view: 'split', level: 1, level2: false,
+    tool: 'select', sel: 'living', mats: {},
+    rot: -28, tilt: 58, zoom: 0.92,
+    wallH: null, wallT: 18, hour: 14,
+    layers: { rooms: true, walls: true, openings: true, furniture: true, dims: true },
+    furn: FURN.slice(), mp: [],
+    cam: { x: 260, y: 200, yaw: 180, pitch: -4 },
+    heroSpin: -34
+  };
+
+  componentDidMount() {
+    this._key = (e) => {
+      if (this.state.screen !== 'walk') return;
+      const k = e.key.toLowerCase();
+      const map = { w: 'f', arrowup: 'f', s: 'b', arrowdown: 'b', a: 'l', arrowleft: 'l', d: 'r', arrowright: 'r' };
+      const m = map[k];
+      if (!m) { if (k === 'escape') this.setState({ screen: 'work' }); return; }
+      e.preventDefault();
+      this.step(m, e.shiftKey);
+    };
+    window.addEventListener('keydown', this._key);
+    this._hero = setInterval(() => {
+      if (this.scr() === 'import') this.setState((s) => ({ heroSpin: s.heroSpin + 0.28 }));
+    }, 60);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this._key); clearInterval(this._hero); clearInterval(this._det); }
+
+  scr() { return this.state.screen || (this.props.startScreen === 'workspace' ? 'work' : 'import'); }
+  wh() { return this.state.wallH || this.props.wallHeightCm || 260; }
+
+  step(m, fast) {
+    const d = fast ? 34 : 18;
+    this.setState((s) => {
+      const c = { ...s.cam };
+      if (m === 'l') c.yaw -= 6;
+      else if (m === 'r') c.yaw += 6;
+      else {
+        const a = c.yaw * Math.PI / 180;
+        const fx = -Math.sin(a), fy = -Math.cos(a), k = m === 'f' ? d : -d;
+        c.x = Math.max(20, Math.min(W - 20, c.x + fx * k));
+        c.y = Math.max(20, Math.min(H - 20, c.y + fy * k));
+      }
+      return { cam: c };
+    });
+  }
+
+  detect() {
+    clearInterval(this._det);
+    this.setState({ detecting: true, prog: 0 });
+    this._det = setInterval(() => {
+      this.setState((s) => {
+        const p = s.prog + 0.055;
+        if (p >= 1.08) { clearInterval(this._det); return { prog: 1, detecting: false, screen: 'work' }; }
+        return { prog: p };
+      });
+    }, 90);
+  }
+
+  orbit(e) {
+    e.preventDefault();
+    const sx = e.clientX, sy = e.clientY, r0 = this.state.rot, t0 = this.state.tilt;
+    const mv = (ev) => this.setState({ rot: r0 + (ev.clientX - sx) * 0.42, tilt: Math.max(14, Math.min(86, t0 - (ev.clientY - sy) * 0.28)) });
+    const up = () => { window.removeEventListener('mousemove', mv); window.removeEventListener('mouseup', up); };
+    window.addEventListener('mousemove', mv); window.addEventListener('mouseup', up);
+  }
+
+  sun() {
+    const f = (this.state.hour - 5) / 16;
+    const az = (-118 + f * 236) * Math.PI / 180;
+    const el = Math.max(0, Math.sin(Math.PI * f)) * 66 * Math.PI / 180;
+    return { dx: Math.cos(az), dy: Math.sin(az), el, azDeg: Math.round(-118 + f * 236), elDeg: Math.round(el * 180 / Math.PI) };
+  }
+  amb() { const s = this.sun(); return 0.5 + 0.42 * Math.sin(s.el); }
+
+  matOf(r) { return this.state.mats[r.id] || r.mat; }
+
+  faces(mode) {
+    const s = this.sun(), amb = this.amb(), L = this.state.layers, wh = this.wh(), wt = this.state.wallT;
+    const out = [];
+    const lit = (nx, ny) => amb + 0.5 * Math.max(0, nx * s.dx + ny * s.dy) * Math.cos(s.el);
+    const topLit = amb + 0.46 * Math.sin(s.el);
+    const base = { position: 'absolute', left: 0, top: 0, transformOrigin: '0 0', backfaceVisibility: 'visible' };
+    const push = (k, st) => out.push(R('div', { key: k, style: { ...base, ...st } }));
+
+    if (L.rooms && mode !== 'walk') ROOMS.forEach((r) => {
+      const m = MATS[this.matOf(r)], on = this.state.sel === r.id;
+      const b = topLit * 1.02;
+      push('f' + r.id, {
+        width: r.w * PX + 'px', height: r.h * PX + 'px',
+        transform: 'translate3d(' + r.x * PX + 'px,' + r.y * PX + 'px,0)',
+        background: on ? 'color-mix(in oklab, ' + ok(m.L * b, m.C, m.Hu) + ' 72%, #9184d9)' : ok(m.L * b, m.C, m.Hu),
+        boxShadow: on ? 'inset 0 0 0 1px #b5abfc' : 'inset 0 0 0 1px rgba(0,0,0,0.35)'
+      });
+    });
+
+    if (L.rooms && mode === 'walk') {
+      // CSS drops planes that straddle the eye plane, so slabs are tiled.
+      const T = 100;
+      ROOMS.forEach((r) => {
+        const m = MATS[this.matOf(r)];
+        const nx2 = Math.ceil(r.w / T), ny2 = Math.ceil(r.h / T);
+        for (let i = 0; i < nx2; i++) for (let j = 0; j < ny2; j++) {
+          const x = r.x + i * T, y = r.y + j * T;
+          const w = Math.min(T, r.x + r.w - x), d = Math.min(T, r.y + r.h - y);
+          push('ft' + r.id + i + j, {
+            width: w * PX + 0.4 + 'px', height: d * PX + 0.4 + 'px',
+            transform: 'translate3d(' + x * PX + 'px,' + y * PX + 'px,0)',
+            background: ok(m.L * topLit * 0.96, m.C, m.Hu)
+          });
+          push('ct' + r.id + i + j, {
+            width: w * PX + 0.4 + 'px', height: d * PX + 0.4 + 'px',
+            transform: 'translate3d(' + x * PX + 'px,' + y * PX + 'px,' + wh * PX + 'px)',
+            background: ok(0.34 + 0.07 * amb, 0.005, 275)
+          });
+        }
+      });
+    }
+
+    if (L.walls) WALLS.forEach((w, i) => {
+      const dx = w[2] - w[0], dy = w[3] - w[1];
+      const len = Math.hypot(dx, dy), a = Math.atan2(dy, dx), ad = a * 180 / Math.PI;
+      const nx = -Math.sin(a), ny = Math.cos(a);
+      const hh = w[4] ? wh : wh - 2;
+      const c1 = ok(0.44 * lit(nx, ny), 0.006, 275), c2 = ok(0.44 * lit(-nx, -ny), 0.006, 275);
+      const geo = (off, deg) => 'translate3d(' + (w[0] + nx * off) * PX + 'px,' + (w[1] + ny * off) * PX + 'px,0) rotateZ(' + ad + 'deg) rotateX(90deg)';
+      push('wa' + i, { width: len * PX + 'px', height: hh * PX + 'px', transform: geo(-wt / 2), background: c1 });
+      push('wb' + i, { width: len * PX + 'px', height: hh * PX + 'px', transform: geo(wt / 2), background: c2 });
+      push('wc' + i, {
+        width: len * PX + 'px', height: wt * PX + 'px',
+        transform: 'translate3d(' + (w[0] + nx * -wt / 2) * PX + 'px,' + (w[1] + ny * -wt / 2) * PX + 'px,' + hh * PX + 'px) rotateZ(' + ad + 'deg)',
+        background: ok(0.5 * topLit, 0.006, 275)
+      });
+    });
+
+    if (L.openings) {
+      DOORS.forEach((d, i) => {
+        const ad = Math.atan2(d.ty, d.tx) * 180 / Math.PI;
+        const top = 205, hh = Math.max(2, wh - top);
+        [-wt / 2, wt / 2].forEach((off, j) => {
+          push('dl' + i + j, {
+            width: d.w * PX + 'px', height: hh * PX + 'px',
+            transform: 'translate3d(' + (d.x + d.nx * off) * PX + 'px,' + (d.y + d.ny * off) * PX + 'px,0) rotateZ(' + ad + 'deg) rotateX(90deg) translate(0,' + top * PX + 'px)',
+            background: ok(0.4 * lit(d.nx * (j ? -1 : 1), d.ny * (j ? -1 : 1)), 0.006, 275)
+          });
+        });
+        if (d.entry) push('dm' + i, {
+          width: d.w * PX + 'px', height: 6 * PX + 'px',
+          transform: 'translate3d(' + d.x * PX + 'px,' + d.y * PX + 'px,0.4px) rotateZ(' + ad + 'deg)',
+          background: '#9184d9', opacity: 0.55
+        });
+      });
+      WINDOWS.forEach((w, i) => {
+        const a = Math.atan2(w[3] - w[1], w[2] - w[0]), ad = a * 180 / Math.PI, len = Math.hypot(w[2] - w[0], w[3] - w[1]);
+        const nx = -Math.sin(a), ny = Math.cos(a);
+        const glow = Math.sin(this.sun().el) > 0.08 ? 0.86 : 0.3;
+        [-wt / 2 - 0.6, wt / 2 + 0.6].forEach((off, j) => {
+          push('wn' + i + j, {
+            width: len * PX + 'px', height: 132 * PX + 'px',
+            transform: 'translate3d(' + (w[0] + nx * off) * PX + 'px,' + (w[1] + ny * off) * PX + 'px,0) rotateZ(' + ad + 'deg) rotateX(90deg) translate(0,' + 90 * PX + 'px)',
+            background: 'oklch(' + (0.4 + 0.19 * glow).toFixed(3) + ' 0.035 250)',
+            boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.4)', opacity: 0.95
+          });
+        });
+      });
+    }
+
+    if (L.furniture) this.state.furn.forEach((f, i) => {
+      const m = { L: 0.44, C: 0.02, Hu: 60 };
+      const bx = f.x * PX, by = f.y * PX, w = f.w * PX, d = f.d * PX, h = f.h * PX;
+      push('ft' + i, { width: w + 'px', height: d + 'px', transform: 'translate3d(' + bx + 'px,' + by + 'px,' + h + 'px)', background: ok(m.L * topLit * 1.06, m.C, m.Hu), boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.4)' });
+      push('fn' + i, { width: w + 'px', height: h + 'px', transform: 'translate3d(' + bx + 'px,' + by + 'px,0) rotateX(90deg)', background: ok(m.L * lit(0, -1), m.C, m.Hu) });
+      push('fs' + i, { width: w + 'px', height: h + 'px', transform: 'translate3d(' + bx + 'px,' + (by + d) + 'px,0) rotateX(90deg)', background: ok(m.L * lit(0, 1), m.C, m.Hu) });
+      push('fw' + i, { width: d + 'px', height: h + 'px', transform: 'translate3d(' + bx + 'px,' + (by + d) + 'px,0) rotateZ(-90deg) rotateX(90deg)', background: ok(m.L * lit(-1, 0), m.C, m.Hu) });
+      push('fe' + i, { width: d + 'px', height: h + 'px', transform: 'translate3d(' + (bx + w) + 'px,' + (by + d) + 'px,0) rotateZ(-90deg) rotateX(90deg)', background: ok(m.L * lit(1, 0), m.C, m.Hu) });
+    });
+
+    return out;
+  }
+
+  planSvg() {
+    const L = this.state.layers, wt = this.state.wallT, sel = this.state.sel, tool = this.state.tool;
+    const g = [];
+    const onPick = (id) => () => this.setState({ sel: id });
+
+    if (L.rooms) ROOMS.forEach((r) => {
+      const m = MATS[this.matOf(r)], on = sel === r.id;
+      g.push(R('rect', { key: 'r' + r.id, x: r.x, y: r.y, width: r.w, height: r.h, onClick: onPick(r.id),
+        fill: on ? 'rgba(145,132,217,0.16)' : 'rgba(233,233,237,0.035)',
+        stroke: on ? '#9184d9' : 'transparent', strokeWidth: 3, style: { cursor: 'pointer' } }));
+      g.push(R('text', { key: 't' + r.id, x: r.x + r.w / 2, y: r.y + r.h / 2 - 6, textAnchor: 'middle', fill: on ? '#e7e5fe' : '#b2b6ca', fontSize: 20, fontFamily: 'Inter', style: { pointerEvents: 'none' } }, r.name));
+      g.push(R('text', { key: 'a' + r.id, x: r.x + r.w / 2, y: r.y + r.h / 2 + 20, textAnchor: 'middle', fill: '#75798c', fontSize: 16, fontFamily: 'Inter', style: { pointerEvents: 'none' } }, (r.w * r.h / 10000).toFixed(1) + ' m² · ' + m.label));
+    });
+
+    if (L.walls) WALLS.forEach((w, i) => {
+      const vert = w[0] === w[2];
+      g.push(R('rect', { key: 'w' + i, x: vert ? w[0] - wt / 2 : w[0], y: vert ? w[1] : w[1] - wt / 2,
+        width: vert ? wt : w[2] - w[0], height: vert ? w[3] - w[1] : wt, fill: w[4] ? '#cfd3e5' : '#9397ab', style: { pointerEvents: 'none' } }));
+    });
+
+    if (L.openings) {
+      DOORS.forEach((d, i) => {
+        const ex = d.x + d.nx * d.w, ey = d.y + d.ny * d.w;
+        const ax = d.x + d.tx * d.w, ay = d.y + d.ty * d.w;
+        const sweep = (d.nx * d.ty - d.ny * d.tx) > 0 ? 1 : 0;
+        g.push(R('path', { key: 'dp' + i, d: 'M ' + d.x + ' ' + d.y + ' L ' + ex + ' ' + ey + ' M ' + ex + ' ' + ey + ' A ' + d.w + ' ' + d.w + ' 0 0 ' + sweep + ' ' + ax + ' ' + ay,
+          fill: 'none', stroke: d.entry ? '#9184d9' : '#75798c', strokeWidth: 2.5, style: { pointerEvents: 'none' } }));
+      });
+      WINDOWS.forEach((w, i) => {
+        const vert = w[0] === w[2];
+        g.push(R('rect', { key: 'wi' + i, x: vert ? w[0] - wt / 2 - 1 : w[0], y: vert ? w[1] : w[1] - wt / 2 - 1,
+          width: vert ? wt + 2 : w[2] - w[0], height: vert ? w[3] - w[1] : wt + 2, fill: '#161826', stroke: '#b5abfc', strokeWidth: 2, style: { pointerEvents: 'none' } }));
+      });
+    }
+
+    if (L.furniture) this.state.furn.forEach((f, i) => {
+      g.push(R('rect', { key: 'fu' + i, x: f.x, y: f.y, width: f.w, height: f.d, rx: 4, fill: 'rgba(233,233,237,0.06)', stroke: '#595d6c', strokeWidth: 1.6, style: { pointerEvents: 'none' } }));
+    });
+
+    if (L.dims) {
+      const dim = (x1, y1, x2, y2, label, off) => {
+        const vert = x1 === x2;
+        const ox = vert ? off : 0, oy = vert ? 0 : off;
+        g.push(R('line', { key: 'dl' + label + off, x1: x1 + ox, y1: y1 + oy, x2: x2 + ox, y2: y2 + oy, stroke: '#595d6c', strokeWidth: 1.4 }));
+        g.push(R('text', { key: 'dt' + label + off, x: (x1 + x2) / 2 + ox + (vert ? -8 : 0), y: (y1 + y2) / 2 + oy + (vert ? 0 : -8),
+          textAnchor: 'middle', fill: '#75798c', fontSize: 15, fontFamily: 'Inter',
+          transform: vert ? 'rotate(-90 ' + ((x1 + x2) / 2 + ox - 8) + ' ' + ((y1 + y2) / 2 + oy) + ')' : null }, label));
+      };
+      dim(0, 0, 820, 0, '8.20 m', -34);
+      dim(0, 0, 0, 760, '7.60 m', -34);
+    }
+
+    const mp = this.state.mp;
+    if (mp.length) {
+      mp.forEach((p, i) => g.push(R('circle', { key: 'mc' + i, cx: p.x, cy: p.y, r: 6, fill: '#9184d9' })));
+      if (mp.length === 2) {
+        g.push(R('line', { key: 'ml', x1: mp[0].x, y1: mp[0].y, x2: mp[1].x, y2: mp[1].y, stroke: '#9184d9', strokeWidth: 2.5, strokeDasharray: '10 6' }));
+        const d = Math.hypot(mp[1].x - mp[0].x, mp[1].y - mp[0].y);
+        g.push(R('text', { key: 'mt', x: (mp[0].x + mp[1].x) / 2, y: (mp[0].y + mp[1].y) / 2 - 12, textAnchor: 'middle', fill: '#d2cefd', fontSize: 19, fontFamily: 'Inter' }, (d / 100).toFixed(2) + ' m'));
+      }
+    }
+
+    const click = (e) => {
+      if (this.state.tool !== 'measure') return;
+      const r = e.currentTarget.getBoundingClientRect();
+      const vb = { x: -78, y: -78, w: 976, h: 916 };
+      const px = vb.x + (e.clientX - r.left) / r.width * vb.w;
+      const py = vb.y + (e.clientY - r.top) / r.height * vb.h;
+      const p = { x: Math.round(px / 5) * 5, y: Math.round(py / 5) * 5 };
+      this.setState((s) => ({ mp: s.mp.length >= 2 ? [p] : s.mp.concat([p]) }));
+    };
+
+    return R('svg', {
+      viewBox: '-78 -78 976 916', preserveAspectRatio: 'xMidYMid meet', onClick: click,
+      style: { position: 'absolute', inset: '32px', width: 'calc(100% - 64px)', height: 'calc(100% - 64px)', zIndex: 2, cursor: tool === 'measure' ? 'crosshair' : 'default' }
+    }, g);
+  }
+
+  miniMap() {
+    const c = this.state.cam;
+    const a = c.yaw * Math.PI / 180, fx = -Math.sin(a), fy = -Math.cos(a);
+    const g = ROOMS.map((r) => R('rect', { key: r.id, x: r.x, y: r.y, width: r.w, height: r.h, fill: 'rgba(233,233,237,0.07)', stroke: '#3f424d', strokeWidth: 4 }));
+    g.push(R('line', { key: 'v', x1: c.x, y1: c.y, x2: c.x + fx * 150, y2: c.y + fy * 150, stroke: '#9184d9', strokeWidth: 8 }));
+    g.push(R('circle', { key: 'p', cx: c.x, cy: c.y, r: 22, fill: '#b5abfc' }));
+    return R('svg', { viewBox: '-20 -20 860 800', style: { width: '100%', height: '120px', display: 'block' } }, g);
+  }
+
+  renderVals() {
+    const s = this.state, scr = this.scr(), wh = this.wh(), sun = this.sun();
+    const sel = ROOMS.find((r) => r.id === s.sel) || ROOMS[0];
+    const selMat = this.matOf(sel);
+    const view = s.view, empty = s.level === 2 && !s.level2;
+
+    const seg = (on) => ({ height: '24px', padding: '0 11px', fontSize: '11.5px', fontFamily: 'Inter, sans-serif', fontWeight: 500, borderRadius: '6px', border: 0, cursor: 'pointer', whiteSpace: 'nowrap', background: on ? 'rgba(145,132,217,0.18)' : 'transparent', color: on ? '#d2cefd' : '#b2b6ca' });
+    const eseg = (on) => ({ height: '30px', padding: '0 14px', fontSize: '12px', fontFamily: 'Inter, sans-serif', fontWeight: 500, borderRadius: '6px', border: 0, cursor: 'pointer', whiteSpace: 'nowrap', background: on ? 'rgba(145,132,217,0.18)' : 'transparent', color: on ? '#d2cefd' : '#b2b6ca' });
+
+    const ec = ENTRY_COPY[s.entry];
+    const stepIdx = Math.floor(s.prog * DETECT_STEPS.length);
+
+    const toolDefs = [
+      ['select', 'Select', R('svg', { width: 15, height: 15, viewBox: '0 0 16 16' }, R('path', { d: 'M3 2 L3 13 L6.4 9.8 L8.6 14 L10.4 13 L8.2 9 L13 8.6 Z', fill: 'currentColor' }))],
+      ['wall', 'Wall', R('svg', { width: 15, height: 15, viewBox: '0 0 16 16' }, R('rect', { x: 2, y: 6.5, width: 12, height: 3, fill: 'currentColor' }))],
+      ['door', 'Door', R('svg', { width: 15, height: 15, viewBox: '0 0 16 16' }, R('path', { d: 'M3 13 L3 4 M3 4 A 9 9 0 0 1 12 13', fill: 'none', stroke: 'currentColor', strokeWidth: 1.6 }))],
+      ['window', 'Window', R('svg', { width: 15, height: 15, viewBox: '0 0 16 16' }, R('g', { fill: 'none', stroke: 'currentColor', strokeWidth: 1.5 }, R('rect', { x: 2.5, y: 4.5, width: 11, height: 7 }), R('line', { x1: 8, y1: 4.5, x2: 8, y2: 11.5 })))],
+      ['measure', 'Measure', R('svg', { width: 15, height: 15, viewBox: '0 0 16 16' }, R('g', { stroke: 'currentColor', strokeWidth: 1.5 }, R('line', { x1: 2, y1: 8, x2: 14, y2: 8 }), R('line', { x1: 2, y1: 5, x2: 2, y2: 11 }), R('line', { x1: 14, y1: 5, x2: 14, y2: 11 })))],
+      ['furn', 'Furnish', R('svg', { width: 15, height: 15, viewBox: '0 0 16 16' }, R('g', { fill: 'none', stroke: 'currentColor', strokeWidth: 1.5 }, R('rect', { x: 2.5, y: 2.5, width: 5, height: 5 }), R('rect', { x: 8.5, y: 8.5, width: 5, height: 5 })))]
+    ];
+    const TOOL_HINT = { select: 'Click a room to inspect', wall: 'Drag to draw a wall run', door: 'Click a wall to cut a door', window: 'Click a wall to cut a window', measure: 'Click two points', furn: 'Pick from the library' };
+
+    const isoTf = 'rotateX(' + s.tilt + 'deg) rotateZ(' + s.rot + 'deg) scale3d(' + s.zoom + ',' + s.zoom + ',' + s.zoom + ') translate3d(' + (-W * PX / 2) + 'px,' + (-H * PX / 2) + 'px,0)';
+    const c = s.cam;
+    const walkTf = 'translate3d(0,0,520px) rotateX(' + (90 + c.pitch) + 'deg) rotateZ(' + c.yaw + 'deg) translate3d(' + (-c.x * PX) + 'px,' + (-c.y * PX) + 'px,' + (-166 * PX) + 'px)';
+    const walkRoom = ROOMS.find((r) => c.x >= r.x && c.x <= r.x + r.w && c.y >= r.y && c.y <= r.y + r.h);
+
+    let furnCost = 0; s.furn.forEach((f) => { furnCost += f.p; });
+    let floorCost = 0, area = 0;
+    ROOMS.forEach((r) => { const a = r.w * r.h / 10000; area += a; floorCost += a * MATS[this.matOf(r)].rate; });
+    const shellCost = Math.round(area * 610);
+    const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
+
+    return {
+      planName: this.props.planName || 'Maple St · Unit 4',
+      savedNote: scr === 'import' ? 'draft' : 'all changes saved',
+      isImport: scr === 'import', isWork: scr === 'work', isWalk: scr === 'walk',
+
+      setSplit: () => this.setState({ view: 'split' }), set2d: () => this.setState({ view: '2d' }), set3d: () => this.setState({ view: '3d' }),
+      tabSplit: seg(view === 'split'), tab2d: seg(view === '2d'), tab3d: seg(view === '3d'),
+      setL1: () => this.setState({ level: 1 }), setL2: () => this.setState({ level: 2 }),
+      tabL1: seg(s.level === 1), tabL2: seg(s.level === 2), levelNum: s.level,
+      enterWalk: () => this.setState({ screen: 'walk' }), exitWalk: () => this.setState({ screen: 'work' }),
+      backToImport: () => this.setState({ screen: 'import', detecting: false, prog: 0 }),
+
+      tabUpload: () => this.setState({ entry: 'Upload' }), tabDraw: () => this.setState({ entry: 'Draw' }),
+      tabCad: () => this.setState({ entry: 'CAD' }), tabScan: () => this.setState({ entry: 'Scan' }),
+      eUpload: eseg(s.entry === 'Upload'), eDraw: eseg(s.entry === 'Draw'), eCad: eseg(s.entry === 'CAD'), eScan: eseg(s.entry === 'Scan'),
+      dropTitle: ec[0], dropHint: ec[1], dropCta: ec[2],
+      runDetect: () => this.detect(),
+      detecting: s.detecting,
+      detectLabel: DETECT_STEPS[Math.min(stepIdx, DETECT_STEPS.length - 1)],
+      detectPct: Math.min(100, Math.round(s.prog * 100)) + '%',
+      detectBar: { height: '100%', width: Math.min(100, s.prog * 100) + '%', background: '#9184d9', transition: 'width 120ms linear' },
+      detectSteps: DETECT_STEPS.map((l, i) => ({
+        label: l,
+        dot: { width: '5px', height: '5px', borderRadius: '50%', flex: 'none', background: i < stepIdx ? '#9184d9' : i === stepIdx ? '#b5abfc' : '#3f424d', animation: i === stepIdx ? 'blink 900ms infinite' : 'none' },
+        txt: { color: i <= stepIdx ? '#b2b6ca' : '#595d6c' }
+      })),
+      importFacts: [{ n: '6', l: 'rooms detected in the sample' }, { n: '62.3 m²', l: 'total floor area' }, { n: '±2 cm', l: 'wall placement tolerance' }],
+      heroStage: { position: 'absolute', inset: 0, perspective: '2600px', display: 'grid', placeItems: 'center' },
+      heroWorld: { position: 'relative', width: 0, height: 0, transformStyle: 'preserve-3d', transform: 'rotateX(62deg) rotateZ(' + s.heroSpin + 'deg) scale3d(0.6,0.6,0.6) translate3d(' + (-W * PX / 2) + 'px,' + (-H * PX / 2) + 'px,0)' },
+      heroFaces: this.faces('hero'),
+      heroCaption: 'Sample model · 6 rooms · 260 cm walls',
+
+      tools: toolDefs.map(([id, label, icon]) => ({
+        label, icon, pick: () => this.setState({ tool: id, mp: [] }),
+        st: { width: '30px', height: '30px', display: 'grid', placeItems: 'center', borderRadius: '8px', border: 0, cursor: 'pointer', background: s.tool === id ? 'rgba(145,132,217,0.2)' : 'transparent', color: s.tool === id ? '#d2cefd' : '#75798c' }
+      })),
+      toolHint: TOOL_HINT[s.tool],
+      toolPill: { fontSize: '10px', padding: '2px 7px', borderRadius: '999px', border: '1px solid #3f424d', color: '#b2b6ca', background: 'rgba(22,24,38,0.7)' },
+
+      paneWrap: { flex: 1, minWidth: 0, display: 'grid', gridTemplateColumns: view === 'split' ? 'minmax(0,1fr) minmax(0,1fr)' : 'minmax(0,1fr)', overflow: 'hidden' },
+      pane2d: { position: 'relative', overflow: 'hidden', display: view === '3d' ? 'none' : 'block', background: '#14161f', borderRight: view === 'split' ? '1px solid rgba(233,233,237,0.16)' : '0' },
+      pane3d: { position: 'relative', overflow: 'hidden', display: view === '2d' ? 'none' : 'block', background: 'radial-gradient(120% 90% at 60% 25%, #1e2131 0%, #12141d 72%)', cursor: 'grab' },
+      planSvg: empty ? null : this.planSvg(),
+      emptyLevel: empty,
+      traceLevel: () => this.setState({ level2: true }),
+      isoStage: { position: 'absolute', inset: 0, perspective: '3200px', display: 'grid', placeItems: 'center', opacity: empty ? 0.12 : 1 },
+      isoWorld: { position: 'relative', width: 0, height: 0, transformStyle: 'preserve-3d', transform: isoTf },
+      faces3d: this.faces('iso'),
+      orbitDown: (e) => this.orbit(e),
+      zoomIn: () => this.setState((p) => ({ zoom: Math.min(1.9, p.zoom * 1.15) })),
+      zoomOut: () => this.setState((p) => ({ zoom: Math.max(0.4, p.zoom / 1.15) })),
+      resetView: () => this.setState({ rot: -28, tilt: 58, zoom: 0.92 }),
+      shadeLabel: sun.elDeg > 4 ? 'daylight ' + s.hour + ':00' : 'night ' + s.hour + ':00',
+
+      selName: sel.name,
+      selArea: (sel.w * sel.h / 10000).toFixed(1) + ' m²',
+      selDims: (sel.w / 100).toFixed(1) + ' × ' + (sel.h / 100).toFixed(1),
+      selVol: (sel.w * sel.h * wh / 1e6).toFixed(1) + ' m³',
+      materials: Object.keys(MATS).map((k) => ({
+        label: MATS[k].label, pick: () => this.setState((p) => ({ mats: { ...p.mats, [sel.id]: k } })),
+        st: { display: 'inline-flex', alignItems: 'center', gap: '6px', height: '26px', padding: '0 9px', fontSize: '11.5px', fontFamily: 'Inter, sans-serif', color: selMat === k ? '#e7e5fe' : '#b2b6ca', background: selMat === k ? 'rgba(145,132,217,0.16)' : 'transparent', border: '1px solid ' + (selMat === k ? '#9184d9' : '#3f424d'), borderRadius: '999px', cursor: 'pointer' },
+        sw: { width: '9px', height: '9px', borderRadius: '2px', background: ok(MATS[k].L, MATS[k].C, MATS[k].Hu) }
+      })),
+
+      wallH: wh, wallHLabel: wh + ' cm', setWallH: (e) => this.setState({ wallH: +e.target.value }),
+      wallT: s.wallT, wallTLabel: s.wallT + ' cm', setWallT: (e) => this.setState({ wallT: +e.target.value }),
+      hour: s.hour, hourLabel: (s.hour < 10 ? '0' : '') + s.hour + ':00', setHour: (e) => this.setState({ hour: +e.target.value }),
+      sunAzLabel: sun.azDeg + '°', sunElLabel: sun.elDeg + '°',
+
+      layers: [['rooms', 'Rooms & areas'], ['walls', 'Walls'], ['openings', 'Doors & windows'], ['furniture', 'Furniture'], ['dims', 'Dimensions']].map(([k, label]) => {
+        const on = s.layers[k];
+        return {
+          label, toggle: () => this.setState((p) => ({ layers: { ...p.layers, [k]: !p.layers[k] } })),
+          txt: { color: on ? '#e9e9ed' : '#75798c' },
+          sw: { position: 'relative', display: 'block', width: '26px', height: '14px', borderRadius: '999px', flex: 'none', background: on ? 'rgba(145,132,217,0.32)' : '#292b31', border: '1px solid ' + (on ? '#9184d9' : '#3f424d') },
+          knob: { position: 'absolute', top: '1px', left: on ? '13px' : '1px', width: '10px', height: '10px', borderRadius: '50%', background: on ? '#b5abfc' : '#75798c', transition: 'left 140ms ease' }
+        };
+      }),
+
+      catalog: CATALOG.map((c2) => ({
+        name: c2.name, meta: c2.w + '×' + c2.d + ' cm · ' + money(c2.p),
+        glyph: { display: 'block', width: '100%', height: '22px', borderRadius: '3px', border: '1px solid #595d6c', background: 'repeating-linear-gradient(135deg, rgba(233,233,237,0.07) 0 4px, transparent 4px 8px)' },
+        add: () => this.setState((p) => {
+          const r = ROOMS.find((q) => q.id === p.sel) || ROOMS[0];
+          return { furn: p.furn.concat([{ r: r.id, t: c2.name, x: r.x + r.w / 2 - c2.w / 2, y: r.y + r.h / 2 - c2.d / 2, w: c2.w, d: c2.d, h: c2.h, p: c2.p }]) };
+        })
+      })),
+
+      showCost: this.props.showCostPanel !== false,
+      costLines: [
+        { label: 'Shell & partitions', val: money(shellCost) },
+        { label: 'Floor finishes', val: money(floorCost) },
+        { label: 'Furniture (' + s.furn.length + ' items)', val: money(furnCost) },
+        { label: 'Openings (' + (DOORS.length + WINDOWS.length) + ')', val: money(DOORS.length * 640 + WINDOWS.length * 880) }
+      ],
+      costTotal: money(shellCost + floorCost + furnCost + DOORS.length * 640 + WINDOWS.length * 880),
+
+      statusScale: 'Scale 1:50 · metric',
+      statusWalls: WALLS.length + ' wall runs · ' + DOORS.length + ' doors · ' + WINDOWS.length + ' windows',
+      statusArea: area.toFixed(1) + ' m² net',
+      statusMeasure: s.mp.length === 2 ? 'Measured ' + (Math.hypot(s.mp[1].x - s.mp[0].x, s.mp[1].y - s.mp[0].y) / 100).toFixed(2) + ' m' : s.tool === 'measure' ? 'Measure: click two points' : '',
+
+      walkStage: { position: 'absolute', inset: 0, perspective: '520px', display: 'grid', placeItems: 'center' },
+      walkWorld: { position: 'relative', width: 0, height: 0, transformStyle: 'preserve-3d', transform: walkTf },
+      walkFaces: this.faces('walk'),
+      walkRoom: walkRoom ? walkRoom.name : 'Between rooms',
+      walkCoords: 'x ' + Math.round(c.x) + ' · y ' + Math.round(c.y) + ' cm · bearing ' + ((Math.round(c.yaw) % 360 + 360) % 360) + '°',
+      walkKeys: ['W', 'A', 'S', 'D', '⇧'].map((k) => ({ label: k, st: { display: 'grid', placeItems: 'center', width: '20px', height: '20px', fontSize: '10px', color: '#b2b6ca', border: '1px solid #3f424d', borderRadius: '4px' } })),
+      miniMap: this.miniMap()
+    };
+  }
+}
+
+</script>
+</body>
+</html>

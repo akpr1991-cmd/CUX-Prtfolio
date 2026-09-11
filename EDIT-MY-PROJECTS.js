@@ -16,27 +16,27 @@
 
 window.CASE_STUDIES = [
   {
-    slug: "mastercard",
-    title: "Global Payments Network",
-    org: "Financial services · Payment processing",
-    summary: "Global technology and financial services company that runs a payment processing network. Internal tool to track the usages of all products Procurement.",
+    slug: "acquire.ai-case study",
+    title: "Procurement Solution with AI Agents",
+    org: "Spend Intelligence · Procurement Solution",
+    summary: "An AI-powered procurement platform that automates sourcing, predicts supply chain risk, and delivers real-time cost intelligence.",
     tags: ["Product usage", "Dashboards", "Enterprise UX"],
     password: "akpixels@16",
-    href: "case-studies/mastercard.pdf",
-    cover: "case-studies/mastercard/cover.jpg"
+    href: "case-studies/acquire.ai-case study.pdf",
+    cover: "case-studies/acquire.ai-case study/cover.jpg"
   },
   {
-    slug: "procurement-ai",
+    slug: "vessel-management-portal",
     title: "Vessel Management Portal",
     org: "Enterprise SaaS · Maritime",
     summary: "Enterprise SaaS for maritime vessel management.",
     tags: ["Enterprise SaaS", "Maritime", "Workflow"],
     password: "akpixels@16",
-    href: "case-studies/procurement-ai.pdf",
-    cover: "case-studies/procurement-ai/cover.jpg"
+    href: "case-studies/vessel-management-portal.pdf",
+    cover: "case-studies/vessel-management-portal/cover.jpg"
   },
   {
-    slug: "spreadsmart",
+    slug: "numera-spreading",
     title: "AI-Powered Financial Data Extraction",
     org: "Lending · Credit risk",
     summary: "An AI-powered financial spreading tool that replaces conventional manual data entry processes with automated data extraction to configurable templates.",
@@ -46,14 +46,14 @@ window.CASE_STUDIES = [
     cover: "case-studies/spreadsmart/cover.jpg"
   },
   {
-    slug: "credit-risk-staging",
-    title: "Conference Solution",
+    slug: "mastercard",
+    title: "Global Payment Network — Usage & Tracking Platform",
     org: "Life sciences · AI platform",
-    summary: "AI-enabled platform for extracting data from medical conferences and surfacing insights.",
-    tags: ["Data extraction", "Insights", "AI platform"],
+    summary: "A real-time analytics engine for monitoring cross-border transaction flows, tracking volume metrics, and optimizing network performance across global payment rails.",
+    tags: ["Fintech", "Insights", "Enterprise SaaS"],
     password: "akpixels@16",
-    href: "case-studies/credit-risk-staging.pdf",
-    cover: "case-studies/credit-risk-staging/cover.jpg"
+    href: "case-studies/mastercard.pdf",
+    cover: "case-studies/mastercard/cover.jpg"
   }
 ];
 
@@ -65,7 +65,7 @@ window.CASE_STUDIES = [
    ─────────────────────────────────────────────────────────────── */
 
 window.EXTRAS = [
-  { caption: "Usage analytics — Mastercard",      image: "images/extra-1.jpg", href: "extras/extra-1.pdf" },
+  { caption: "Insights.AI",      image: "images/extra-1.jpg", href: "extras/extra-1.pdf" },
   { caption: "Sourcing workflow — Procurement.ai", image: "images/extra-2.jpg", href: "extras/extra-2.pdf" },
   { caption: "Spreading canvas — Spreadsmart",     image: "images/extra-3.jpg", href: "extras/extra-3.pdf" }
 ];
