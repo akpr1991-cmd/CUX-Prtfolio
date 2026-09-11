@@ -519,12 +519,27 @@ textarea.input { min-height: 90px; resize: vertical; }
     .ak-aura { max-width: 300px; margin: 0 auto; }
     .ak-gate { padding: 24px 20px !important; }
   }
+  @media (max-width: 720px) {
+    header > div { flex-wrap: wrap; height: auto !important; gap: 10px 14px !important; padding-top: 12px !important; padding-bottom: 12px !important; }
+    .ak-nav { flex: 1 0 100%; justify-content: flex-start !important; gap: 16px !important; }
+    /* case-study cards stack: cover above, details in normal flow */
+    .ak-shot { aspect-ratio: auto !important; overflow: visible !important; border-radius: 0 !important; box-shadow: none !important; background: transparent !important; }
+    .ak-cover { position: relative !important; inset: auto !important; aspect-ratio: 16/10; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+    .ak-rest { display: none !important; }
+    .ak-overlay { position: relative !important; inset: auto !important; background: none !important; padding: 16px 2px 0 !important; gap: 9px !important; }
+    .ak-overlay h3 { font-size: 19px !important; }
+    .ak-aura { height: 320px; aspect-ratio: auto !important; overflow: hidden; display: flex; align-items: center; }
+  }
   @media (max-width: 560px) {
-    header > div { flex-wrap: wrap; height: auto !important; gap: 10px !important; padding-top: 12px !important; padding-bottom: 12px !important; }
-    .ak-nav { flex: 1 0 100%; justify-content: flex-start !important; }
     .btn { width: 100%; justify-content: center; }
     .ak-help-ico { width: 50px; height: 50px; border-radius: 13px; }
     .ak-help-ico svg { width: 25px; height: 25px; }
+  }
+  @media (max-width: 400px) {
+    main > section, main > sc-if > section, main > div, #work > div, #work > .ak-grid,
+    #contact > div, header > div, footer { padding-left: 16px !important; padding-right: 16px !important; }
+    .ak-help-row { padding-left: 16px; padding-right: 16px; margin-left: -16px; margin-right: -16px; scroll-padding-left: 16px; }
+    .ak-aura { height: 260px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1006,6 +1021,19 @@ class Component extends DCLogic {
 
   componentWillUnmount() { if (this.io) this.io.disconnect(); clearTimeout(this.fallback); if (this._curOff) this._curOff(); }
 
+  async sha256(text) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  async matches(entered, study) {
+    const want = String(study.passwordHash || "").toLowerCase();
+    if (!want) return false;
+    const got = await this.sha256(entered);
+    if (got === want) return true;
+    return (await this.sha256(entered.toLowerCase())) === want;
+  }
+
   persist(unlocked) {
     try { localStorage.setItem("ak-portfolio-unlocked", JSON.stringify(unlocked)); } catch (e) {}
   }
@@ -1032,10 +1060,11 @@ class Component extends DCLogic {
           const v = e.target.value;
           this.setState((st) => ({ inputs: { ...st.inputs, [s.slug]: v }, errors: { ...st.errors, [s.slug]: false } }));
         },
-        onSubmit: (e) => {
+        onSubmit: async (e) => {
           e.preventDefault();
-          const entered = (this.state.inputs[s.slug] || "").trim().toLowerCase();
-          if (entered && entered === String(s.password).toLowerCase()) {
+          const entered = (this.state.inputs[s.slug] || "").trim();
+          const ok = entered ? await this.matches(entered, s) : false;
+          if (ok) {
             const unlocked = { ...this.state.unlocked, [s.slug]: true };
             this.persist(unlocked);
             this.setState({ unlocked, prompt: null, errors: { ...this.state.errors, [s.slug]: false } });
